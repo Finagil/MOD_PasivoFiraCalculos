@@ -7,11 +7,12 @@
     Dim ds As New PasivoFiraDS
 
     Sub Main()
-        Dim Hoy As Date = "30/JUN/2017"
+        Dim Hoy As Date = "06/JUL/2017"
         If CargaTIIE(Hoy) And Hoy.DayOfWeek <> DayOfWeek.Sunday And Hoy.DayOfWeek <> DayOfWeek.Saturday Then
             taCalendar.Fill(ds.CONT_CPF_CalendariosRevisionTasa, Hoy)
             For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
                 GeneraCorteInteres(Hoy, Rc.Id_Contrato, Rc.VencimientoInteres)
+                Console.WriteLine(Rc.Id_Contrato)
                 taCalendar.ProcesaCalendario(True, Rc.ID_Calendario, Rc.ID_Calendario)
             Next
         Else

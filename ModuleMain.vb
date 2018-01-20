@@ -8,7 +8,7 @@
     Dim ds As New PasivoFiraDS
 
     Sub Main()
-        Dim Hoy As Date = "20/jul/2017"
+        Dim Hoy As Date = "31/jul/2017"
         If CargaTIIE(Hoy) And Hoy.DayOfWeek <> DayOfWeek.Sunday And Hoy.DayOfWeek <> DayOfWeek.Saturday Then
             taCalendar.Fill(ds.CONT_CPF_CalendariosRevisionTasa, Hoy)
             For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
@@ -47,6 +47,7 @@
         Dim Rsaldo As PasivoFiraDS.CONT_CPF_saldos_contingenteRow
 
         TipoTasa = "BP"
+
         TasaActivaBP = TaAnexos.TasaActivaBP(r.id_contrato)
         TasaActivaFB = TaAnexos.TasaActivaFB(r.id_contrato)
         TasaActivaFn = TaAnexos.TasaActivaFN(r.id_contrato)
@@ -88,29 +89,33 @@
         End If
 
         If EsCorteInte = True Then
+            Dim Fecha1 As Date
             Dim CapitalVIG As Decimal = 0
             Dim IntORD_Aux As Decimal = IntORD
             Dim IntFB_Aux As Decimal = IntFB
             Dim IntFN_Aux As Decimal = IntFN
+            Fecha1 = TaEdoCta.SacaFecha1(r.id_contrato)
+            Dim InteFinan As Decimal = TaEdoCta.SacaInteresAux1(r.id_contrato, Fecha1, Fecha)
+
             If EsVencimetoCap Then
                 CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha)
-                SaldoFIN -= CapitalVIG + IntFINAN
-                IntORD_Aux = IntFINAN * -1
+                SaldoFIN -= CapitalVIG + IntFINAN + InteFinan
+                IntORD_Aux = InteFinan * -1
                 IntFB_Aux = 0
                 IntFN_Aux = 0
             End If
             TaEdoCta.Insert(TipoTasa, r.FechaFinal, Fecha, SaldoINI, SaldoFIN, CapitalVIG, 0, IntORD + InteresAux1, IntVENC + InteresAux2, 0, 0, 0,
-                        0, 0, ID_Contrato, (TasaActivaBP + TIIE_old), diasX, IntORD_Aux, IntVENC)
+                        InteFinan, 0, ID_Contrato, (TasaActivaBP + TIIE_old), diasX, IntORD_Aux, IntVENC)
 
             TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, CapitalVIG, 0, IntFB + InteresAux1FB, 0, 0, 0, 0,
-                            0, 0, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFB_Aux, 0)
+                            InteFinan, 0, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFB_Aux, 0)
 
             If TasaActivaFN > 0 Then
-                TaEdoCta.Insert(TipoTasa, r.FechaFinal, Fecha, SaldoINI, SaldoFIN, CapitalVIG, 0, IntFN + InteresAux1FN, IntVENC + InteresAux2FN, 0, 0, 0,
-                                        0, 0, ID_Contrato, (TasaActivaFN), diasX, IntFN_Aux, IntVENC)
+                TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, CapitalVIG, 0, IntFN + InteresAux1FN, IntVENC + InteresAux2FN, 0, 0, 0,
+                                        InteFinan, 0, ID_Contrato, (TasaActivaFN), diasX, IntFN_Aux, IntVENC)
             End If
 
-            TaSaldoConti.Fill(ds.CONT_CPF_saldos_contingente, r.id_contrato_garantia)
+            TaSaldoConti.FillByUltimo(ds.CONT_CPF_saldos_contingente, r.id_contrato_garantia)
 
             For Each Rsaldo In ds.CONT_CPF_saldos_contingente.Rows
                 Rsaldo = ds.CONT_CPF_saldos_contingente.Rows(0)
@@ -356,14 +361,22 @@
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
     End Sub
 
-    Sub CalculaServicioCobro(FecIni As Date, MontoBase As Decimal, PCXSG As Decimal, id_contrato As Integer)
+    Sub CalculaServicioCobro(FecIni As Date, MontoBase As Decimal, PCXSG As Decimal, id_contrato As Integer, Subsidio As Boolean)
         Dim FecFin As Date = TaVeciminetos.SigFechaVenc(id_contrato)
         Dim Dias As Integer
         Dim Cobro As Decimal
         Dim ID As Integer = taCXSG.SacaIDContratoGarantia(id_contrato)
+        Dim SubsidioAUX As Decimal
+
+        If Subsidio Then
+            SubsidioAUX = 2
+        Else
+            SubsidioAUX = 1
+        End If
 
         Dias = DateDiff(DateInterval.Day, FecIni, FecFin)
-        Cobro = ((((MontoBase) * (PCXSG / 100)) / 360)) * (Dias)
+        Cobro = ((((MontoBase / SubsidioAUX) * (PCXSG / 100)) / 360)) * (Dias)
+
         taCXSG.Insert(FecIni, FecFin, Dias, FecIni, MontoBase, Cobro, Cobro * TasaIVA, Cobro * (1 + TasaIVA), PCXSG, ID)
     End Sub
 

@@ -3503,6 +3503,8 @@ Partial Public Class PasivoFiraDS
         
         Private columnid_contrato_garantia As Global.System.Data.DataColumn
         
+        Private columnsubsidio As Global.System.Data.DataColumn
+        
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Sub New()
@@ -3627,6 +3629,14 @@ Partial Public Class PasivoFiraDS
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property subsidioColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnsubsidio
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false)>  _
         Public ReadOnly Property Count() As Integer
@@ -3663,9 +3673,9 @@ Partial Public Class PasivoFiraDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Overloads Function AddCONT_CPF_csgRow(ByVal fe_inicial As Date, ByVal fe_final As Date, ByVal dias As Integer, ByVal fe_aplicacion As Date, ByVal importe_base As Decimal, ByVal importe_cobro As Decimal, ByVal importe_iva As Decimal, ByVal total As Decimal, ByVal porcentaje_cobro As Decimal, ByVal id_contrato_garantia As Integer) As CONT_CPF_csgRow
+        Public Overloads Function AddCONT_CPF_csgRow(ByVal fe_inicial As Date, ByVal fe_final As Date, ByVal dias As Integer, ByVal fe_aplicacion As Date, ByVal importe_base As Decimal, ByVal importe_cobro As Decimal, ByVal importe_iva As Decimal, ByVal total As Decimal, ByVal porcentaje_cobro As Decimal, ByVal id_contrato_garantia As Integer, ByVal subsidio As Boolean) As CONT_CPF_csgRow
             Dim rowCONT_CPF_csgRow As CONT_CPF_csgRow = CType(Me.NewRow,CONT_CPF_csgRow)
-            Dim columnValuesArray() As Object = New Object() {Nothing, fe_inicial, fe_final, dias, fe_aplicacion, importe_base, importe_cobro, importe_iva, total, porcentaje_cobro, id_contrato_garantia}
+            Dim columnValuesArray() As Object = New Object() {Nothing, fe_inicial, fe_final, dias, fe_aplicacion, importe_base, importe_cobro, importe_iva, total, porcentaje_cobro, id_contrato_garantia, subsidio}
             rowCONT_CPF_csgRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowCONT_CPF_csgRow)
             Return rowCONT_CPF_csgRow
@@ -3705,6 +3715,7 @@ Partial Public Class PasivoFiraDS
             Me.columntotal = MyBase.Columns("total")
             Me.columnporcentaje_cobro = MyBase.Columns("porcentaje_cobro")
             Me.columnid_contrato_garantia = MyBase.Columns("id_contrato_garantia")
+            Me.columnsubsidio = MyBase.Columns("subsidio")
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -3732,6 +3743,8 @@ Partial Public Class PasivoFiraDS
             MyBase.Columns.Add(Me.columnporcentaje_cobro)
             Me.columnid_contrato_garantia = New Global.System.Data.DataColumn("id_contrato_garantia", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnid_contrato_garantia)
+            Me.columnsubsidio = New Global.System.Data.DataColumn("subsidio", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnsubsidio)
             Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnid_csg}, true))
             Me.columnid_csg.AutoIncrement = true
             Me.columnid_csg.AutoIncrementSeed = -1
@@ -6389,6 +6402,21 @@ Partial Public Class PasivoFiraDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property subsidio() As Boolean
+            Get
+                Try 
+                    Return CType(Me(Me.tableCONT_CPF_csg.subsidioColumn),Boolean)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'subsidio' de la tabla 'CONT_CPF_csg' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableCONT_CPF_csg.subsidioColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Function Isfe_inicialNull() As Boolean
             Return Me.IsNull(Me.tableCONT_CPF_csg.fe_inicialColumn)
         End Function
@@ -6505,6 +6533,18 @@ Partial Public Class PasivoFiraDS
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Sub Setid_contrato_garantiaNull()
             Me(Me.tableCONT_CPF_csg.id_contrato_garantiaColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IssubsidioNull() As Boolean
+            Return Me.IsNull(Me.tableCONT_CPF_csg.subsidioColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetsubsidioNull()
+            Me(Me.tableCONT_CPF_csg.subsidioColumn) = Global.System.Convert.DBNull
         End Sub
     End Class
     
@@ -12224,6 +12264,7 @@ Namespace PasivoFiraDSTableAdapters
             tableMapping.ColumnMappings.Add("total", "total")
             tableMapping.ColumnMappings.Add("porcentaje_cobro", "porcentaje_cobro")
             tableMapping.ColumnMappings.Add("id_contrato_garantia", "id_contrato_garantia")
+            tableMapping.ColumnMappings.Add("subsidio", "subsidio")
             Me._adapter.TableMappings.Add(tableMapping)
             Me._adapter.DeleteCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.DeleteCommand.Connection = Me.Connection
@@ -12240,7 +12281,8 @@ Namespace PasivoFiraDSTableAdapters
                 "l] = @Original_total)) AND ((@IsNull_porcentaje_cobro = 1 AND [porcentaje_cobro]"& _ 
                 " IS NULL) OR ([porcentaje_cobro] = @Original_porcentaje_cobro)) AND ((@IsNull_id"& _ 
                 "_contrato_garantia = 1 AND [id_contrato_garantia] IS NULL) OR ([id_contrato_gara"& _ 
-                "ntia] = @Original_id_contrato_garantia)))"
+                "ntia] = @Original_id_contrato_garantia)) AND ((@IsNull_subsidio = 1 AND [subsidi"& _ 
+                "o] IS NULL) OR ([subsidio] = @Original_subsidio)))"
             Me._adapter.DeleteCommand.CommandType = Global.System.Data.CommandType.Text
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_csg", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_csg", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_fe_inicial", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fe_inicial", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
@@ -12263,15 +12305,18 @@ Namespace PasivoFiraDSTableAdapters
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_porcentaje_cobro", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 7, 4, "porcentaje_cobro", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_id_contrato_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato_garantia", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_contrato_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato_garantia", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_subsidio", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "subsidio", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_subsidio", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "subsidio", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.InsertCommand.Connection = Me.Connection
             Me._adapter.InsertCommand.CommandText = "INSERT INTO [CONT_CPF_csg] ([fe_inicial], [fe_final], [dias], [fe_aplicacion], [i"& _ 
                 "mporte_base], [importe_cobro], [importe_iva], [total], [porcentaje_cobro], [id_c"& _ 
-                "ontrato_garantia]) VALUES (@fe_inicial, @fe_final, @dias, @fe_aplicacion, @impor"& _ 
-                "te_base, @importe_cobro, @importe_iva, @total, @porcentaje_cobro, @id_contrato_g"& _ 
-                "arantia);"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_csg, fe_inicial, fe_final, dias, fe_aplicacion, importe_bas"& _ 
-                "e, importe_cobro, importe_iva, total, porcentaje_cobro, id_contrato_garantia FRO"& _ 
-                "M CONT_CPF_csg WHERE (id_csg = SCOPE_IDENTITY())"
+                "ontrato_garantia], [subsidio]) VALUES (@fe_inicial, @fe_final, @dias, @fe_aplica"& _ 
+                "cion, @importe_base, @importe_cobro, @importe_iva, @total, @porcentaje_cobro, @i"& _ 
+                "d_contrato_garantia, @subsidio);"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_csg, fe_inicial, fe_final, dias, fe_"& _ 
+                "aplicacion, importe_base, importe_cobro, importe_iva, total, porcentaje_cobro, i"& _ 
+                "d_contrato_garantia, subsidio FROM CONT_CPF_csg WHERE (id_csg = SCOPE_IDENTITY()"& _ 
+                ")"
             Me._adapter.InsertCommand.CommandType = Global.System.Data.CommandType.Text
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@fe_inicial", Global.System.Data.SqlDbType.DateTime, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fe_inicial", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@fe_final", Global.System.Data.SqlDbType.DateTime, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fe_final", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -12283,28 +12328,31 @@ Namespace PasivoFiraDSTableAdapters
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@total", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "total", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@porcentaje_cobro", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 7, 4, "porcentaje_cobro", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato_garantia", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@subsidio", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "subsidio", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.UpdateCommand.Connection = Me.Connection
             Me._adapter.UpdateCommand.CommandText = "UPDATE [CONT_CPF_csg] SET [fe_inicial] = @fe_inicial, [fe_final] = @fe_final, [di"& _ 
                 "as] = @dias, [fe_aplicacion] = @fe_aplicacion, [importe_base] = @importe_base, ["& _ 
                 "importe_cobro] = @importe_cobro, [importe_iva] = @importe_iva, [total] = @total,"& _ 
                 " [porcentaje_cobro] = @porcentaje_cobro, [id_contrato_garantia] = @id_contrato_g"& _ 
-                "arantia WHERE (([id_csg] = @Original_id_csg) AND ((@IsNull_fe_inicial = 1 AND [f"& _ 
-                "e_inicial] IS NULL) OR ([fe_inicial] = @Original_fe_inicial)) AND ((@IsNull_fe_f"& _ 
-                "inal = 1 AND [fe_final] IS NULL) OR ([fe_final] = @Original_fe_final)) AND ((@Is"& _ 
-                "Null_dias = 1 AND [dias] IS NULL) OR ([dias] = @Original_dias)) AND ((@IsNull_fe"& _ 
-                "_aplicacion = 1 AND [fe_aplicacion] IS NULL) OR ([fe_aplicacion] = @Original_fe_"& _ 
-                "aplicacion)) AND ((@IsNull_importe_base = 1 AND [importe_base] IS NULL) OR ([imp"& _ 
-                "orte_base] = @Original_importe_base)) AND ((@IsNull_importe_cobro = 1 AND [impor"& _ 
-                "te_cobro] IS NULL) OR ([importe_cobro] = @Original_importe_cobro)) AND ((@IsNull"& _ 
-                "_importe_iva = 1 AND [importe_iva] IS NULL) OR ([importe_iva] = @Original_import"& _ 
-                "e_iva)) AND ((@IsNull_total = 1 AND [total] IS NULL) OR ([total] = @Original_tot"& _ 
-                "al)) AND ((@IsNull_porcentaje_cobro = 1 AND [porcentaje_cobro] IS NULL) OR ([por"& _ 
-                "centaje_cobro] = @Original_porcentaje_cobro)) AND ((@IsNull_id_contrato_garantia"& _ 
-                " = 1 AND [id_contrato_garantia] IS NULL) OR ([id_contrato_garantia] = @Original_"& _ 
-                "id_contrato_garantia)));"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_csg, fe_inicial, fe_final, dias, fe_aplicaci"& _ 
-                "on, importe_base, importe_cobro, importe_iva, total, porcentaje_cobro, id_contra"& _ 
-                "to_garantia FROM CONT_CPF_csg WHERE (id_csg = @id_csg)"
+                "arantia, [subsidio] = @subsidio WHERE (([id_csg] = @Original_id_csg) AND ((@IsNu"& _ 
+                "ll_fe_inicial = 1 AND [fe_inicial] IS NULL) OR ([fe_inicial] = @Original_fe_inic"& _ 
+                "ial)) AND ((@IsNull_fe_final = 1 AND [fe_final] IS NULL) OR ([fe_final] = @Origi"& _ 
+                "nal_fe_final)) AND ((@IsNull_dias = 1 AND [dias] IS NULL) OR ([dias] = @Original"& _ 
+                "_dias)) AND ((@IsNull_fe_aplicacion = 1 AND [fe_aplicacion] IS NULL) OR ([fe_apl"& _ 
+                "icacion] = @Original_fe_aplicacion)) AND ((@IsNull_importe_base = 1 AND [importe"& _ 
+                "_base] IS NULL) OR ([importe_base] = @Original_importe_base)) AND ((@IsNull_impo"& _ 
+                "rte_cobro = 1 AND [importe_cobro] IS NULL) OR ([importe_cobro] = @Original_impor"& _ 
+                "te_cobro)) AND ((@IsNull_importe_iva = 1 AND [importe_iva] IS NULL) OR ([importe"& _ 
+                "_iva] = @Original_importe_iva)) AND ((@IsNull_total = 1 AND [total] IS NULL) OR "& _ 
+                "([total] = @Original_total)) AND ((@IsNull_porcentaje_cobro = 1 AND [porcentaje_"& _ 
+                "cobro] IS NULL) OR ([porcentaje_cobro] = @Original_porcentaje_cobro)) AND ((@IsN"& _ 
+                "ull_id_contrato_garantia = 1 AND [id_contrato_garantia] IS NULL) OR ([id_contrat"& _ 
+                "o_garantia] = @Original_id_contrato_garantia)) AND ((@IsNull_subsidio = 1 AND [s"& _ 
+                "ubsidio] IS NULL) OR ([subsidio] = @Original_subsidio)));"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_csg, fe_ini"& _ 
+                "cial, fe_final, dias, fe_aplicacion, importe_base, importe_cobro, importe_iva, t"& _ 
+                "otal, porcentaje_cobro, id_contrato_garantia, subsidio FROM CONT_CPF_csg WHERE ("& _ 
+                "id_csg = @id_csg)"
             Me._adapter.UpdateCommand.CommandType = Global.System.Data.CommandType.Text
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@fe_inicial", Global.System.Data.SqlDbType.DateTime, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fe_inicial", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@fe_final", Global.System.Data.SqlDbType.DateTime, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fe_final", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -12316,6 +12364,7 @@ Namespace PasivoFiraDSTableAdapters
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@total", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "total", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@porcentaje_cobro", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 7, 4, "porcentaje_cobro", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato_garantia", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@subsidio", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "subsidio", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_csg", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_csg", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_fe_inicial", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fe_inicial", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_fe_inicial", Global.System.Data.SqlDbType.DateTime, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fe_inicial", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
@@ -12337,6 +12386,8 @@ Namespace PasivoFiraDSTableAdapters
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_porcentaje_cobro", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 7, 4, "porcentaje_cobro", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_id_contrato_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato_garantia", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_contrato_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato_garantia", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_subsidio", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "subsidio", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_subsidio", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "subsidio", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_csg", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_csg", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
         End Sub
         
@@ -12354,8 +12405,8 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(0) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(0).Connection = Me.Connection
             Me._commandCollection(0).CommandText = "SELECT        id_csg, fe_inicial, fe_final, dias, fe_aplicacion, importe_base, im"& _ 
-                "porte_cobro, importe_iva, total, porcentaje_cobro, id_contrato_garantia"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM   "& _ 
-                "         CONT_CPF_csg"
+                "porte_cobro, importe_iva, total, porcentaje_cobro, id_contrato_garantia, subsidi"& _ 
+                "o"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_csg"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(1) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(1).Connection = Me.Connection
@@ -12421,7 +12472,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
-        Public Overloads Overridable Function Delete(ByVal Original_id_csg As Integer, ByVal Original_fe_inicial As Global.System.Nullable(Of Date), ByVal Original_fe_final As Global.System.Nullable(Of Date), ByVal Original_dias As Global.System.Nullable(Of Integer), ByVal Original_fe_aplicacion As Global.System.Nullable(Of Date), ByVal Original_importe_base As Global.System.Nullable(Of Decimal), ByVal Original_importe_cobro As Global.System.Nullable(Of Decimal), ByVal Original_importe_iva As Global.System.Nullable(Of Decimal), ByVal Original_total As Global.System.Nullable(Of Decimal), ByVal Original_porcentaje_cobro As Global.System.Nullable(Of Decimal), ByVal Original_id_contrato_garantia As Global.System.Nullable(Of Integer)) As Integer
+        Public Overloads Overridable Function Delete(ByVal Original_id_csg As Integer, ByVal Original_fe_inicial As Global.System.Nullable(Of Date), ByVal Original_fe_final As Global.System.Nullable(Of Date), ByVal Original_dias As Global.System.Nullable(Of Integer), ByVal Original_fe_aplicacion As Global.System.Nullable(Of Date), ByVal Original_importe_base As Global.System.Nullable(Of Decimal), ByVal Original_importe_cobro As Global.System.Nullable(Of Decimal), ByVal Original_importe_iva As Global.System.Nullable(Of Decimal), ByVal Original_total As Global.System.Nullable(Of Decimal), ByVal Original_porcentaje_cobro As Global.System.Nullable(Of Decimal), ByVal Original_id_contrato_garantia As Global.System.Nullable(Of Integer), ByVal Original_subsidio As Global.System.Nullable(Of Boolean)) As Integer
             Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_id_csg,Integer)
             If (Original_fe_inicial.HasValue = true) Then
                 Me.Adapter.DeleteCommand.Parameters(1).Value = CType(0,Object)
@@ -12493,6 +12544,13 @@ Namespace PasivoFiraDSTableAdapters
                 Me.Adapter.DeleteCommand.Parameters(19).Value = CType(1,Object)
                 Me.Adapter.DeleteCommand.Parameters(20).Value = Global.System.DBNull.Value
             End If
+            If (Original_subsidio.HasValue = true) Then
+                Me.Adapter.DeleteCommand.Parameters(21).Value = CType(0,Object)
+                Me.Adapter.DeleteCommand.Parameters(22).Value = CType(Original_subsidio.Value,Boolean)
+            Else
+                Me.Adapter.DeleteCommand.Parameters(21).Value = CType(1,Object)
+                Me.Adapter.DeleteCommand.Parameters(22).Value = Global.System.DBNull.Value
+            End If
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.DeleteCommand.Connection.State
             If ((Me.Adapter.DeleteCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
                         <> Global.System.Data.ConnectionState.Open) Then
@@ -12512,7 +12570,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
-        Public Overloads Overridable Function Insert(ByVal fe_inicial As Global.System.Nullable(Of Date), ByVal fe_final As Global.System.Nullable(Of Date), ByVal dias As Global.System.Nullable(Of Integer), ByVal fe_aplicacion As Global.System.Nullable(Of Date), ByVal importe_base As Global.System.Nullable(Of Decimal), ByVal importe_cobro As Global.System.Nullable(Of Decimal), ByVal importe_iva As Global.System.Nullable(Of Decimal), ByVal total As Global.System.Nullable(Of Decimal), ByVal porcentaje_cobro As Global.System.Nullable(Of Decimal), ByVal id_contrato_garantia As Global.System.Nullable(Of Integer)) As Integer
+        Public Overloads Overridable Function Insert(ByVal fe_inicial As Global.System.Nullable(Of Date), ByVal fe_final As Global.System.Nullable(Of Date), ByVal dias As Global.System.Nullable(Of Integer), ByVal fe_aplicacion As Global.System.Nullable(Of Date), ByVal importe_base As Global.System.Nullable(Of Decimal), ByVal importe_cobro As Global.System.Nullable(Of Decimal), ByVal importe_iva As Global.System.Nullable(Of Decimal), ByVal total As Global.System.Nullable(Of Decimal), ByVal porcentaje_cobro As Global.System.Nullable(Of Decimal), ByVal id_contrato_garantia As Global.System.Nullable(Of Integer), ByVal subsidio As Global.System.Nullable(Of Boolean)) As Integer
             If (fe_inicial.HasValue = true) Then
                 Me.Adapter.InsertCommand.Parameters(0).Value = CType(fe_inicial.Value,Date)
             Else
@@ -12563,6 +12621,11 @@ Namespace PasivoFiraDSTableAdapters
             Else
                 Me.Adapter.InsertCommand.Parameters(9).Value = Global.System.DBNull.Value
             End If
+            If (subsidio.HasValue = true) Then
+                Me.Adapter.InsertCommand.Parameters(10).Value = CType(subsidio.Value,Boolean)
+            Else
+                Me.Adapter.InsertCommand.Parameters(10).Value = Global.System.DBNull.Value
+            End If
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.InsertCommand.Connection.State
             If ((Me.Adapter.InsertCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
                         <> Global.System.Data.ConnectionState.Open) Then
@@ -12593,6 +12656,7 @@ Namespace PasivoFiraDSTableAdapters
                     ByVal total As Global.System.Nullable(Of Decimal),  _
                     ByVal porcentaje_cobro As Global.System.Nullable(Of Decimal),  _
                     ByVal id_contrato_garantia As Global.System.Nullable(Of Integer),  _
+                    ByVal subsidio As Global.System.Nullable(Of Boolean),  _
                     ByVal Original_id_csg As Integer,  _
                     ByVal Original_fe_inicial As Global.System.Nullable(Of Date),  _
                     ByVal Original_fe_final As Global.System.Nullable(Of Date),  _
@@ -12604,6 +12668,7 @@ Namespace PasivoFiraDSTableAdapters
                     ByVal Original_total As Global.System.Nullable(Of Decimal),  _
                     ByVal Original_porcentaje_cobro As Global.System.Nullable(Of Decimal),  _
                     ByVal Original_id_contrato_garantia As Global.System.Nullable(Of Integer),  _
+                    ByVal Original_subsidio As Global.System.Nullable(Of Boolean),  _
                     ByVal id_csg As Integer) As Integer
             If (fe_inicial.HasValue = true) Then
                 Me.Adapter.UpdateCommand.Parameters(0).Value = CType(fe_inicial.Value,Date)
@@ -12655,78 +12720,90 @@ Namespace PasivoFiraDSTableAdapters
             Else
                 Me.Adapter.UpdateCommand.Parameters(9).Value = Global.System.DBNull.Value
             End If
-            Me.Adapter.UpdateCommand.Parameters(10).Value = CType(Original_id_csg,Integer)
-            If (Original_fe_inicial.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(11).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(Original_fe_inicial.Value,Date)
+            If (subsidio.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(10).Value = CType(subsidio.Value,Boolean)
             Else
-                Me.Adapter.UpdateCommand.Parameters(11).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(12).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(10).Value = Global.System.DBNull.Value
+            End If
+            Me.Adapter.UpdateCommand.Parameters(11).Value = CType(Original_id_csg,Integer)
+            If (Original_fe_inicial.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(Original_fe_inicial.Value,Date)
+            Else
+                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(13).Value = Global.System.DBNull.Value
             End If
             If (Original_fe_final.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(Original_fe_final.Value,Date)
+                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(Original_fe_final.Value,Date)
             Else
-                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(14).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(15).Value = Global.System.DBNull.Value
             End If
             If (Original_dias.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(Original_dias.Value,Integer)
+                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(17).Value = CType(Original_dias.Value,Integer)
             Else
-                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(16).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(17).Value = Global.System.DBNull.Value
             End If
             If (Original_fe_aplicacion.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(17).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(18).Value = CType(Original_fe_aplicacion.Value,Date)
+                Me.Adapter.UpdateCommand.Parameters(18).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(19).Value = CType(Original_fe_aplicacion.Value,Date)
             Else
-                Me.Adapter.UpdateCommand.Parameters(17).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(18).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(18).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(19).Value = Global.System.DBNull.Value
             End If
             If (Original_importe_base.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(19).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(20).Value = CType(Original_importe_base.Value,Decimal)
+                Me.Adapter.UpdateCommand.Parameters(20).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(21).Value = CType(Original_importe_base.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(19).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(20).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(20).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(21).Value = Global.System.DBNull.Value
             End If
             If (Original_importe_cobro.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(21).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(22).Value = CType(Original_importe_cobro.Value,Decimal)
+                Me.Adapter.UpdateCommand.Parameters(22).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(23).Value = CType(Original_importe_cobro.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(21).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(22).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(22).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(23).Value = Global.System.DBNull.Value
             End If
             If (Original_importe_iva.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(23).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(24).Value = CType(Original_importe_iva.Value,Decimal)
+                Me.Adapter.UpdateCommand.Parameters(24).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(25).Value = CType(Original_importe_iva.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(23).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(24).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(24).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(25).Value = Global.System.DBNull.Value
             End If
             If (Original_total.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(25).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(26).Value = CType(Original_total.Value,Decimal)
+                Me.Adapter.UpdateCommand.Parameters(26).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(27).Value = CType(Original_total.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(25).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(26).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(26).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(27).Value = Global.System.DBNull.Value
             End If
             If (Original_porcentaje_cobro.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(27).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(28).Value = CType(Original_porcentaje_cobro.Value,Decimal)
+                Me.Adapter.UpdateCommand.Parameters(28).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(29).Value = CType(Original_porcentaje_cobro.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(27).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(28).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(28).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(29).Value = Global.System.DBNull.Value
             End If
             If (Original_id_contrato_garantia.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(29).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(30).Value = CType(Original_id_contrato_garantia.Value,Integer)
+                Me.Adapter.UpdateCommand.Parameters(30).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(31).Value = CType(Original_id_contrato_garantia.Value,Integer)
             Else
-                Me.Adapter.UpdateCommand.Parameters(29).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(30).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(30).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(31).Value = Global.System.DBNull.Value
             End If
-            Me.Adapter.UpdateCommand.Parameters(31).Value = CType(id_csg,Integer)
+            If (Original_subsidio.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(32).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(33).Value = CType(Original_subsidio.Value,Boolean)
+            Else
+                Me.Adapter.UpdateCommand.Parameters(32).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(33).Value = Global.System.DBNull.Value
+            End If
+            Me.Adapter.UpdateCommand.Parameters(34).Value = CType(id_csg,Integer)
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.UpdateCommand.Connection.State
             If ((Me.Adapter.UpdateCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
                         <> Global.System.Data.ConnectionState.Open) Then
@@ -12757,6 +12834,7 @@ Namespace PasivoFiraDSTableAdapters
                     ByVal total As Global.System.Nullable(Of Decimal),  _
                     ByVal porcentaje_cobro As Global.System.Nullable(Of Decimal),  _
                     ByVal id_contrato_garantia As Global.System.Nullable(Of Integer),  _
+                    ByVal subsidio As Global.System.Nullable(Of Boolean),  _
                     ByVal Original_id_csg As Integer,  _
                     ByVal Original_fe_inicial As Global.System.Nullable(Of Date),  _
                     ByVal Original_fe_final As Global.System.Nullable(Of Date),  _
@@ -12767,8 +12845,9 @@ Namespace PasivoFiraDSTableAdapters
                     ByVal Original_importe_iva As Global.System.Nullable(Of Decimal),  _
                     ByVal Original_total As Global.System.Nullable(Of Decimal),  _
                     ByVal Original_porcentaje_cobro As Global.System.Nullable(Of Decimal),  _
-                    ByVal Original_id_contrato_garantia As Global.System.Nullable(Of Integer)) As Integer
-            Return Me.Update(fe_inicial, fe_final, dias, fe_aplicacion, importe_base, importe_cobro, importe_iva, total, porcentaje_cobro, id_contrato_garantia, Original_id_csg, Original_fe_inicial, Original_fe_final, Original_dias, Original_fe_aplicacion, Original_importe_base, Original_importe_cobro, Original_importe_iva, Original_total, Original_porcentaje_cobro, Original_id_contrato_garantia, Original_id_csg)
+                    ByVal Original_id_contrato_garantia As Global.System.Nullable(Of Integer),  _
+                    ByVal Original_subsidio As Global.System.Nullable(Of Boolean)) As Integer
+            Return Me.Update(fe_inicial, fe_final, dias, fe_aplicacion, importe_base, importe_cobro, importe_iva, total, porcentaje_cobro, id_contrato_garantia, subsidio, Original_id_csg, Original_fe_inicial, Original_fe_final, Original_dias, Original_fe_aplicacion, Original_importe_base, Original_importe_cobro, Original_importe_iva, Original_total, Original_porcentaje_cobro, Original_id_contrato_garantia, Original_subsidio, Original_id_csg)
         End Function
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

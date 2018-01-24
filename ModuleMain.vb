@@ -64,7 +64,7 @@
         TIIE_old = TIIE28
         diasX = DateDiff(DateInterval.Day, r.FechaFinal, Fecha)
         diasY = DateDiff(DateInterval.Day, FechaAnt, Fecha)
-        subsidio = TaAnexos.Subsidiocontrato(r.id_contrato)
+        subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital + r.InteresOrdinario + r.Vencido + r.InteresVencido
         If TaVeciminetos.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL vIGENTE
             If diasX <> diasY And Minis_BASE > 0 Then
@@ -130,7 +130,7 @@
 
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
-                Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntFB + InteresAux1FB, 0, CapitalVIG, 0, r.id_contrato)
+                Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntFB + InteresAux1FB, r.InteresOrdinario, CapitalVIG, 0, r.id_contrato)
                 If TaVeciminetos.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
                     TaVeciminetos.UpdateEstatus("Vencido", Fecha, ID_Contrato)
                     CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
@@ -179,7 +179,7 @@
         TIIE_old = TIIE28
         diasX = DateDiff(DateInterval.Day, r.FechaFinal, Fecha)
         diasY = DateDiff(DateInterval.Day, FechaAnt, Fecha)
-
+        subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital + r.InteresOrdinario + r.Vencido + r.InteresVencido
         If TaVeciminetos.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL vIGENTE
             If diasX <> diasY And Minis_BASE > 0 Then
@@ -289,7 +289,7 @@
         TIIE_old = Math.Round(TIIE_old, 2)
         diasX = DateDiff(DateInterval.Day, r.FechaFinal, Fecha)
         diasY = DateDiff(DateInterval.Day, FechaAnt, Fecha)
-
+        subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital + r.InteresOrdinario + r.Vencido + r.InteresVencido
         If TaVeciminetos.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
             If diasX <> diasY And Minis_BASE > 0 Then
@@ -391,7 +391,7 @@
         Dias = DateDiff(DateInterval.Day, FecIni, FecFin)
         Cobro = ((((MontoBase / SubsidioAUX) * (PCXSG / 100)) / 360)) * (Dias)
 
-        taCXSG.Insert(FecIni, FecFin, Dias, FecIni, MontoBase, Cobro, Cobro * TasaIVA, Cobro * (1 + TasaIVA), PCXSG, ID)
+        taCXSG.Insert(FecIni, FecFin, Dias, FecIni, MontoBase, Cobro, Cobro * TasaIVA, Cobro * (1 + TasaIVA), PCXSG, ID, Subsidio) 'dagl 24/01/2018 se agrega el campo subsidio a la tabla cxg 
     End Sub
 
 End Module

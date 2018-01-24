@@ -6,9 +6,10 @@
     Dim taCalendar As New PasivoFiraDSTableAdapters.CONT_CPF_CalendariosRevisionTasaTableAdapter
     Dim taCXSG As New PasivoFiraDSTableAdapters.CONT_CPF_csgTableAdapter
     Dim ds As New PasivoFiraDS
+    Dim subsidio As Boolean
 
     Sub Main()
-        Dim Hoy As Date = "31/jul/2017"
+        Dim Hoy As Date = "30/nov/2017"
         If CargaTIIE(Hoy) And Hoy.DayOfWeek <> DayOfWeek.Sunday And Hoy.DayOfWeek <> DayOfWeek.Saturday Then
             taCalendar.Fill(ds.CONT_CPF_CalendariosRevisionTasa, Hoy)
             For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
@@ -63,7 +64,7 @@
         TIIE_old = TIIE28
         diasX = DateDiff(DateInterval.Day, r.FechaFinal, Fecha)
         diasY = DateDiff(DateInterval.Day, FechaAnt, Fecha)
-
+        subsidio = TaAnexos.Subsidiocontrato(r.id_contrato)
         SaldoINI = r.Capital + r.InteresOrdinario + r.Vencido + r.InteresVencido
         If TaVeciminetos.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL vIGENTE
             If diasX <> diasY And Minis_BASE > 0 Then
@@ -132,8 +133,11 @@
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntFB + InteresAux1FB, 0, CapitalVIG, 0, r.id_contrato)
                 If TaVeciminetos.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
                     TaVeciminetos.UpdateEstatus("Vencido", Fecha, ID_Contrato)
-                    CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato)
+                    CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
+            Else
+                Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
+                Pag.Insert("PAGO POR REF", "APLICADO", Fecha, 0, 0, 0, IntFB, 0, 0, 0, r.id_contrato) 'DAGL Ingresar pago de interes 23/01/2018
             End If
         Else
             TaEdoCta.Insert(TipoTasa, r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
@@ -141,6 +145,8 @@
 
             TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFB, 0)
+
+
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
     End Sub
@@ -238,8 +244,11 @@
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntFB + InteresAux1FB, 0, CapitalVIG, 0, r.id_contrato)
                 If TaVeciminetos.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
                     TaVeciminetos.UpdateEstatus("Vencido", Fecha, ID_Contrato)
-                    CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato)
+                    CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
+            Else
+                Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
+                Pag.Insert("PAGO POR REF", "APLICADO", Fecha, 0, 0, 0, IntFB, 0, 0, 0, r.id_contrato) 'DAGL Ingresar pago de interes 23/01/2018
             End If
         Else
             TaEdoCta.Insert(TipoTasa, r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
@@ -247,6 +256,7 @@
 
             TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFB, 0)
+
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
     End Sub
@@ -344,8 +354,11 @@
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntFB + InteresAux1FB, 0, CapitalVIG, 0, r.id_contrato)
                 If TaVeciminetos.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
                     TaVeciminetos.UpdateEstatus("Vencido", Fecha, ID_Contrato)
-                    CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato)
+                    CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
+            Else
+                Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
+                Pag.Insert("PAGO POR REF", "APLICADO", Fecha, 0, 0, 0, IntFB, 0, 0, 0, r.id_contrato) 'DAGL Ingresar pago de interes 23/01/2018
             End If
         Else
             TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
@@ -353,6 +366,7 @@
 
             TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, ID_Contrato, (TasaActivaFB + r.TiieActiva), diasX, IntFB, 0)
+
             If TasaActivaFN > 0 Then
                 TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFB, 0)

@@ -397,23 +397,27 @@ WHERE     (Mes = @MEs)</CommandText>
               <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT        CONT_CPF_contratos.id_contrato, CONT_CPF_edocuenta.tipo_deu_acre, SUM(ISNULL(CONT_CPF_edocuenta.min_base, 0)) AS Capital, SUM(ISNULL(CONT_CPF_edocuenta.cap_vigente, 0)) AS Vigente, 
-                         SUM(ISNULL(CONT_CPF_edocuenta.cap_vencido, 0)) AS Vencido, SUM(CONT_CPF_edocuenta.min_base) - ISNULL(SUM(CONT_CPF_edocuenta.cap_vigente), 0) - ISNULL(SUM(CONT_CPF_edocuenta.cap_vencido), 0) 
-                         AS SaldoInsoluto, CONT_CPF_contratos.FechaCorte, SUM(ISNULL(CONT_CPF_edocuenta.int_ord, 0)) AS InteresOrdinario, SUM(ISNULL(CONT_CPF_edocuenta.int_vencido, 0)) AS InteresVencido, 
-                         SUM(ISNULL(CONT_CPF_edocuenta.int_mor_ord, 0)) AS MotatoriosOrdinarios, SUM(ISNULL(CONT_CPF_edocuenta.int_mor_pen, 0)) AS MotatoriosPendientes, SUM(ISNULL(CONT_CPF_edocuenta.int_acum, 0)) 
-                         AS InteresAcumulado, SUM(ISNULL(CONT_CPF_edocuenta.int_fin, 0)) AS InteresFinanciado, MIN(CONT_CPF_edocuenta.fecha_ini) AS FechaInicial, MAX(CONT_CPF_edocuenta.fecha_fin) AS FechaFinal, CONT_CPF_contratos.BP, 
-                         CONT_CPF_contratos.FN, CONT_CPF_contratos.FB, MAX(CONT_CPF_edocuenta.id_edo_cta) AS id_edo_ctaMAX, CONT_CPF_esquema_cobro.clave AS claveCobro, CONT_CPF_tipo_tasas.des_tipo_tasa, 
-                         CONT_CPF_contratos_garantias.id_contrato_garantia, CONT_CPF_contratos.porcentaje_cxsg, CONT_CPF_contratos.TiieActiva
+                    <CommandText>SELECT        CONT_CPF_contratos.id_contrato, CONT_CPF_edocuenta.tipo_deu_acre, SUM(CONT_CPF_edocuenta.min_base) - ISNULL(SUM(CONT_CPF_edocuenta.cap_vigente), 
+                         0) - ISNULL(SUM(CONT_CPF_edocuenta.cap_vencido), 0) AS Capital, SUM(ISNULL(CONT_CPF_edocuenta.cap_vigente, 0)) AS Vigente, 
+                         SUM(ISNULL(CONT_CPF_edocuenta.cap_vencido, 0)) AS Vencido, SUM(CONT_CPF_edocuenta.min_base) - ISNULL(SUM(CONT_CPF_edocuenta.cap_vigente), 0) 
+                         - ISNULL(SUM(CONT_CPF_edocuenta.cap_vencido), 0) AS SaldoInsoluto, CONT_CPF_contratos.FechaCorte, SUM(ISNULL(CONT_CPF_edocuenta.InteAux1, 0)) 
+                         AS InteresOrdinario, SUM(ISNULL(CONT_CPF_edocuenta.int_vencido, 0)) AS InteresVencido, SUM(ISNULL(CONT_CPF_edocuenta.int_mor_ord, 0)) 
+                         AS MotatoriosOrdinarios, SUM(ISNULL(CONT_CPF_edocuenta.int_mor_pen, 0)) AS MotatoriosPendientes, SUM(ISNULL(CONT_CPF_edocuenta.int_acum, 0)) 
+                         AS InteresAcumulado, SUM(ISNULL(CONT_CPF_edocuenta.int_fin, 0)) AS InteresFinanciado, MIN(CONT_CPF_edocuenta.fecha_ini) AS FechaInicial, 
+                         MAX(CONT_CPF_edocuenta.fecha_fin) AS FechaFinal, CONT_CPF_contratos.BP, CONT_CPF_contratos.FN, CONT_CPF_contratos.FB, 
+                         MAX(CONT_CPF_edocuenta.id_edo_cta) AS id_edo_ctaMAX, CONT_CPF_esquema_cobro.clave AS claveCobro, CONT_CPF_tipo_tasas.des_tipo_tasa, 
+                         CONT_CPF_contratos_garantias.id_contrato_garantia, CONT_CPF_contratos.porcentaje_cxsg, CONT_CPF_contratos.TiieActiva, CONT_CPF_contratos.subsidio
 FROM            CONT_CPF_contratos INNER JOIN
                          CONT_CPF_edocuenta ON CONT_CPF_contratos.id_contrato = CONT_CPF_edocuenta.id_contrato INNER JOIN
                          CONT_CPF_esquema_cobro ON CONT_CPF_contratos.id_esquema_cobro = CONT_CPF_esquema_cobro.id_esquema_cobro INNER JOIN
                          CONT_CPF_tipo_tasas ON CONT_CPF_contratos.id_tipo_tasa = CONT_CPF_tipo_tasas.id_tipo_tasa INNER JOIN
                          CONT_CPF_contratos_garantias ON CONT_CPF_contratos.id_contrato = CONT_CPF_contratos_garantias.id_contrato
-GROUP BY CONT_CPF_contratos.id_contrato, CONT_CPF_edocuenta.tipo_deu_acre, CONT_CPF_contratos.FechaCorte, CONT_CPF_contratos.BP, CONT_CPF_contratos.FN, CONT_CPF_contratos.FB, CONT_CPF_esquema_cobro.clave, 
-                         CONT_CPF_tipo_tasas.des_tipo_tasa, CONT_CPF_contratos_garantias.id_contrato_garantia, CONT_CPF_contratos.porcentaje_cxsg, CONT_CPF_contratos.TiieActiva
+GROUP BY CONT_CPF_contratos.id_contrato, CONT_CPF_edocuenta.tipo_deu_acre, CONT_CPF_contratos.FechaCorte, CONT_CPF_contratos.BP, CONT_CPF_contratos.FN, 
+                         CONT_CPF_contratos.FB, CONT_CPF_esquema_cobro.clave, CONT_CPF_tipo_tasas.des_tipo_tasa, CONT_CPF_contratos_garantias.id_contrato_garantia, 
+                         CONT_CPF_contratos.porcentaje_cxsg, CONT_CPF_contratos.TiieActiva, CONT_CPF_contratos.subsidio
 HAVING        (CONT_CPF_edocuenta.tipo_deu_acre = 'BP') AND (CONT_CPF_contratos.id_contrato = @ID_Contrato)</CommandText>
                     <Parameters>
-                      <Parameter AllowDbNull="false" AutogeneratedName="ID_Contrato" ColumnName="id_contrato" DataSourceName="Production.dbo.CONT_CPF_contratos" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@ID_Contrato" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="id_contrato" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="ID_Contrato" ColumnName="id_contrato" DataSourceName="Production_AUX.dbo.CONT_CPF_contratos" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@ID_Contrato" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="id_contrato" SourceColumnNullMapping="false" SourceVersion="Current" />
                     </Parameters>
                   </DbCommand>
                 </SelectCommand>
@@ -444,8 +448,21 @@ HAVING        (CONT_CPF_edocuenta.tipo_deu_acre = 'BP') AND (CONT_CPF_contratos.
               <Mapping SourceColumn="id_contrato_garantia" DataSetColumn="id_contrato_garantia" />
               <Mapping SourceColumn="porcentaje_cxsg" DataSetColumn="porcentaje_cxsg" />
               <Mapping SourceColumn="TiieActiva" DataSetColumn="TiieActiva" />
+              <Mapping SourceColumn="subsidio" DataSetColumn="subsidio" />
             </Mappings>
             <Sources>
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Production_AUX.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="Subsidiocontrato" Modifier="Public" Name="Subsidiocontrato" QueryType="Scalar" ScalarCallRetval="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy5" UserSourceName="Subsidiocontrato">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        subsidio
+FROM            CONT_CPF_contratos
+WHERE        (id_contrato = @Idcontrato)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="false" AutogeneratedName="Idcontrato" ColumnName="id_contrato" DataSourceName="Production_AUX.dbo.CONT_CPF_contratos" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@Idcontrato" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="id_contrato" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
               <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Pasivo.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="TasaActivaBP" Modifier="Public" Name="TasaActivaBP" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="TasaActivaBP">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
@@ -1225,7 +1242,7 @@ WHERE     (id_contrato = @id_contrato)</CommandText>
   <xs:element name="PasivoFiraDS" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="PasivoFiraDS" msprop:Generator_UserDSName="PasivoFiraDS">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="CONT_CPF_edocuenta" msprop:Generator_TableClassName="CONT_CPF_edocuentaDataTable" msprop:Generator_TableVarName="tableCONT_CPF_edocuenta" msprop:Generator_RowChangedName="CONT_CPF_edocuentaRowChanged" msprop:Generator_TablePropName="CONT_CPF_edocuenta" msprop:Generator_RowDeletingName="CONT_CPF_edocuentaRowDeleting" msprop:Generator_RowChangingName="CONT_CPF_edocuentaRowChanging" msprop:Generator_RowEvHandlerName="CONT_CPF_edocuentaRowChangeEventHandler" msprop:Generator_RowDeletedName="CONT_CPF_edocuentaRowDeleted" msprop:Generator_RowClassName="CONT_CPF_edocuentaRow" msprop:Generator_UserTableName="CONT_CPF_edocuenta" msprop:Generator_RowEvArgName="CONT_CPF_edocuentaRowChangeEvent">
+        <xs:element name="CONT_CPF_edocuenta" msprop:Generator_TableClassName="CONT_CPF_edocuentaDataTable" msprop:Generator_TableVarName="tableCONT_CPF_edocuenta" msprop:Generator_TablePropName="CONT_CPF_edocuenta" msprop:Generator_RowDeletingName="CONT_CPF_edocuentaRowDeleting" msprop:Generator_RowChangingName="CONT_CPF_edocuentaRowChanging" msprop:Generator_RowEvHandlerName="CONT_CPF_edocuentaRowChangeEventHandler" msprop:Generator_RowDeletedName="CONT_CPF_edocuentaRowDeleted" msprop:Generator_UserTableName="CONT_CPF_edocuenta" msprop:Generator_RowChangedName="CONT_CPF_edocuentaRowChanged" msprop:Generator_RowEvArgName="CONT_CPF_edocuentaRowChangeEvent" msprop:Generator_RowClassName="CONT_CPF_edocuentaRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id_edo_cta" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid_edo_cta" msprop:Generator_ColumnPropNameInRow="id_edo_cta" msprop:Generator_ColumnPropNameInTable="id_edo_ctaColumn" msprop:Generator_UserColumnName="id_edo_cta" type="xs:int" />
@@ -1257,7 +1274,7 @@ WHERE     (id_contrato = @id_contrato)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="TIIE" msprop:Generator_TableClassName="TIIEDataTable" msprop:Generator_TableVarName="tableTIIE" msprop:Generator_RowChangedName="TIIERowChanged" msprop:Generator_TablePropName="TIIE" msprop:Generator_RowDeletingName="TIIERowDeleting" msprop:Generator_RowChangingName="TIIERowChanging" msprop:Generator_RowEvHandlerName="TIIERowChangeEventHandler" msprop:Generator_RowDeletedName="TIIERowDeleted" msprop:Generator_RowClassName="TIIERow" msprop:Generator_UserTableName="TIIE" msprop:Generator_RowEvArgName="TIIERowChangeEvent">
+        <xs:element name="TIIE" msprop:Generator_TableClassName="TIIEDataTable" msprop:Generator_TableVarName="tableTIIE" msprop:Generator_TablePropName="TIIE" msprop:Generator_RowDeletingName="TIIERowDeleting" msprop:Generator_RowChangingName="TIIERowChanging" msprop:Generator_RowEvHandlerName="TIIERowChangeEventHandler" msprop:Generator_RowDeletedName="TIIERowDeleted" msprop:Generator_UserTableName="TIIE" msprop:Generator_RowChangedName="TIIERowChanged" msprop:Generator_RowEvArgName="TIIERowChangeEvent" msprop:Generator_RowClassName="TIIERow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Mes" msprop:Generator_ColumnVarNameInTable="columnMes" msprop:Generator_ColumnPropNameInRow="Mes" msprop:Generator_ColumnPropNameInTable="MesColumn" msprop:Generator_UserColumnName="Mes" minOccurs="0">
@@ -1271,7 +1288,7 @@ WHERE     (id_contrato = @id_contrato)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="SaldosAnexos" msprop:Generator_TableClassName="SaldosAnexosDataTable" msprop:Generator_TableVarName="tableSaldosAnexos" msprop:Generator_RowChangedName="SaldosAnexosRowChanged" msprop:Generator_TablePropName="SaldosAnexos" msprop:Generator_RowDeletingName="SaldosAnexosRowDeleting" msprop:Generator_RowChangingName="SaldosAnexosRowChanging" msprop:Generator_RowEvHandlerName="SaldosAnexosRowChangeEventHandler" msprop:Generator_RowDeletedName="SaldosAnexosRowDeleted" msprop:Generator_RowClassName="SaldosAnexosRow" msprop:Generator_UserTableName="SaldosAnexos" msprop:Generator_RowEvArgName="SaldosAnexosRowChangeEvent">
+        <xs:element name="SaldosAnexos" msprop:Generator_TableClassName="SaldosAnexosDataTable" msprop:Generator_TableVarName="tableSaldosAnexos" msprop:Generator_TablePropName="SaldosAnexos" msprop:Generator_RowDeletingName="SaldosAnexosRowDeleting" msprop:Generator_RowChangingName="SaldosAnexosRowChanging" msprop:Generator_RowEvHandlerName="SaldosAnexosRowChangeEventHandler" msprop:Generator_RowDeletedName="SaldosAnexosRowDeleted" msprop:Generator_UserTableName="SaldosAnexos" msprop:Generator_RowChangedName="SaldosAnexosRowChanged" msprop:Generator_RowEvArgName="SaldosAnexosRowChangeEvent" msprop:Generator_RowClassName="SaldosAnexosRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id_contrato" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid_contrato" msprop:Generator_ColumnPropNameInRow="id_contrato" msprop:Generator_ColumnPropNameInTable="id_contratoColumn" msprop:Generator_UserColumnName="id_contrato" type="xs:int" />
@@ -1316,10 +1333,11 @@ WHERE     (id_contrato = @id_contrato)</CommandText>
               <xs:element name="id_contrato_garantia" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid_contrato_garantia" msprop:Generator_ColumnPropNameInRow="id_contrato_garantia" msprop:Generator_ColumnPropNameInTable="id_contrato_garantiaColumn" msprop:Generator_UserColumnName="id_contrato_garantia" type="xs:int" />
               <xs:element name="porcentaje_cxsg" msprop:Generator_ColumnVarNameInTable="columnporcentaje_cxsg" msprop:Generator_ColumnPropNameInRow="porcentaje_cxsg" msprop:Generator_ColumnPropNameInTable="porcentaje_cxsgColumn" msprop:Generator_UserColumnName="porcentaje_cxsg" type="xs:decimal" minOccurs="0" />
               <xs:element name="TiieActiva" msprop:Generator_ColumnVarNameInTable="columnTiieActiva" msprop:Generator_ColumnPropNameInRow="TiieActiva" msprop:Generator_ColumnPropNameInTable="TiieActivaColumn" msprop:Generator_UserColumnName="TiieActiva" type="xs:decimal" minOccurs="0" />
+              <xs:element name="subsidio" msprop:Generator_ColumnVarNameInTable="columnsubsidio" msprop:Generator_ColumnPropNameInRow="subsidio" msprop:Generator_ColumnPropNameInTable="subsidioColumn" msprop:Generator_UserColumnName="subsidio" type="xs:boolean" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="CONT_CPF_vencimientos" msprop:Generator_TableClassName="CONT_CPF_vencimientosDataTable" msprop:Generator_TableVarName="tableCONT_CPF_vencimientos" msprop:Generator_TablePropName="CONT_CPF_vencimientos" msprop:Generator_RowDeletingName="CONT_CPF_vencimientosRowDeleting" msprop:Generator_RowChangingName="CONT_CPF_vencimientosRowChanging" msprop:Generator_RowEvHandlerName="CONT_CPF_vencimientosRowChangeEventHandler" msprop:Generator_RowDeletedName="CONT_CPF_vencimientosRowDeleted" msprop:Generator_UserTableName="CONT_CPF_vencimientos" msprop:Generator_RowChangedName="CONT_CPF_vencimientosRowChanged" msprop:Generator_RowEvArgName="CONT_CPF_vencimientosRowChangeEvent" msprop:Generator_RowClassName="CONT_CPF_vencimientosRow">
+        <xs:element name="CONT_CPF_vencimientos" msprop:Generator_TableClassName="CONT_CPF_vencimientosDataTable" msprop:Generator_TableVarName="tableCONT_CPF_vencimientos" msprop:Generator_RowChangedName="CONT_CPF_vencimientosRowChanged" msprop:Generator_TablePropName="CONT_CPF_vencimientos" msprop:Generator_RowDeletingName="CONT_CPF_vencimientosRowDeleting" msprop:Generator_RowChangingName="CONT_CPF_vencimientosRowChanging" msprop:Generator_RowEvHandlerName="CONT_CPF_vencimientosRowChangeEventHandler" msprop:Generator_RowDeletedName="CONT_CPF_vencimientosRowDeleted" msprop:Generator_RowClassName="CONT_CPF_vencimientosRow" msprop:Generator_UserTableName="CONT_CPF_vencimientos" msprop:Generator_RowEvArgName="CONT_CPF_vencimientosRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id_vencimientos" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid_vencimientos" msprop:Generator_ColumnPropNameInRow="id_vencimientos" msprop:Generator_ColumnPropNameInTable="id_vencimientosColumn" msprop:Generator_UserColumnName="id_vencimientos" type="xs:int" />
@@ -1338,7 +1356,7 @@ WHERE     (id_contrato = @id_contrato)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="CONT_CPF_CalendariosRevisionTasa" msprop:Generator_TableClassName="CONT_CPF_CalendariosRevisionTasaDataTable" msprop:Generator_TableVarName="tableCONT_CPF_CalendariosRevisionTasa" msprop:Generator_RowChangedName="CONT_CPF_CalendariosRevisionTasaRowChanged" msprop:Generator_TablePropName="CONT_CPF_CalendariosRevisionTasa" msprop:Generator_RowDeletingName="CONT_CPF_CalendariosRevisionTasaRowDeleting" msprop:Generator_RowChangingName="CONT_CPF_CalendariosRevisionTasaRowChanging" msprop:Generator_RowEvHandlerName="CONT_CPF_CalendariosRevisionTasaRowChangeEventHandler" msprop:Generator_RowDeletedName="CONT_CPF_CalendariosRevisionTasaRowDeleted" msprop:Generator_RowClassName="CONT_CPF_CalendariosRevisionTasaRow" msprop:Generator_UserTableName="CONT_CPF_CalendariosRevisionTasa" msprop:Generator_RowEvArgName="CONT_CPF_CalendariosRevisionTasaRowChangeEvent">
+        <xs:element name="CONT_CPF_CalendariosRevisionTasa" msprop:Generator_TableClassName="CONT_CPF_CalendariosRevisionTasaDataTable" msprop:Generator_TableVarName="tableCONT_CPF_CalendariosRevisionTasa" msprop:Generator_TablePropName="CONT_CPF_CalendariosRevisionTasa" msprop:Generator_RowDeletingName="CONT_CPF_CalendariosRevisionTasaRowDeleting" msprop:Generator_RowChangingName="CONT_CPF_CalendariosRevisionTasaRowChanging" msprop:Generator_RowEvHandlerName="CONT_CPF_CalendariosRevisionTasaRowChangeEventHandler" msprop:Generator_RowDeletedName="CONT_CPF_CalendariosRevisionTasaRowDeleted" msprop:Generator_UserTableName="CONT_CPF_CalendariosRevisionTasa" msprop:Generator_RowChangedName="CONT_CPF_CalendariosRevisionTasaRowChanged" msprop:Generator_RowEvArgName="CONT_CPF_CalendariosRevisionTasaRowChangeEvent" msprop:Generator_RowClassName="CONT_CPF_CalendariosRevisionTasaRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID_Calendario" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID_Calendario" msprop:Generator_ColumnPropNameInRow="ID_Calendario" msprop:Generator_ColumnPropNameInTable="ID_CalendarioColumn" msprop:Generator_UserColumnName="ID_Calendario" type="xs:int" />
@@ -1352,7 +1370,7 @@ WHERE     (id_contrato = @id_contrato)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="CONT_CPF_saldos_contingente" msprop:Generator_TableClassName="CONT_CPF_saldos_contingenteDataTable" msprop:Generator_TableVarName="tableCONT_CPF_saldos_contingente" msprop:Generator_RowChangedName="CONT_CPF_saldos_contingenteRowChanged" msprop:Generator_TablePropName="CONT_CPF_saldos_contingente" msprop:Generator_RowDeletingName="CONT_CPF_saldos_contingenteRowDeleting" msprop:Generator_RowChangingName="CONT_CPF_saldos_contingenteRowChanging" msprop:Generator_RowEvHandlerName="CONT_CPF_saldos_contingenteRowChangeEventHandler" msprop:Generator_RowDeletedName="CONT_CPF_saldos_contingenteRowDeleted" msprop:Generator_RowClassName="CONT_CPF_saldos_contingenteRow" msprop:Generator_UserTableName="CONT_CPF_saldos_contingente" msprop:Generator_RowEvArgName="CONT_CPF_saldos_contingenteRowChangeEvent">
+        <xs:element name="CONT_CPF_saldos_contingente" msprop:Generator_TableClassName="CONT_CPF_saldos_contingenteDataTable" msprop:Generator_TableVarName="tableCONT_CPF_saldos_contingente" msprop:Generator_TablePropName="CONT_CPF_saldos_contingente" msprop:Generator_RowDeletingName="CONT_CPF_saldos_contingenteRowDeleting" msprop:Generator_RowChangingName="CONT_CPF_saldos_contingenteRowChanging" msprop:Generator_RowEvHandlerName="CONT_CPF_saldos_contingenteRowChangeEventHandler" msprop:Generator_RowDeletedName="CONT_CPF_saldos_contingenteRowDeleted" msprop:Generator_UserTableName="CONT_CPF_saldos_contingente" msprop:Generator_RowChangedName="CONT_CPF_saldos_contingenteRowChanged" msprop:Generator_RowEvArgName="CONT_CPF_saldos_contingenteRowChangeEvent" msprop:Generator_RowClassName="CONT_CPF_saldos_contingenteRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id_saldocontingente" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid_saldocontingente" msprop:Generator_ColumnPropNameInRow="id_saldocontingente" msprop:Generator_ColumnPropNameInTable="id_saldocontingenteColumn" msprop:Generator_UserColumnName="id_saldocontingente" type="xs:int" />
@@ -1371,7 +1389,7 @@ WHERE     (id_contrato = @id_contrato)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Pagos" msprop:Generator_TableClassName="PagosDataTable" msprop:Generator_TableVarName="tablePagos" msprop:Generator_TablePropName="Pagos" msprop:Generator_RowDeletingName="PagosRowDeleting" msprop:Generator_RowChangingName="PagosRowChanging" msprop:Generator_RowEvHandlerName="PagosRowChangeEventHandler" msprop:Generator_RowDeletedName="PagosRowDeleted" msprop:Generator_UserTableName="Pagos" msprop:Generator_RowChangedName="PagosRowChanged" msprop:Generator_RowEvArgName="PagosRowChangeEvent" msprop:Generator_RowClassName="PagosRow">
+        <xs:element name="Pagos" msprop:Generator_TableClassName="PagosDataTable" msprop:Generator_TableVarName="tablePagos" msprop:Generator_RowChangedName="PagosRowChanged" msprop:Generator_TablePropName="Pagos" msprop:Generator_RowDeletingName="PagosRowDeleting" msprop:Generator_RowChangingName="PagosRowChanging" msprop:Generator_RowEvHandlerName="PagosRowChangeEventHandler" msprop:Generator_RowDeletedName="PagosRowDeleted" msprop:Generator_RowClassName="PagosRow" msprop:Generator_UserTableName="Pagos" msprop:Generator_RowEvArgName="PagosRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id_pago" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid_pago" msprop:Generator_ColumnPropNameInRow="id_pago" msprop:Generator_ColumnPropNameInTable="id_pagoColumn" msprop:Generator_UserColumnName="id_pago" type="xs:int" />
@@ -1401,7 +1419,7 @@ WHERE     (id_contrato = @id_contrato)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="CONT_CPF_csg" msprop:Generator_TableClassName="CONT_CPF_csgDataTable" msprop:Generator_TableVarName="tableCONT_CPF_csg" msprop:Generator_TablePropName="CONT_CPF_csg" msprop:Generator_RowDeletingName="CONT_CPF_csgRowDeleting" msprop:Generator_RowChangingName="CONT_CPF_csgRowChanging" msprop:Generator_RowEvHandlerName="CONT_CPF_csgRowChangeEventHandler" msprop:Generator_RowDeletedName="CONT_CPF_csgRowDeleted" msprop:Generator_UserTableName="CONT_CPF_csg" msprop:Generator_RowChangedName="CONT_CPF_csgRowChanged" msprop:Generator_RowEvArgName="CONT_CPF_csgRowChangeEvent" msprop:Generator_RowClassName="CONT_CPF_csgRow">
+        <xs:element name="CONT_CPF_csg" msprop:Generator_TableClassName="CONT_CPF_csgDataTable" msprop:Generator_TableVarName="tableCONT_CPF_csg" msprop:Generator_RowChangedName="CONT_CPF_csgRowChanged" msprop:Generator_TablePropName="CONT_CPF_csg" msprop:Generator_RowDeletingName="CONT_CPF_csgRowDeleting" msprop:Generator_RowChangingName="CONT_CPF_csgRowChanging" msprop:Generator_RowEvHandlerName="CONT_CPF_csgRowChangeEventHandler" msprop:Generator_RowDeletedName="CONT_CPF_csgRowDeleted" msprop:Generator_RowClassName="CONT_CPF_csgRow" msprop:Generator_UserTableName="CONT_CPF_csg" msprop:Generator_RowEvArgName="CONT_CPF_csgRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id_csg" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid_csg" msprop:Generator_ColumnPropNameInRow="id_csg" msprop:Generator_ColumnPropNameInTable="id_csgColumn" msprop:Generator_UserColumnName="id_csg" type="xs:int" />

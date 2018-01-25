@@ -9,7 +9,7 @@
     Dim subsidio As Boolean
 
     Sub Main()
-        Dim Hoy As Date = "30/nov/2017"
+        Dim Hoy As Date = "22/ene/2018"
         If CargaTIIE(Hoy) And Hoy.DayOfWeek <> DayOfWeek.Sunday And Hoy.DayOfWeek <> DayOfWeek.Saturday Then
             taCalendar.Fill(ds.CONT_CPF_CalendariosRevisionTasa, Hoy)
             For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
@@ -29,7 +29,7 @@
                 Procesa_SIMPLE_FIN(Fecha, ID_Contrato, EsCorteInte, r, EsVencimientoCAP)
             ElseIf CInt(r.claveCobro.Trim) = EsquemaCobro.SIMPLE And InStr(r.des_tipo_tasa.Trim, "Variable") Then
                 Procesa_SIMPLE(Fecha, ID_Contrato, EsCorteInte, r, EsVencimientoCAP)
-            ElseIf CInt(r.claveCobro.Trim) = EsquemaCobro.SIMPLE And InStr(r.des_tipo_tasa.Trim, "Fija con ") Then
+            ElseIf CInt(r.claveCobro.Trim) = EsquemaCobro.SIMPLE And InStr(r.des_tipo_tasa.Trim, "Tasa Fija con Pago") Then  '"Fija con "
                 Procesa_FIJA_CON(Fecha, ID_Contrato, EsCorteInte, r, EsVencimientoCAP)
             End If
         Next
@@ -99,7 +99,9 @@
             Dim InteFinan As Decimal = TaEdoCta.SacaInteresAux1(r.id_contrato, Fecha1, Fecha)
 
             If EsVencimetoCap Then
-                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha)
+                Dim Fecha_ante As DateTime = Fecha.AddDays(-2) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
+                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha_ante, Fecha)
+                ' CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha)
                 SaldoFIN -= CapitalVIG + IntFINAN + InteFinan
                 IntORD_Aux = InteFinan * -1
                 IntFB_Aux = 0
@@ -210,7 +212,9 @@
             Dim IntFB_Aux As Decimal = IntFB
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
-                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha)
+                Dim Fecha_ante As DateTime = Fecha.AddDays(-2) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
+                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha_ante, Fecha)
+                '  CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha)
                 SaldoFIN -= CapitalVIG + IntFINAN
                 IntORD_Aux = IntFINAN * -1
                 IntFB_Aux = 0
@@ -320,7 +324,8 @@
             Dim IntFB_Aux As Decimal = IntFB
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
-                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha)
+                Dim Fecha_ante As DateTime = Fecha.AddDays(-2) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
+                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha_ante, Fecha)
                 SaldoFIN -= CapitalVIG + IntFINAN
                 IntORD_Aux = 0
                 IntFB_Aux = 0

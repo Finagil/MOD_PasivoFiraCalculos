@@ -393,6 +393,13 @@
             SubsidioAUX = 1
         End If
 
+        Dias = DateDiff(DateInterval.Day, FecIni, FecFin) 'DAGL 26/01/2018 REVISAR FECHA INICIAL CUALDO LA FECHA DE VENCIMIENTO SEA MENOR A LA FECHA DE REVISION DE TASA
+        If FecIni > FecFin Then
+            Dim fechaux As Date = FecIni
+            FecIni = FecFin
+            FecFin = fechaux
+
+        End If
         Dias = DateDiff(DateInterval.Day, FecIni, FecFin)
         Cobro = ((((MontoBase / SubsidioAUX) * (PCXSG / 100)) / 360)) * (Dias)
 

@@ -1377,6 +1377,8 @@ Partial Public Class PasivoFiraDS
         
         Private columnsubsidio As Global.System.Data.DataColumn
         
+        Private columntasafijafira As Global.System.Data.DataColumn
+        
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Sub New()
@@ -1613,6 +1615,14 @@ Partial Public Class PasivoFiraDS
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property tasafijafiraColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columntasafijafira
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false)>  _
         Public ReadOnly Property Count() As Integer
@@ -1672,9 +1682,10 @@ Partial Public Class PasivoFiraDS
                     ByVal des_tipo_tasa As String,  _
                     ByVal porcentaje_cxsg As Decimal,  _
                     ByVal TiieActiva As Decimal,  _
-                    ByVal subsidio As Boolean) As SaldosAnexosRow
+                    ByVal subsidio As Boolean,  _
+                    ByVal tasafijafira As Decimal) As SaldosAnexosRow
             Dim rowSaldosAnexosRow As SaldosAnexosRow = CType(Me.NewRow,SaldosAnexosRow)
-            Dim columnValuesArray() As Object = New Object() {Nothing, tipo_deu_acre, Capital, Vigente, Vencido, SaldoInsoluto, FechaCorte, InteresOrdinario, InteresVencido, MotatoriosOrdinarios, MotatoriosPendientes, InteresAcumulado, InteresFinanciado, FechaInicial, FechaFinal, BP, FN, FB, id_edo_ctaMAX, claveCobro, des_tipo_tasa, Nothing, porcentaje_cxsg, TiieActiva, subsidio}
+            Dim columnValuesArray() As Object = New Object() {Nothing, tipo_deu_acre, Capital, Vigente, Vencido, SaldoInsoluto, FechaCorte, InteresOrdinario, InteresVencido, MotatoriosOrdinarios, MotatoriosPendientes, InteresAcumulado, InteresFinanciado, FechaInicial, FechaFinal, BP, FN, FB, id_edo_ctaMAX, claveCobro, des_tipo_tasa, Nothing, porcentaje_cxsg, TiieActiva, subsidio, tasafijafira}
             rowSaldosAnexosRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowSaldosAnexosRow)
             Return rowSaldosAnexosRow
@@ -1728,6 +1739,7 @@ Partial Public Class PasivoFiraDS
             Me.columnporcentaje_cxsg = MyBase.Columns("porcentaje_cxsg")
             Me.columnTiieActiva = MyBase.Columns("TiieActiva")
             Me.columnsubsidio = MyBase.Columns("subsidio")
+            Me.columntasafijafira = MyBase.Columns("tasafijafira")
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -1783,6 +1795,8 @@ Partial Public Class PasivoFiraDS
             MyBase.Columns.Add(Me.columnTiieActiva)
             Me.columnsubsidio = New Global.System.Data.DataColumn("subsidio", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnsubsidio)
+            Me.columntasafijafira = New Global.System.Data.DataColumn("tasafijafira", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columntasafijafira)
             Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnid_contrato}, true))
             Me.columnid_contrato.AutoIncrement = true
             Me.columnid_contrato.AutoIncrementSeed = -1
@@ -4870,6 +4884,21 @@ Partial Public Class PasivoFiraDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property tasafijafira() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableSaldosAnexos.tasafijafiraColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'tasafijafira' de la tabla 'SaldosAnexos' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableSaldosAnexos.tasafijafiraColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Function Istipo_deu_acreNull() As Boolean
             Return Me.IsNull(Me.tableSaldosAnexos.tipo_deu_acreColumn)
         End Function
@@ -5118,6 +5147,18 @@ Partial Public Class PasivoFiraDS
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Sub SetsubsidioNull()
             Me(Me.tableSaldosAnexos.subsidioColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IstasafijafiraNull() As Boolean
+            Return Me.IsNull(Me.tableSaldosAnexos.tasafijafiraColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SettasafijafiraNull()
+            Me(Me.tableSaldosAnexos.tasafijafiraColumn) = Global.System.Convert.DBNull
         End Sub
     End Class
     
@@ -8833,6 +8874,7 @@ Namespace PasivoFiraDSTableAdapters
             tableMapping.ColumnMappings.Add("porcentaje_cxsg", "porcentaje_cxsg")
             tableMapping.ColumnMappings.Add("TiieActiva", "TiieActiva")
             tableMapping.ColumnMappings.Add("subsidio", "subsidio")
+            tableMapping.ColumnMappings.Add("tasafijafira", "tasafijafira")
             Me._adapter.TableMappings.Add(tableMapping)
         End Sub
         
@@ -8846,7 +8888,7 @@ Namespace PasivoFiraDSTableAdapters
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Private Sub InitCommandCollection()
-            Me._commandCollection = New Global.System.Data.SqlClient.SqlCommand(6) {}
+            Me._commandCollection = New Global.System.Data.SqlClient.SqlCommand(8) {}
             Me._commandCollection(0) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(0).Connection = Me.Connection
             Me._commandCollection(0).CommandText = "SELECT        CONT_CPF_contratos.id_contrato, CONT_CPF_edocuenta.tipo_deu_acre, S"& _ 
@@ -8869,21 +8911,22 @@ Namespace PasivoFiraDSTableAdapters
                 "X, CONT_CPF_esquema_cobro.clave AS claveCobro, CONT_CPF_tipo_tasas.des_tipo_tasa"& _ 
                 ", "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_contratos_garantias.id_contrato_garantia, "& _ 
                 "CONT_CPF_contratos.porcentaje_cxsg, CONT_CPF_contratos.TiieActiva, CONT_CPF_cont"& _ 
-                "ratos.subsidio"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_contratos INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                 "& _ 
-                "        CONT_CPF_edocuenta ON CONT_CPF_contratos.id_contrato = CONT_CPF_edocuent"& _ 
-                "a.id_contrato INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_esquema_cobro ON CON"& _ 
-                "T_CPF_contratos.id_esquema_cobro = CONT_CPF_esquema_cobro.id_esquema_cobro INNER"& _ 
-                " JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_tipo_tasas ON CONT_CPF_contratos.id_tip"& _ 
-                "o_tasa = CONT_CPF_tipo_tasas.id_tipo_tasa INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         C"& _ 
-                "ONT_CPF_contratos_garantias ON CONT_CPF_contratos.id_contrato = CONT_CPF_contrat"& _ 
-                "os_garantias.id_contrato"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"GROUP BY CONT_CPF_contratos.id_contrato, CONT_CPF_edoc"& _ 
-                "uenta.tipo_deu_acre, CONT_CPF_contratos.FechaCorte, CONT_CPF_contratos.BP, CONT_"& _ 
-                "CPF_contratos.FN, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_contratos.FB, CONT_CPF_esq"& _ 
-                "uema_cobro.clave, CONT_CPF_tipo_tasas.des_tipo_tasa, CONT_CPF_contratos_garantia"& _ 
-                "s.id_contrato_garantia, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_contratos.porcentaje"& _ 
-                "_cxsg, CONT_CPF_contratos.TiieActiva, CONT_CPF_contratos.subsidio"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"HAVING       "& _ 
-                " (CONT_CPF_edocuenta.tipo_deu_acre = 'BP') AND (CONT_CPF_contratos.id_contrato ="& _ 
-                " @ID_Contrato)"
+                "ratos.subsidio, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_contratos.tasafijafira"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM"& _ 
+                "            CONT_CPF_contratos INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_edo"& _ 
+                "cuenta ON CONT_CPF_contratos.id_contrato = CONT_CPF_edocuenta.id_contrato INNER "& _ 
+                "JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_esquema_cobro ON CONT_CPF_contratos.id_e"& _ 
+                "squema_cobro = CONT_CPF_esquema_cobro.id_esquema_cobro INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"             "& _ 
+                "            CONT_CPF_tipo_tasas ON CONT_CPF_contratos.id_tipo_tasa = CONT_CPF_ti"& _ 
+                "po_tasas.id_tipo_tasa INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_contratos_ga"& _ 
+                "rantias ON CONT_CPF_contratos.id_contrato = CONT_CPF_contratos_garantias.id_cont"& _ 
+                "rato"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"GROUP BY CONT_CPF_contratos.id_contrato, CONT_CPF_edocuenta.tipo_deu_acre,"& _ 
+                " CONT_CPF_contratos.FechaCorte, CONT_CPF_contratos.BP, CONT_CPF_contratos.FN, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)& _ 
+                "                         CONT_CPF_contratos.FB, CONT_CPF_esquema_cobro.clave, CO"& _ 
+                "NT_CPF_tipo_tasas.des_tipo_tasa, CONT_CPF_contratos_garantias.id_contrato_garant"& _ 
+                "ia, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_contratos.porcentaje_cxsg, CONT_CPF_cont"& _ 
+                "ratos.TiieActiva, CONT_CPF_contratos.subsidio, CONT_CPF_contratos.tasafijafira"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)& _ 
+                "HAVING        (CONT_CPF_edocuenta.tipo_deu_acre = 'BP') AND (CONT_CPF_contratos."& _ 
+                "id_contrato = @ID_Contrato)"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_Contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(1) = New Global.System.Data.SqlClient.SqlCommand()
@@ -8912,19 +8955,31 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(4).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Idcontrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(5) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(5).Connection = Me.Connection
-            Me._commandCollection(5).CommandText = "UPDATE       CONT_CPF_contratos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SET                FechaCorte = @FechaCorte"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHE"& _ 
-                "RE        (id_contrato = @ID_contrato)"
+            Me._commandCollection(5).CommandText = "SELECT        tasafijafira"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_contratos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_"& _ 
+                "contrato = @ID_CONTRATO)"
             Me._commandCollection(5).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(5).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaCorte", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "FechaCorte", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(5).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._commandCollection(5).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_CONTRATO", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(6) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(6).Connection = Me.Connection
-            Me._commandCollection(6).CommandText = "UPDATE       CONT_CPF_contratos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SET                FechaCorte = @FechaCorte, Tii"& _ 
-                "eActiva = @TIIE"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato)"
+            Me._commandCollection(6).CommandText = "SELECT        TiieActiva"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_contratos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_co"& _ 
+                "ntrato = @ID_Contrato)"
             Me._commandCollection(6).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(6).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaCorte", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "FechaCorte", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(6).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TIIE", Global.System.Data.SqlDbType.[Decimal], 5, Global.System.Data.ParameterDirection.Input, 7, 4, "TiieActiva", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(6).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._commandCollection(6).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_Contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(7) = New Global.System.Data.SqlClient.SqlCommand()
+            Me._commandCollection(7).Connection = Me.Connection
+            Me._commandCollection(7).CommandText = "UPDATE       CONT_CPF_contratos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SET                FechaCorte = @FechaCorte"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHE"& _ 
+                "RE        (id_contrato = @ID_contrato)"
+            Me._commandCollection(7).CommandType = Global.System.Data.CommandType.Text
+            Me._commandCollection(7).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaCorte", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "FechaCorte", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(7).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._commandCollection(8) = New Global.System.Data.SqlClient.SqlCommand()
+            Me._commandCollection(8).Connection = Me.Connection
+            Me._commandCollection(8).CommandText = "UPDATE       CONT_CPF_contratos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SET                FechaCorte = @FechaCorte, Tii"& _ 
+                "eActiva = @TIIE"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato)"
+            Me._commandCollection(8).CommandType = Global.System.Data.CommandType.Text
+            Me._commandCollection(8).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaCorte", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "FechaCorte", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(8).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TIIE", Global.System.Data.SqlDbType.[Decimal], 5, Global.System.Data.ParameterDirection.Input, 7, 4, "TiieActiva", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(8).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -9063,10 +9118,64 @@ Namespace PasivoFiraDSTableAdapters
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
+        Public Overloads Overridable Function TASAFIJA(ByVal ID_CONTRATO As Integer) As Object
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(5)
+            command.Parameters(0).Value = CType(ID_CONTRATO,Integer)
+            Dim previousConnectionState As Global.System.Data.ConnectionState = command.Connection.State
+            If ((command.Connection.State And Global.System.Data.ConnectionState.Open)  _
+                        <> Global.System.Data.ConnectionState.Open) Then
+                command.Connection.Open
+            End If
+            Dim returnValue As Object
+            Try 
+                returnValue = command.ExecuteScalar
+            Finally
+                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
+                    command.Connection.Close
+                End If
+            End Try
+            If ((returnValue Is Nothing)  _
+                        OrElse (returnValue.GetType Is GetType(Global.System.DBNull))) Then
+                Return Nothing
+            Else
+                Return CType(returnValue,Object)
+            End If
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
+        Public Overloads Overridable Function TIIEACTIVA(ByVal ID_Contrato As Integer) As Global.System.Nullable(Of Decimal)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(6)
+            command.Parameters(0).Value = CType(ID_Contrato,Integer)
+            Dim previousConnectionState As Global.System.Data.ConnectionState = command.Connection.State
+            If ((command.Connection.State And Global.System.Data.ConnectionState.Open)  _
+                        <> Global.System.Data.ConnectionState.Open) Then
+                command.Connection.Open
+            End If
+            Dim returnValue As Object
+            Try 
+                returnValue = command.ExecuteScalar
+            Finally
+                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
+                    command.Connection.Close
+                End If
+            End Try
+            If ((returnValue Is Nothing)  _
+                        OrElse (returnValue.GetType Is GetType(Global.System.DBNull))) Then
+                Return New Global.System.Nullable(Of Decimal)()
+            Else
+                Return New Global.System.Nullable(Of Decimal)(CType(returnValue,Decimal))
+            End If
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, false)>  _
         Public Overloads Overridable Function UpdateFechaCorte(ByVal FechaCorte As Global.System.Nullable(Of Date), ByVal ID_contrato As Integer) As Integer
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(5)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(7)
             If (FechaCorte.HasValue = true) Then
                 command.Parameters(0).Value = CType(FechaCorte.Value,Date)
             Else
@@ -9094,7 +9203,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, false)>  _
         Public Overloads Overridable Function UpdateFechaCorteTIIE(ByVal FechaCorte As Global.System.Nullable(Of Date), ByVal TIIE As Global.System.Nullable(Of Decimal), ByVal ID_contrato As Integer) As Integer
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(6)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(8)
             If (FechaCorte.HasValue = true) Then
                 command.Parameters(0).Value = CType(FechaCorte.Value,Date)
             Else

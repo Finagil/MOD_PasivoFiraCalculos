@@ -9,7 +9,7 @@
     Dim subsidio As Boolean
 
     Sub Main()
-        Dim Hoy As Date = "22/ene/2018"
+        Dim Hoy As Date = "28/feb/2018"
         If CargaTIIE(Hoy) And Hoy.DayOfWeek <> DayOfWeek.Sunday And Hoy.DayOfWeek <> DayOfWeek.Saturday Then
             taCalendar.Fill(ds.CONT_CPF_CalendariosRevisionTasa, Hoy)
             For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
@@ -275,7 +275,8 @@
         Dim IntFB As Decimal = 0
         Dim IntFN As Decimal = 0
         Dim Rsaldo As PasivoFiraDS.CONT_CPF_saldos_contingenteRow
-
+        Dim tasafija As Decimal = 0
+        Dim saldoINIfn As Decimal = 0
         TasaActivaBP = TaAnexos.TasaActivaBP(r.id_contrato)
         TasaActivaFB = TaAnexos.TasaActivaFB(r.id_contrato)
         TasaActivaFN = TaAnexos.TasaActivaFN(r.id_contrato)
@@ -285,16 +286,22 @@
         InteresAux2 = TaEdoCta.SacaInteresAux2(r.id_contrato, r.FechaCorte, Fecha)
         InteresAux1FB = TaEdoCta.SacaInteresAux1FB(r.id_contrato, r.FechaCorte, Fecha)
         InteresAux2FB = TaEdoCta.SacaInteresAux2FB(r.id_contrato, r.FechaCorte, Fecha)
+        InteresAux1FN = TaEdoCta.SacaInteresAux1FN(r.id_contrato, r.FechaFinal, Fecha)
         InteresAux1FN = TaEdoCta.SacaInteresAux1FN(r.id_contrato, r.FechaCorte, Fecha)
         InteresAux2FN = TaEdoCta.SacaInteresAux2FN(r.id_contrato, r.FechaCorte, Fecha)
         Minis_BASE = TaEdoCta.Minis_Base(r.id_contrato)
         FechaAnt = TaEdoCta.Minis_Base_Fec(r.id_contrato)
-        TIIE_old = TIIE28
-        TIIE_old = Math.Round(TIIE_old, 2)
+        ' TIIE_old = TIIE28
+        TIIE_old = TaAnexos.TIIEACTIVA(r.id_contrato)
+        ' TIIE_old = Math.Round(TIIE_old, 2)
         diasX = DateDiff(DateInterval.Day, r.FechaFinal, Fecha)
         diasY = DateDiff(DateInterval.Day, FechaAnt, Fecha)
+        ' diasX = DateDiff(DateInterval.Day, r.FechaCorte, Fecha)
+        ' diasY = DateDiff(DateInterval.Day, r.FechaCorte, Fecha)
         subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital + r.InteresOrdinario + r.Vencido + r.InteresVencido
+        SaldoINI = r.Capital + r.Vencido + r.InteresVencido
+
         If TaVeciminetos.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
             If diasX <> diasY And Minis_BASE > 0 Then
                 IntORD = Math.Round((r.Capital + r.InteresOrdinario - Minis_BASE) * ((TasaActivaBP) / 100 / 360) * (diasX), 2)
@@ -310,12 +317,15 @@
         Else
             IntVENC = 0
         End If
-
-        IntFINAN = IntORD + IntVENC + InteresAux1 + InteresAux2
+        '   IntFINAN = IntORD + IntVENC + InteresAux1 + InteresAux2
+        IntFINAN = IntORD + IntVENC - InteresAux1 + InteresAux2
         SaldoFIN = SaldoINI + IntFINAN
-        IntFB = Math.Round((SaldoINI) * ((TasaActivaFB + r.TiieActiva) / 100 / 360) * (diasX), 2)
+
+        tasafija = TaAnexos.TASAFIJA(r.id_contrato)
+        IntFB = Math.Round((SaldoINI) * ((tasafija) / 100 / 360) * (diasX), 2)
+        ' IntFN = Math.Round((SaldoINI) * ((TasaActivaFN + TIIE_old) / 100 / 360) * (diasX), 2)
         If TasaActivaFN > 0 Then
-            IntFN = Math.Round((SaldoINI) * ((TasaActivaFN + TIIE_old) / 100 / 360) * (diasX), 2)
+            IntFN = (SaldoINI) * ((TasaActivaFN + TIIE_old) / 100 / 360) * (diasX)
         End If
 
         If EsCorteInte = True Then
@@ -335,7 +345,7 @@
                         0, 0, ID_Contrato, (TasaActivaBP), diasX, IntORD_Aux, IntVENC)
 
             TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, CapitalVIG, 0, IntFB + InteresAux1FB, 0, 0, 0, 0,
-                            0, 0, ID_Contrato, (TasaActivaFB + r.TiieActiva), diasX, IntFB_Aux, 0)
+                            0, 0, ID_Contrato, (tasafija), diasX, IntFB_Aux, 0)
 
             If TasaActivaFN > 0 Then
                 TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, CapitalVIG, 0, IntFN + InteresAux1FN, IntVENC + InteresAux2FN, 0, 0, 0,
@@ -351,8 +361,8 @@
                 TaSaldoConti.UpdateSaldoConti(SaldoFIN * (Rsaldo.cobertura_efectiva / 100), ID_Contrato, 0)
             Next
 
-            'CargaTIIE(Fecha) NO APLICA EN TASA FIJA
-            TaAnexos.UpdateFechaCorteTIIE(Fecha, r.TiieActiva, ID_Contrato)
+            CargaTIIE(Fecha) 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
+            TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE28, ID_Contrato)
 
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
@@ -366,16 +376,18 @@
                 Pag.Insert("PAGO POR REF", "APLICADO", Fecha, 0, 0, 0, IntFB, 0, 0, 0, r.id_contrato) 'DAGL Ingresar pago de interes 23/01/2018
             End If
         Else
-            TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
+            TaEdoCta.Insert("BP", r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, ID_Contrato, (TasaActivaBP), diasX, IntORD, IntVENC)
 
             TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, ID_Contrato, (TasaActivaFB + r.TiieActiva), diasX, IntFB, 0)
+                            0, 0, ID_Contrato, (tasafija), diasX, IntFB, 0)
 
             If TasaActivaFN > 0 Then
-                TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFB, 0)
+                TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFN, 0)
             End If
+            '  CargaTIIE(Fecha)
+            '   TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE28, ID_Contrato)
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
     End Sub

@@ -9,7 +9,7 @@
     Dim subsidio As Boolean
 
     Sub Main()
-        Dim Hoy As Date = "28/feb/2018"
+        Dim Hoy As Date = "02/ene/2018"
         If CargaTIIE(Hoy) And Hoy.DayOfWeek <> DayOfWeek.Sunday And Hoy.DayOfWeek <> DayOfWeek.Saturday Then
             taCalendar.Fill(ds.CONT_CPF_CalendariosRevisionTasa, Hoy)
             For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
@@ -99,7 +99,7 @@
             Dim InteFinan As Decimal = TaEdoCta.SacaInteresAux1(r.id_contrato, Fecha1, Fecha)
 
             If EsVencimetoCap Then
-                Dim Fecha_ante As DateTime = Fecha.AddDays(-2) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
+                Dim Fecha_ante As DateTime = Fecha.AddDays(-3) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
                 CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha_ante, Fecha)
                 ' CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha)
                 SaldoFIN -= CapitalVIG + IntFINAN + InteFinan
@@ -212,7 +212,7 @@
             Dim IntFB_Aux As Decimal = IntFB
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
-                Dim Fecha_ante As DateTime = Fecha.AddDays(-2) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
+                Dim Fecha_ante As DateTime = Fecha.AddDays(-3) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
                 CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha_ante, Fecha)
                 '  CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha)
                 SaldoFIN -= CapitalVIG + IntFINAN
@@ -286,7 +286,7 @@
         InteresAux2 = TaEdoCta.SacaInteresAux2(r.id_contrato, r.FechaCorte, Fecha)
         InteresAux1FB = TaEdoCta.SacaInteresAux1FB(r.id_contrato, r.FechaCorte, Fecha)
         InteresAux2FB = TaEdoCta.SacaInteresAux2FB(r.id_contrato, r.FechaCorte, Fecha)
-        InteresAux1FN = TaEdoCta.SacaInteresAux1FN(r.id_contrato, r.FechaFinal, Fecha)
+        ' InteresAux1FN = TaEdoCta.SacaInteresAux1FN(r.id_contrato, r.FechaFinal, Fecha)
         InteresAux1FN = TaEdoCta.SacaInteresAux1FN(r.id_contrato, r.FechaCorte, Fecha)
         InteresAux2FN = TaEdoCta.SacaInteresAux2FN(r.id_contrato, r.FechaCorte, Fecha)
         Minis_BASE = TaEdoCta.Minis_Base(r.id_contrato)
@@ -334,7 +334,7 @@
             Dim IntFB_Aux As Decimal = IntFB
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
-                Dim Fecha_ante As DateTime = Fecha.AddDays(-2) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
+                Dim Fecha_ante As DateTime = Fecha.AddDays(-3) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
                 CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha_ante, Fecha)
                 SaldoFIN -= CapitalVIG + IntFINAN
                 IntORD_Aux = 0

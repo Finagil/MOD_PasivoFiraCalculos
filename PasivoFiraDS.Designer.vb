@@ -8526,8 +8526,8 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(4).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Fecha", Global.System.Data.SqlDbType.NChar, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "Vigencia", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(5) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(5).Connection = Me.Connection
-            Me._commandCollection(5).CommandText = "SELECT     MAX(Promedio) AS Promedio"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM         Vw_TIIEpromedio"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE     (Me"& _ 
-                "s = @MEs)"
+            Me._commandCollection(5).CommandText = "SELECT        ISNULL(MAX(Promedio), 0) AS Promedio"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Vw_TIIEpromed"& _ 
+                "io"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (Mes = @MEs)"
             Me._commandCollection(5).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(5).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@MEs", Global.System.Data.SqlDbType.NVarChar, 6, Global.System.Data.ParameterDirection.Input, 0, 0, "Mes", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
         End Sub
@@ -8693,7 +8693,7 @@ Namespace PasivoFiraDSTableAdapters
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function SacaTIIEpromedio(ByVal MEs As String) As Global.System.Nullable(Of Decimal)
+        Public Overloads Overridable Function SacaTIIEpromedio(ByVal MEs As String) As Object
             Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(5)
             If (MEs Is Nothing) Then
                 command.Parameters(0).Value = Global.System.DBNull.Value
@@ -8715,9 +8715,9 @@ Namespace PasivoFiraDSTableAdapters
             End Try
             If ((returnValue Is Nothing)  _
                         OrElse (returnValue.GetType Is GetType(Global.System.DBNull))) Then
-                Return New Global.System.Nullable(Of Decimal)()
+                Return Nothing
             Else
-                Return New Global.System.Nullable(Of Decimal)(CType(returnValue,Decimal))
+                Return CType(returnValue,Object)
             End If
         End Function
     End Class

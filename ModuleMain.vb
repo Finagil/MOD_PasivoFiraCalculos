@@ -100,7 +100,7 @@
 
             If EsVencimetoCap Then
                 Dim Fecha_ante As DateTime = Fecha.AddDays(-3) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
-                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha_ante, Fecha)
+                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato)
                 ' CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha)
                 SaldoFIN -= CapitalVIG + IntFINAN + InteFinan
                 IntORD_Aux = InteFinan * -1
@@ -121,10 +121,15 @@
             TaSaldoConti.FillByUltimo(ds.CONT_CPF_saldos_contingente, r.id_contrato_garantia)
 
             For Each Rsaldo In ds.CONT_CPF_saldos_contingente.Rows
+
                 Rsaldo = ds.CONT_CPF_saldos_contingente.Rows(0)
-                TaSaldoConti.Insert(Fecha, Nothing, Nothing, 0, 0, Nothing, SaldoFIN, Rsaldo.cobertura_nominal, Rsaldo.cobertura_efectiva,
-                                    SaldoFIN * (Rsaldo.cobertura_nominal / 100), SaldoFIN * (Rsaldo.cobertura_efectiva / 100), Rsaldo.id_contrato_garantia)
-                TaSaldoConti.UpdateSaldoConti(SaldoFIN * (Rsaldo.cobertura_efectiva / 100), ID_Contrato, 0)
+                Dim saldonuevo As Decimal = SaldoFIN * (Rsaldo.cobertura_efectiva / 100)
+                If saldonuevo > Rsaldo.monto_efectivo Then
+                    TaSaldoConti.Insert(Fecha, Nothing, Nothing, 0, 0, Nothing, SaldoFIN, Rsaldo.cobertura_nominal, Rsaldo.cobertura_efectiva,
+                                   SaldoFIN * (Rsaldo.cobertura_nominal / 100), SaldoFIN * (Rsaldo.cobertura_efectiva / 100), Rsaldo.id_contrato_garantia)
+                    TaSaldoConti.UpdateSaldoConti(SaldoFIN * (Rsaldo.cobertura_efectiva / 100), ID_Contrato, 0)
+                End If
+
             Next
 
             CargaTIIE(Fecha)
@@ -213,7 +218,7 @@
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
                 Dim Fecha_ante As DateTime = Fecha.AddDays(-3) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
-                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha_ante, Fecha)
+                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato)
                 '  CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha)
                 SaldoFIN -= CapitalVIG + IntFINAN
                 IntORD_Aux = IntFINAN * -1
@@ -335,7 +340,7 @@
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
                 Dim Fecha_ante As DateTime = Fecha.AddDays(-3) 'DAGL  25/01/2018 Se restan 2 dias para traer el cap vigente, y en el query se agrega un between 
-                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato, Fecha_ante, Fecha)
+                CapitalVIG = TaVeciminetos.CapitalVigente(ID_Contrato)
                 SaldoFIN -= CapitalVIG + IntFINAN
                 IntORD_Aux = 0
                 IntFB_Aux = 0

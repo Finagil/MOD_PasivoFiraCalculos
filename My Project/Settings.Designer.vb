@@ -57,8 +57,8 @@ Namespace My
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=server-raid;Initial Catalog=Production;Persist Security Info=True;Use"& _ 
-            "r ID=User_PRO;Password=User_PRO2015")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=server-minds\test_minds;Initial Catalog=ProductionD;Persist Security "& _ 
+            "Info=True;User ID=finagil;Password=finagil")>  _
         Public ReadOnly Property PasivoConnectionString() As String
             Get
                 Return CType(Me("PasivoConnectionString"),String)

@@ -11,8 +11,8 @@
     Public TIIE182 As Decimal = 0
     Public TIIE365 As Decimal = 0
     Public TIIE_Promedio As Decimal = 0
-    Public TIIE_Aplica As Decimal = 0
-    Public Function CargaTIIE(ByVal Fecha As Date, ByVal Tipta As String, ByVal claveCobro As String) As Boolean
+
+    Public Function CargaTIIE(ByVal Fecha As Date) As Boolean
         CargaTIIE = True
         Dim ta As New PasivoFiraDSTableAdapters.TIIETableAdapter
         ta.Connection.ConnectionString = "Data Source=server-raid;Persist Security Info=True;Password=User_PRO2015;User ID=User_PRO"
@@ -26,21 +26,7 @@
             Console.WriteLine("No hay TIIE Capturada para la Fecha {0}", Fecha.ToShortDateString)
             CargaTIIE = False
         End If
-        If claveCobro = "" Then
-            claveCobro = 0
-
-        End If
-        If CInt(claveCobro.Trim) = EsquemaCobro.SIMPLE_FIN And Tipta.Trim <> "7" Then
-            TIIE_Aplica = TIIE28
-        End If
-
-        If CInt(claveCobro.Trim) = EsquemaCobro.SIMPLE And Tipta.Trim = "7" Then 'SIMPLE Y FIJA TRAER LA TIIE28 DAGL
-            TIIE_Aplica = TIIE28
-        End If
-        ta.Dispose()
-
         ta.Dispose()
     End Function
-
 
 End Module

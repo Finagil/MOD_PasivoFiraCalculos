@@ -1,8 +1,10 @@
 ﻿Module ModGlobal
     Public Enum EsquemaCobro As Integer
-        SIMFA = 20
+        SIMFAA = 20
         SIMPLE = 71
         SIMPLE_FIN = 21
+        TRADICIONAL = 70
+        COBRO_MENSUAL = 30
     End Enum
 
     Public TasaIVA As Decimal = 0.16
@@ -22,7 +24,7 @@
         TIIE365 = ta.SacaTIIE365(Fecha.ToString("yyyyMMdd"))
         TIIE_Promedio = ta.SacaTIIEpromedio(Fecha.AddMonths(-1).ToString("yyyyMMdd"))
         'If TIIE28 = 0 Or TIIE91 = 0 Or TIIE182 = 0 Or TIIE365 = 0 Then
-        If TIIE28 = 0 Or TIIE91 = 0 Then
+        If TIIE28 = 0 Then
             Console.WriteLine("No hay TIIE Capturada para la Fecha {0}", Fecha.ToShortDateString)
             CargaTIIE = False
         End If

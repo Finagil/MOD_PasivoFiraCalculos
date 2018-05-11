@@ -149,7 +149,7 @@
     Sub GeneraCorteInteres(Fecha As Date, ID_Contrato As Integer, EsCorteInte As Boolean, EsVencimientoCAP As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean)
         TaAnexos.Fill(ds.SaldosAnexos, ID_Contrato)
         For Each r As PasivoFiraDS.SaldosAnexosRow In ds.SaldosAnexos.Rows
-            Console.WriteLine(ID_Contrato & " " & Fecha.ToShortDateString & r.des_tipo_tasa & " Esquema: " & EsquemaCobro.SIMPLE_FIN)
+            Console.WriteLine(ID_Contrato & " " & Fecha.ToShortDateString & r.des_tipo_tasa & " Esquema: " & r.claveCobro.Trim)
 
             If CInt(r.claveCobro.Trim) = EsquemaCobro.SIMPLE And InStr(r.des_tipo_tasa.Trim, "Variable") Then
                 Procesa_SIMPLE_VAR(Fecha, ID_Contrato, EsCorteInte, r, EsVencimientoCAP, AcumulaInteres, RevisionTasa, False)
@@ -501,8 +501,8 @@
         Dim TipoTasa As String
 
         AjusteDias = TaEdoCta.EsDiaFestivo(Fecha, "MXN")
-        If Fecha.AddDays(AjusteDias).DayOfWeek = DayOfWeek.Saturday And EsVencimetoCap = True Then AjusteDias += 2
-        If Fecha.AddDays(AjusteDias).DayOfWeek = DayOfWeek.Sunday And EsVencimetoCap = True Then AjusteDias += 1
+        If Fecha.AddDays(AjusteDias).DayOfWeek = DayOfWeek.Saturday And (EsVencimetoCap = True Or RevisionTasa = True) Then AjusteDias += 2
+        If Fecha.AddDays(AjusteDias).DayOfWeek = DayOfWeek.Sunday And (EsVencimetoCap = True Or RevisionTasa = True) Then AjusteDias += 1
         AjusteDias += TaEdoCta.EsDiaFestivo(Fecha.AddDays(AjusteDias), "MXN")
 
         TipoTasa = "BP"
@@ -633,8 +633,8 @@
         Dim saldoINIfn As Decimal = 0
 
         AjusteDias = TaEdoCta.EsDiaFestivo(Fecha, "MXN")
-        If Fecha.AddDays(AjusteDias).DayOfWeek = DayOfWeek.Saturday And EsVencimetoCap = True Then AjusteDias += 2
-        If Fecha.AddDays(AjusteDias).DayOfWeek = DayOfWeek.Sunday And EsVencimetoCap = True Then AjusteDias += 1
+        If Fecha.AddDays(AjusteDias).DayOfWeek = DayOfWeek.Saturday And (EsVencimetoCap = True Or RevisionTasa = True) Then AjusteDias += 2
+        If Fecha.AddDays(AjusteDias).DayOfWeek = DayOfWeek.Sunday And (EsVencimetoCap = True Or RevisionTasa = True) Then AjusteDias += 1
         AjusteDias += TaEdoCta.EsDiaFestivo(Fecha.AddDays(AjusteDias), "MXN")
 
         TasaActivaBP = TaAnexos.TasaActivaBP(r.id_contrato)

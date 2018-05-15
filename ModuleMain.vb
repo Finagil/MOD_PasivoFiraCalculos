@@ -32,80 +32,75 @@
     Dim diasProm As Integer = 0
     Dim Cobro As Decimal = 0
     Dim id_contratoGarantia As Integer = 0
+    Dim Tipar As String
     Public FN, FB, BP As Decimal
 
     Sub Main()
-        Dim Fila As Integer
         Dim Args() As String = Environment.GetCommandLineArgs()
         Dim Hoy As Date
         Dim ID As Integer = Args(1)
         Dim Hasta As Date
-        Dim Tipar As String
+        Dim Aux As Decimal
 
-        'For xx As Integer = 0 To 0
-        '    ID = xx
-        '    ID = 58
+        'For xx As Integer = 67 To 75
+        'ID = xx
         Hasta = Today.Date
             Tipar = TaAnexos.tipar(ID)
-        'If TaAnexos.ExisteIdContrato(ID) <= 0 Then
-        '    Console.WriteLine("No existe contrato " & ID.ToString)
-        '    Continue For
-        'End If
-        If TaAnexos.ExisteContrato(ID) <= 0 Then
-            Console.WriteLine("NO EXISTE CONTRATO " & ID)
-            Exit Sub
-        End If
-        If Tipar = "H" Or Tipar = "C" Then
-            Dim x As Integer
-            Dim Anexo, Ciclo As String
-            Dim mfira As New PasivoFiraDSTableAdapters.mFIRATableAdapter
-            Dim Fechas() As Date
-            Dim Importes() As Decimal
-            Dim HastaX As Date
-            Anexo = TaAnexos.anexo(ID)
-            Ciclo = TaAnexos.ciclo(ID)
-            TaEdoCta.BorraTodo(ID)
-            'Hoy = TaEdoCta.SacaFecha1(ID)
-            TaVeciminetos.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
-            TaSaldoConti.BorraSaldoContigente(ID)
-            taCXSG.BorraCSG(ID)
-            tapagos.BorraPagos(ID)
-            TaMinis.BorraMinistraciones(ID)
-            mfira.FillByOtorgado(ds.mFIRA, Anexo, Ciclo)
-            For Each rx As PasivoFiraDS.mFIRARow In ds.mFIRA.Rows
-                x += 1
-                ReDim Preserve Fechas(x)
-                ReDim Preserve Importes(x)
-                Fechas(x) = CtoD(rx.FechaProgramada)
-                Importes(x) = rx.Importe
-            Next
-            x = 0
-            CargaTIIE(Fechas(1), "", "")
-            TaAnexos.UpdateFechaCorteTIIE(Fechas(1), TIIE28, ID)
+            If TaAnexos.ExisteContrato(ID) <= 0 Then
+                Console.WriteLine("NO EXISTE CONTRATO " & ID)
+                Exit Sub
+                'Continue For
+            End If
+            If Tipar = "H" Or Tipar = "C" Then
+                diasProm = 99
+                Dim Anexo, Ciclo As String
+                Dim mfira As New PasivoFiraDSTableAdapters.mFIRATableAdapter
+                Anexo = TaAnexos.anexo(ID)
+                Ciclo = TaAnexos.ciclo(ID)
+                Hoy = TaEdoCta.SacaFecha1(ID) '1 saca la fecha
+                TaEdoCta.BorraTodo(ID) '2 borra todo
+                CargaTIIE(Hoy, "", "") '3.1 saca tiie
+                TaAnexos.UpdateFechaCorteTIIE(Hoy, TIIE28, ID) '3.2 saca tiie
+                Aux = mfira.ministracionporfecha(Anexo, Hoy.ToString("yyyyMMdd"), Ciclo)
+                TaEdoCta.Insert("BP", Hoy, Hoy, 0, Aux, 0, 0, 0, 0, 0, 0, 0, 0, Aux, ID, TIIE28, 0, 0, 0, 0) ' 4 inserta primera linea
+                TaVeciminetos.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
+                TaSaldoConti.BorraSaldoContigente(ID)
+                taCXSG.BorraCSG(ID)
+                tapagos.BorraPagos(ID)
+                TaMinis.BorraMinistraciones(ID)
+                mfira.FillByOtorgado(ds.mFIRA, Anexo, Ciclo)
+                For Each rx As PasivoFiraDS.mFIRARow In ds.mFIRA.Rows
+                    If TaMinis.ExisteMinistracion(ID, CtoD(rx.FechaProgramada)) <= 0 Then
+                        CalculaServicioCobroX(CtoD(rx.FechaProgramada), ID)
+                    End If
+                    If taCalendar.ExisteFecha(ID, CtoD(rx.FechaProgramada)) <= 0 Then
+                        taCalendar.Insert(ID, CtoD(rx.FechaProgramada), 0, 0, 0, 0, 0)
+                    End If
+                Next
+                Hoy = Hoy.AddDays(1)
 
-            For Each rx As PasivoFiraDS.mFIRARow In ds.mFIRA.Rows
-                x += 1
-                'InsertaMinistracion(ID, rx)
-                Hoy = Fechas(x)
-                CalculaServicioCobro(Hoy, ID)
-
-                If x = Fechas.Length - 1 Then
-                    HastaX = Hasta
-                Else
-                    HastaX = Fechas(x + 1)
-                End If
+                While Hoy <= Hasta
+                    taCalendar.FillByIdContrato(ds.CONT_CPF_CalendariosRevisionTasa, Hoy, ID)
+                    For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
+                        GeneraCorteInteres(Hoy, Rc.Id_Contrato, Rc.VencimientoInteres, Rc.VencimientoCapital, Rc.AcumulaInteres, Rc.RevisionTasa)
+                        Console.WriteLine(Rc.Id_Contrato)
+                        taCalendar.ProcesaCalendario(True, Rc.ID_Calendario, Rc.ID_Calendario)
+                    Next
+                    Hoy = Hoy.AddDays(1)
+                End While
+            Else
+                TaEdoCta.BorraDatos(ID)
+                Hoy = TaEdoCta.SacaFecha1(ID)
                 CargaTIIE(Hoy, "", "")
                 TaAnexos.UpdateFechaCorteTIIE(Hoy, TIIE28, ID)
-
-                While Hoy <= HastaX
-                    If Hoy = CDate("30/12/2017") Then
-                        taCalendar.FillByIdContrato(ds.CONT_CPF_CalendariosRevisionTasa, Hoy, ID)
-                        For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
-                            GeneraCorteInteres(Hoy, Rc.Id_Contrato, Rc.VencimientoInteres, Rc.VencimientoCapital, Rc.AcumulaInteres, Rc.RevisionTasa)
-                            Console.WriteLine(Rc.Id_Contrato)
-                            taCalendar.ProcesaCalendario(True, Rc.ID_Calendario, Rc.ID_Calendario)
-                        Next
-                    ElseIf CargaTIIE(Hoy, "", "") And Hoy.DayOfWeek <> DayOfWeek.Sunday And Hoy.DayOfWeek <> DayOfWeek.Saturday Then
+                TaVeciminetos.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
+                TaSaldoConti.BorraSaldoContigente(ID)
+                taCXSG.BorraCSG(ID)
+                tapagos.BorraPagos(ID)
+                diasProm = DiasEntreVecn(ID)
+                While Hoy <= Hasta
+                    If CargaTIIE(Hoy, "", "") Then
+                        Console.WriteLine("Procesando " & Hoy.ToShortDateString)
                         taCalendar.FillByIdContrato(ds.CONT_CPF_CalendariosRevisionTasa, Hoy, ID)
                         For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
                             GeneraCorteInteres(Hoy, Rc.Id_Contrato, Rc.VencimientoInteres, Rc.VencimientoCapital, Rc.AcumulaInteres, Rc.RevisionTasa)
@@ -117,32 +112,7 @@
                     End If
                     Hoy = Hoy.AddDays(1)
                 End While
-            Next
-        Else
-            TaEdoCta.BorraDatos(ID)
-            Hoy = TaEdoCta.SacaFecha1(ID)
-            CargaTIIE(Hoy, "", "")
-            TaAnexos.UpdateFechaCorteTIIE(Hoy, TIIE28, ID)
-            TaVeciminetos.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
-            TaSaldoConti.BorraSaldoContigente(ID)
-            taCXSG.BorraCSG(ID)
-            tapagos.BorraPagos(ID)
-            diasProm = DiasEntreVecn(ID)
-            While Hoy <= Hasta
-                If CargaTIIE(Hoy, "", "") Then
-                    Console.WriteLine("Procesando " & Hoy.ToShortDateString)
-                    taCalendar.FillByIdContrato(ds.CONT_CPF_CalendariosRevisionTasa, Hoy, ID)
-                    For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
-                        GeneraCorteInteres(Hoy, Rc.Id_Contrato, Rc.VencimientoInteres, Rc.VencimientoCapital, Rc.AcumulaInteres, Rc.RevisionTasa)
-                        Console.WriteLine(Rc.Id_Contrato)
-                        taCalendar.ProcesaCalendario(True, Rc.ID_Calendario, Rc.ID_Calendario)
-                    Next
-                Else
-                    Console.WriteLine("Error tasa Tiie : {0}", Hoy)
-                End If
-                Hoy = Hoy.AddDays(1)
-            End While
-        End If
+            End If
         'Next
     End Sub
 
@@ -288,6 +258,7 @@
             Dim monto As Decimal = 0
             Dim iva As Decimal = 0
             Dim ID_garantina As Integer
+            Dim DiasX As Integer
             importe = cobro
             iva = importe * 0.16
             monto = importe + iva
@@ -322,25 +293,6 @@
             Next
             If NoGarantias = 0 Then
                 taGarantias.Insert(idcont, ID_garantina, Nominal, MontoBase * (Nominal / 100), Efectiva, True)
-                'Me.CONT_CPF_contratosTableAdapter.Updatesubsidio(CheckBox1.Checked, ID_Contrato)
-
-
-                '            Else
-
-                ' For Each row1 As DataRow In Taminis.GetDataByIDCONTRATO(idcont, idcont)
-
-
-
-
-
-
-                ' Nominal = row1("Cobertura_Nominal")
-                'Efectiva = row1("Cobertura_Efectiva")
-                'taGarantias.UpdateSaldoConti(SaldoFIN * (Efectiva / 100), idcont)
-                'FB = row1("FB")
-                'BP = row1("BP")
-                'FN = row1("FN")
-                'Next
             End If
 
 
@@ -352,7 +304,7 @@
                     CargaTIIE(row1("FechaCorte"), row1("Tipta"), row1("ClaveEsquema"))
                     FechaUltimoMov = TaMinis.Fechaultimomov(idcont)
                     fec = FECHAPROG_AUX.Substring(6, 2) + "/" + FECHAPROG_AUX.Substring(4, 2) + "/" + FECHAPROG_AUX.Substring(0, 4)
-                    Dim DiasX As Integer = DateDiff(DateInterval.Day, FechaUltimoMov, fec)
+                    DiasX = DateDiff(DateInterval.Day, FechaUltimoMov, fec)
                     InteORD = SaldoINI * ((BP + TIIE_Aplica) / 100 / 360) * DiasX
                     If row1("Tipta") = "7" Then 'DAGL 25/01/2018 En tasa fija se resta el valor FB
                         InteORDFB = SaldoINI * ((FB + tasafira) / 100 / 360) * DiasX
@@ -388,27 +340,185 @@
                     'If MinistracionesBindingSource.Current("Tipta") = "7" Then
                     '  taEdoCta.Insert("FN", FechaUltimoMov, dt_descuento.Value.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, id, TIIE_Aplica, 0, InteORDFN, 0)
                     'Else
-                    TaEdoCta.Insert("FN", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, FN + TIIE_Aplica, 0, InteORDFN, 0, 0)
+                    TaEdoCta.Insert("FN", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, FN + TIIE_Aplica, DiasX, InteORDFN, 0, 0)
                     'End If
 
                 End If
 
                 If row1("Tipta") = "7" Then
-                    TaEdoCta.Insert("BP", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, BP, 0, InteORD, 0, 0)
+                    TaEdoCta.Insert("BP", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, BP, DiasX, 0, 0, InteORD)
                 Else
-                    TaEdoCta.Insert("BP", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, BP + TIIE_Aplica, 0, InteORD, 0, 0)
+                    TaEdoCta.Insert("BP", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, BP + TIIE_Aplica, DiasX, 0, 0, InteORD)
                 End If
 
                 If row1("Tipta") = "7" Then
                     ' tasafira = TxttasaFira.Text 'DAGL 25/01/2018 En tasa fija se resta el valor FB
 
-                    TaEdoCta.Insert("FB", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, tasafira, 0, InteORDFB, 0, 0) 'tasafijafira
+                    TaEdoCta.Insert("FB", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, tasafira, DiasX, InteORDFB, 0, 0) 'tasafijafira
                 Else
-                    TaEdoCta.Insert("FB", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, FB + TIIE_Aplica, 0, InteORDFB, 0, 0)
+                    TaEdoCta.Insert("FB", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, FB + TIIE_Aplica, DiasX, InteORDFB, 0, 0)
 
                 End If
                 TaAnexos.UpdateFechaCorteTIIE(fec, TIIE28, idcont)
             Next
+
+        Next
+    End Sub
+
+    Sub CalculaServicioCobroX(hoy As Date, idcont As Integer)
+        Dim FECHAPROG, FECHAPROG_AUX As String
+        Dim tasafira As Decimal = 0
+        Dim ciclo As String
+        Dim dias As Integer
+        Dim ANEXOAUX As String
+        Dim PCXSG As Decimal = 0
+        Dim cont As Integer
+        Dim fonaga As String
+        Dim gl_mosusa As Decimal = 0
+
+        tasafira = TaAnexos.TASAFIJA(idcont)
+        ANEXOAUX = TaAnexos.anexo(idcont)
+        fonaga = TaAnexos.fonaga(idcont)
+        ciclo = TaAnexos.ciclo(idcont)
+        FECHAPROG = hoy.ToString("yyyyMMdd")
+
+
+        Dim Subsidio As Decimal
+        Dim subsidiox As Boolean
+        Dim FechaPago As Date = hoy
+        Dim FechaFinal As Date
+        Dim cobro As Decimal = 0
+        Dim PCXSG_Aux As Decimal = 0
+
+        Dim MontoBase As Decimal
+        Dim MIN As Integer
+        Dim fec As Date
+        Dim tipar As String = TaAnexos.tipar(idcont)
+        Dim anexo1 As String = TaAnexos.anexo(idcont)
+        Dim tipta As String = TaAnexos.tipta(idcont)
+        cont = TaMinis.ministraciones_contrato(idcont)
+
+        FECHAPROG = MFIRA.FECMIN1(idcont, hoy.ToString("yyyyMMdd"))
+        FECHAPROG_AUX = hoy.ToString("yyyyMMdd")
+
+        For Each row As DataRow In MFIRA.GetMINPORCONTRATO(idcont, hoy.ToString("yyyyMMdd"))
+            MontoBase = row("Importe")
+            Dim fec1 As String = row("FechaProgramada")
+            fec = fec1.Substring(6, 2) + "/" + fec1.Substring(4, 2) + "/" + fec1.Substring(0, 4)
+            Dim fec2 As Date = fec.AddDays(-1)
+            MIN = row("Ministracion")
+            FechaFinal = TaMinis.primervenavi(anexo1, ciclo)
+            PCXSG = TaAnexos.pcxs(idcont)
+            dias = DateDiff(DateInterval.Day, fec, FechaFinal)
+            subsidiox = TaAnexos.Subsidiocontrato(idcont)
+            If subsidiox = True Then
+                Subsidio = 2
+            Else
+                Subsidio = 1
+            End If
+            cobro = ((((MontoBase / Subsidio) * (PCXSG / 100)) / 360)) * (dias)
+            PCXSG_Aux = PCXSG / Subsidio
+
+            Dim Consec As Integer = MIN
+            Dim NoGarantias As Integer = taGarantias.ExistenGarantias(idcont)
+            Dim SaldoINI, SaldoFIN, InteORD, InteORDFN, InteORDFB As Decimal
+            Dim FechaUltimoMov As Date
+
+            SaldoINI = TaEdoCta.SaldoContrato(idcont)
+            SaldoFIN = SaldoINI + MontoBase
+            Dim importe As Decimal = 0
+            Dim monto As Decimal = 0
+            Dim iva As Decimal = 0
+            Dim ID_garantina As Integer
+            Dim DiasX As Integer
+            importe = cobro
+            iva = importe * 0.16
+            monto = importe + iva
+            TaMinis.InsertQueryMinistraciones(MontoBase, fec, Consec, PCXSG_Aux, iva, importe, idcont, "Otorgado", fec)
+            Ministraciones.Descontar(anexo1, ciclo, FechaPago.ToString("yyyyMMdd"))
+
+            'For Each row1 As DataRow In TaMinis.GetDataByIDCONTRATO(idcont, idcont)
+            '    fonaga = TaAnexos.fonaga(idcont)
+            '    gl_mosusa = TaAnexos.gl_mosusa(idcont)
+            '    If fonaga = "SI" Then
+            '        ID_garantina = 2 ' id tabla de garantias
+            '        If gl_mosusa = 0 Then
+            '            Nominal = 45
+            '            Efectiva = 45
+            '        Else
+            '            Nominal = 50
+            '            Efectiva = 45
+            '        End If
+            '    Else
+            '        ID_garantina = 1 ' id tabla de garantias
+            '        Nominal = 50
+            '        Efectiva = 50
+            '    End If
+
+            '    FB = row1("FB")
+            '    BP = row1("BP")
+            '    FN = row1("FN")
+            'Next
+            'If NoGarantias = 0 Then
+            '    taGarantias.Insert(idcont, ID_garantina, Nominal, MontoBase * (Nominal / 100), Efectiva, True)
+            'End If
+
+            'If SaldoINI > 0 Then
+            '    Dim IDC As Integer = idcont
+            '    For Each row1 As DataRow In TaMinis.GetDataByIDCONTRATO(idcont, idcont)
+            '        CargaTIIE(row1("FechaCorte"), row1("Tipta"), row1("ClaveEsquema"))
+            '        FechaUltimoMov = TaMinis.Fechaultimomov(idcont)
+            '        fec = FECHAPROG_AUX.Substring(6, 2) + "/" + FECHAPROG_AUX.Substring(4, 2) + "/" + FECHAPROG_AUX.Substring(0, 4)
+            '        DiasX = DateDiff(DateInterval.Day, FechaUltimoMov, fec)
+            '        InteORD = SaldoINI * ((BP + TIIE_Aplica) / 100 / 360) * DiasX
+            '        If row1("Tipta") = "7" Then 'DAGL 25/01/2018 En tasa fija se resta el valor FB
+            '            InteORDFB = SaldoINI * ((FB + tasafira) / 100 / 360) * DiasX
+            '        Else
+            '            InteORDFB = SaldoINI * ((FB + TIIE_Aplica) / 100 / 360) * DiasX
+            '        End If
+            '        InteORDFN = SaldoINI * ((FN + TIIE_Aplica) / 100 / 360) * DiasX
+            '    Next
+            'Else
+            '    fec = FECHAPROG_AUX.Substring(6, 2) + "/" + FECHAPROG_AUX.Substring(4, 2) + "/" + FECHAPROG_AUX.Substring(0, 4)
+            '    For Each row1 As DataRow In TaMinis.GetDataByIDCONTRATO(idcont, idcont)
+            '        CargaTIIE(fec, row1("Tipta"), row1("ClaveEsquema"))
+            '        FechaUltimoMov = fec.ToShortDateString
+            '    Next
+            'End If
+            'id_contratoGarantia = TaMinis.sacaid(idcont)
+            'Dim subsidioaux As Boolean
+            'subsidioaux = TaAnexos.Subsidiocontrato(idcont) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos
+            'fec = FECHAPROG_AUX.Substring(6, 2) + "/" + FECHAPROG_AUX.Substring(4, 2) + "/" + FECHAPROG_AUX.Substring(0, 4)
+            'For Each row1 As DataRow In TaMinis.GetDataByIDCONTRATO(idcont, idcont)
+            '    taCargosXservico.Insert(fec, FechaFinal, dias, Date.Now, MontoBase, cobro, cobro * TasaIVA, cobro * (1 + TasaIVA), PCXSG, id_contratoGarantia, subsidioaux)
+            '    SaldoCont.Insert(fec, Nothing, Nothing, Nothing, Nothing, MontoBase, SaldoFIN, Nominal, Efectiva, SaldoFIN * (Nominal / 100), SaldoFIN * (Efectiva / 100), id_contratoGarantia)
+
+
+            '    If row1("FN") > 0 Then
+            '        'If MinistracionesBindingSource.Current("Tipta") = "7" Then
+            '        '  taEdoCta.Insert("FN", FechaUltimoMov, dt_descuento.Value.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, id, TIIE_Aplica, 0, InteORDFN, 0)
+            '        'Else
+            '        TaEdoCta.Insert("FN", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, FN + TIIE_Aplica, DiasX, InteORDFN, 0, 0)
+            '        'End If
+
+            '    End If
+
+            '    If row1("Tipta") = "7" Then
+            '        TaEdoCta.Insert("BP", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, BP, DiasX, 0, 0, InteORD)
+            '    Else
+            '        TaEdoCta.Insert("BP", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, BP + TIIE_Aplica, DiasX, 0, 0, InteORD)
+            '    End If
+
+            '    If row1("Tipta") = "7" Then
+            '        ' tasafira = TxttasaFira.Text 'DAGL 25/01/2018 En tasa fija se resta el valor FB
+
+            '        TaEdoCta.Insert("FB", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, tasafira, DiasX, InteORDFB, 0, 0) 'tasafijafira
+            '    Else
+            '        TaEdoCta.Insert("FB", FechaUltimoMov, fec.ToShortDateString, SaldoINI, SaldoFIN, 0, Nothing, 0, 0, 0, 0, 0, 0, MontoBase, idcont, FB + TIIE_Aplica, DiasX, InteORDFB, 0, 0)
+
+            '    End If
+            '    TaAnexos.UpdateFechaCorteTIIE(fec, TIIE28, idcont)
+            'Next
 
         Next
     End Sub
@@ -455,38 +565,36 @@
         taCXSG.Insert(FecIni, FecFin, Dias, FecIni, MontoBase, Cobro, Cobro * TasaIVA, Cobro * (1 + TasaIVA), PCXSG, ID, Subsidio) 'dagl 24/01/2018 se agrega el campo subsidio a la tabla cxg 
     End Sub
 
-    Sub SacaIntereses120(ID_Contrato As Integer, Fecha As Date)
-        Dim SaldoConti, Interes, CapVig As Decimal
-        Dim Dias, Diff As Integer
+    Sub CalculaSaldoContigente(ID_Contrato As Integer, Fecha As Date)
+        Dim EsquemaCobro As Integer = TaAnexos.EsquemaCobro(ID_Contrato)
+        Dim Tope As Date
+        If EsquemaCobro = 1 Then 'simple con financiamiento
+            Tope = Fecha.AddDays(-999)
+        Else
+            Tope = Fecha.AddDays(-121)
+        End If
+        Dim SaldoConti, Interes, CapVig, SaldoCap As Decimal
+
         TaEdoCta.FillDesc(ds.CONT_CPF_edocuenta, ID_Contrato, "BP")
+        SaldoCap = TaEdoCta.SaldoCapital(ID_Contrato, "BP")
         For Each r As PasivoFiraDS.CONT_CPF_edocuentaRow In ds.CONT_CPF_edocuenta.Rows
-            If SaldoConti = 0 Then
-                SaldoConti = r.saldo_fin
-            End If
-            Dias += r.dias
-            If Dias <= 120 Then
+            If r.fecha_fin >= Tope Then
+                Interes += r.int_ord
                 CapVig += r.cap_vigente
-                Interes += (r.saldo_ini * (r.tasa / 36000) * r.dias)
-                If Dias = 120 Then
-                    Exit For
-                End If
             Else
-                If Dias <> 120 Then
-                    Diff = Dias - 120
-                    CapVig += r.cap_vigente
-                    Interes += (r.saldo_ini * (r.tasa / 36000) * (r.dias - Diff))
-                    Exit For
-                End If
+                Exit For
             End If
         Next
 
-        SaldoConti += CapVig + Interes
+        SaldoConti = CapVig + Interes + SaldoCap
         taContraGarant.FillByidContrato(ds.CONT_CPF_contratos_garantias, ID_Contrato)
         Dim rz As PasivoFiraDS.CONT_CPF_contratos_garantiasRow
         rz = ds.CONT_CPF_contratos_garantias.Rows(0)
 
         TaSaldoConti.Insert(Fecha, Nothing, Nothing, 0, 0, Nothing, SaldoConti, rz.cobertura_nominal, rz.cobertura_efectiva,
                                SaldoConti * (rz.cobertura_nominal / 100), SaldoConti * (rz.cobertura_efectiva / 100), rz.id_contrato_garantia)
+        taContraGarant.UpdateSaldoContingente(SaldoConti * (rz.cobertura_nominal / 100), rz.id_contrato_garantia, rz.id_contrato)
+
     End Sub
     '++++++++++++++++++++++++++++++++++++++++++++++++++++
     Sub Procesa_SIMPLE_VAR(ByRef Fecha As Date, ByRef ID_Contrato As Integer, ByRef EsCorteInte As Boolean, ByRef r As PasivoFiraDS.SaldosAnexosRow, ByRef EsVencimetoCap As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean, tasaFija As Boolean)
@@ -586,7 +694,6 @@
                                         0, Minis_BASE, ID_Contrato, (TasaActivaFN), diasX, IntFN_Aux, IntVENC, Provision)
             End If
 
-            SacaIntereses120(ID_Contrato, Fecha.AddDays(AjusteDias))
             CargaTIIE(Fecha.AddDays(AjusteDias), "", "")
             If EsCorteInte = True Then
                 TaAnexos.UpdateFechaCorteTIIE(Fecha.AddDays(AjusteDias), TIIE28, ID_Contrato)
@@ -617,6 +724,7 @@
 
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha.AddDays(AjusteDias), "Vigente", ID_Contrato, 0)
+        CalculaSaldoContigente(ID_Contrato, Fecha.AddDays(AjusteDias))
     End Sub
 
     Sub Procesa_SIMPLE_FIJA(ByRef Fecha As Date, ByRef ID_Contrato As Integer, ByRef EsCorteInte As Boolean, ByRef r As PasivoFiraDS.SaldosAnexosRow, ByRef EsVencimetoCap As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean, tasaFija As Boolean)
@@ -725,25 +833,6 @@
                                         0, Minis_BASE, ID_Contrato, (TasaActivaFN), diasX, IntFN_Aux, IntVENC, Provision)
             End If
 
-            'TaSaldoConti.Fill(ds.CONT_CPF_saldos_contingente, r.id_contrato_garantia)
-            SacaIntereses120(ID_Contrato, Fecha.AddDays(AjusteDias))
-            'If ds.CONT_CPF_saldos_contingente.Rows.Count <= 0 Then 'inserta el primer saldo contingente
-            '    taContraGarant.FillByidContrato(ds.CONT_CPF_contratos_garantias, ID_Contrato)
-            '    Dim rz As PasivoFiraDS.CONT_CPF_contratos_garantiasRow
-            '    rz = ds.CONT_CPF_contratos_garantias.Rows(0)
-            '    Dim saldonuevo As Decimal = SaldoFIN * (rz.cobertura_efectiva / 100)
-            '    TaSaldoConti.Insert(Fecha, Nothing, Nothing, 0, 0, Nothing, SaldoFIN, rz.cobertura_nominal, rz.cobertura_efectiva,
-            '                       SaldoFIN * (rz.cobertura_nominal / 100), SaldoFIN * (rz.cobertura_efectiva / 100), rz.id_contrato_garantia)
-            'End If
-
-            'For Each Rsaldo In ds.CONT_CPF_saldos_contingente.Rows
-            '    Rsaldo = ds.CONT_CPF_saldos_contingente.Rows(0)
-            '    TaSaldoConti.Insert(Fecha, Nothing, Nothing, 0, 0, Nothing, SaldoFIN, Rsaldo.cobertura_nominal, Rsaldo.cobertura_efectiva,
-            '                        SaldoFIN * (Rsaldo.cobertura_nominal / 100), SaldoFIN * (Rsaldo.cobertura_efectiva / 100), Rsaldo.id_contrato_garantia)
-            '    TaSaldoConti.UpdateSaldoConti(SaldoFIN * (Rsaldo.cobertura_efectiva / 100), ID_Contrato, 0)
-            '    Exit For
-            'Next
-
             CargaTIIE(Fecha.AddDays(AjusteDias), "", "") 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
             TaAnexos.UpdateFechaCorteTIIE(Fecha.AddDays(AjusteDias), TIIE28, ID_Contrato)
 
@@ -772,6 +861,7 @@
             End If
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        CalculaSaldoContigente(ID_Contrato, Fecha.AddDays(AjusteDias))
     End Sub
 
     Sub Procesa_SIMPLE_CON_FIJA(ByRef Fecha As Date, ByRef ID_Contrato As Integer, ByRef EsCorteInte As Boolean, ByRef r As PasivoFiraDS.SaldosAnexosRow, ByRef EsVencimetoCap As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean, tasaFija As Boolean)
@@ -891,7 +981,6 @@
                                         0, Minis_BASE, ID_Contrato, (TasaActivaFN), diasX, IntFN_Aux, IntVENC, Provision)
             End If
 
-            SacaIntereses120(ID_Contrato, Fecha)
             CargaTIIE(Fecha, "", "") 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
             TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE_Promedio, ID_Contrato)
 
@@ -928,6 +1017,7 @@
             '   TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE28, ID_Contrato)
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 
     Sub Procesa_SIMPLE_CON_VAR(ByRef Fecha As Date, ByRef ID_Contrato As Integer, ByRef EsCorteInte As Boolean, ByRef r As PasivoFiraDS.SaldosAnexosRow, ByRef EsVencimetoCap As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean, tasaFija As Boolean)
@@ -978,13 +1068,17 @@
         SaldoINI = r.Capital + r.InteresOrdinario
 
         If TaVeciminetos.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
-            If Provision > 0 And InteresAux1 = 0 Then
-                diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha)
-            End If
-            IntORD = Math.Round((r.Capital + r.InteresOrdinario) * ((TasaActivaBP + TIIE_old) / 100 / 360) * (diasX), 2)
+            'If Provision > 0 And InteresAux1 = 0 Then
+            '    'diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha)
+            'End If
+            IntORD = Math.Round((r.Capital + r.InteresOrdinario) * ((TasaActivaBP + TIIE_old) / 100 / 360) * (diasX), 2) + Provision
+
             If EsVencimetoCap = False And EsCorteInte = False And RevisionTasa = False And AcumulaInteres = False Then
-                If Minis_BASE = 0 Then
-                    Provision = IntORD
+                If Minis_BASE > 0 And Tipar = "H" Then
+                    Provision = IntORD - Provision
+                    IntORD = 0
+                ElseIf Minis_BASE = 0 Then
+                    Provision = IntORD - Provision
                     IntORD = 0
                 Else
                     Provision = 0
@@ -1051,7 +1145,6 @@
                                         0, Minis_BASE, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFN_Aux, IntVENC, Provision)
             End If
 
-            SacaIntereses120(ID_Contrato, Fecha)
             CargaTIIE(Fecha, "", "") 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
             TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE_Promedio, ID_Contrato)
 
@@ -1086,6 +1179,7 @@
             End If
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 
     Sub Procesa_TRADICIONAL_FIJA(ByRef Fecha As Date, ByRef ID_Contrato As Integer, ByRef EsCorteInte As Boolean, ByRef r As PasivoFiraDS.SaldosAnexosRow, ByRef EsVencimetoCap As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean, tasaFija As Boolean)
@@ -1195,25 +1289,6 @@
                                         0, Minis_BASE, ID_Contrato, (TasaActivaFN), diasX, IntFN_Aux, IntVENC, Provision)
             End If
 
-            'TaSaldoConti.Fill(ds.CONT_CPF_saldos_contingente, r.id_contrato_garantia)
-            SacaIntereses120(ID_Contrato, Fecha.AddDays(AjusteDias))
-            'If ds.CONT_CPF_saldos_contingente.Rows.Count <= 0 Then 'inserta el primer saldo contingente
-            '    taContraGarant.FillByidContrato(ds.CONT_CPF_contratos_garantias, ID_Contrato)
-            '    Dim rz As PasivoFiraDS.CONT_CPF_contratos_garantiasRow
-            '    rz = ds.CONT_CPF_contratos_garantias.Rows(0)
-            '    Dim saldonuevo As Decimal = SaldoFIN * (rz.cobertura_efectiva / 100)
-            '    TaSaldoConti.Insert(Fecha, Nothing, Nothing, 0, 0, Nothing, SaldoFIN, rz.cobertura_nominal, rz.cobertura_efectiva,
-            '                       SaldoFIN * (rz.cobertura_nominal / 100), SaldoFIN * (rz.cobertura_efectiva / 100), rz.id_contrato_garantia)
-            'End If
-
-            'For Each Rsaldo In ds.CONT_CPF_saldos_contingente.Rows
-            '    Rsaldo = ds.CONT_CPF_saldos_contingente.Rows(0)
-            '    TaSaldoConti.Insert(Fecha, Nothing, Nothing, 0, 0, Nothing, SaldoFIN, Rsaldo.cobertura_nominal, Rsaldo.cobertura_efectiva,
-            '                        SaldoFIN * (Rsaldo.cobertura_nominal / 100), SaldoFIN * (Rsaldo.cobertura_efectiva / 100), Rsaldo.id_contrato_garantia)
-            '    TaSaldoConti.UpdateSaldoConti(SaldoFIN * (Rsaldo.cobertura_efectiva / 100), ID_Contrato, 0)
-            '    Exit For
-            'Next
-
             CargaTIIE(Fecha.AddDays(AjusteDias), "", "") 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
             TaAnexos.UpdateFechaCorteTIIE(Fecha.AddDays(AjusteDias), TIIE28, ID_Contrato)
 
@@ -1242,6 +1317,7 @@
             End If
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        CalculaSaldoContigente(ID_Contrato, Fecha.AddDays(AjusteDias))
     End Sub
 
     Sub Procesa_SIMFAA_FIJA(ByRef Fecha As Date, ByRef ID_Contrato As Integer, ByRef EsCorteInte As Boolean, ByRef r As PasivoFiraDS.SaldosAnexosRow, ByRef EsVencimetoCap As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean, tasaFija As Boolean)
@@ -1355,7 +1431,6 @@
                                         0, Minis_BASE, ID_Contrato, (TasaActivaFN), diasX, IntFN_Aux, IntVENC, Provision)
             End If
 
-            SacaIntereses120(ID_Contrato, Fecha)
             CargaTIIE(Fecha, "", "") 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
             TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE_Promedio, ID_Contrato)
 
@@ -1388,10 +1463,9 @@
                 TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
                         0, Minis_BASE, ID_Contrato, (TasaActivaFN), diasX, IntFN, 0, Provision)
             End If
-            '  CargaTIIE(Fecha)
-            '   TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE28, ID_Contrato)
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 
     Sub Procesa_SIMFAA_VAR(ByRef Fecha As Date, ByRef ID_Contrato As Integer, ByRef EsCorteInte As Boolean, ByRef r As PasivoFiraDS.SaldosAnexosRow, ByRef EsVencimetoCap As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean, tasaFija As Boolean)
@@ -1507,8 +1581,6 @@
                 TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, CapitalVIG, 0, IntFN + InteresAux1FN, IntVENC + InteresAux2FN, 0, 0, 0,
                                         0, Minis_BASE, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFN_Aux, IntVENC, Provision)
             End If
-
-            SacaIntereses120(ID_Contrato, Fecha)
             CargaTIIE(Fecha, "", "") 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
             TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE_Promedio, ID_Contrato)
 
@@ -1545,6 +1617,7 @@
             '   TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE28, ID_Contrato)
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 
     Sub Procesa_COBRO_MENSUAL_VAR(ByRef Fecha As Date, ByRef ID_Contrato As Integer, ByRef EsCorteInte As Boolean, ByRef r As PasivoFiraDS.SaldosAnexosRow, ByRef EsVencimetoCap As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean, tasaFija As Boolean)
@@ -1662,7 +1735,6 @@
                                         0, Minis_BASE, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFN_Aux, IntVENC, Provision)
             End If
 
-            SacaIntereses120(ID_Contrato, Fecha)
             CargaTIIE(Fecha, "", "") 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
             TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE_Promedio, ID_Contrato)
 
@@ -1695,10 +1767,9 @@
                 TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
                         0, Minis_BASE, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFN, 0, Provision)
             End If
-            '  CargaTIIE(Fecha)
-            '   TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE28, ID_Contrato)
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 
     Sub Procesa_COBRO_MENSUAL_FIJA(ByRef Fecha As Date, ByRef ID_Contrato As Integer, ByRef EsCorteInte As Boolean, ByRef r As PasivoFiraDS.SaldosAnexosRow, ByRef EsVencimetoCap As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean, tasaFija As Boolean)
@@ -1798,7 +1869,6 @@
                                         0, Minis_BASE, ID_Contrato, (TasaActivaFN), diasX, IntFN_Aux, IntVENC, Provision)
             End If
 
-            SacaIntereses120(ID_Contrato, Fecha)
             CargaTIIE(Fecha, "", "") 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
             TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE_Promedio, ID_Contrato)
 
@@ -1831,9 +1901,9 @@
                 TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
                         0, Minis_BASE, ID_Contrato, (TasaActivaFN), diasX, IntFN, 0, Provision)
             End If
-            '  CargaTIIE(Fecha)
-            '   TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE28, ID_Contrato)
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
+
 End Module

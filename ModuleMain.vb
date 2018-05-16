@@ -114,6 +114,7 @@
                 End While
             End If
         'Next
+        End
     End Sub
 
     Sub GeneraCorteInteres(Fecha As Date, ID_Contrato As Integer, EsCorteInte As Boolean, EsVencimientoCAP As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean)
@@ -1037,7 +1038,6 @@
             RevisionTasa = False
         End If
 
-
         Dim diasX As Integer
         Dim TIIE_old, Minis_BASE As Decimal
         Dim TasaActivaBP, TasaActivaFB, TasaActivaFN, IntORD, IntVENC, IntFINAN, SaldoINI, SaldoFIN, InteresAux1, InteresAux2 As Decimal
@@ -1053,6 +1053,9 @@
         TasaActivaFN = TaAnexos.TasaActivaFN(r.id_contrato)
         CargaTIIE(r.FechaCorte, "", "")
         InteresAux1 = TaEdoCta.SacaInteresAux1(r.id_contrato, r.FechaCorte, Fecha)
+        If InteresAux1 < 0 Then
+            InteresAux1 = 0
+        End If
         InteresAux2 = TaEdoCta.SacaInteresAux2(r.id_contrato, r.FechaCorte, Fecha)
         Provision = TaEdoCta.Provision(r.id_contrato, r.FechaCorte, Fecha)
         InteresAux1FB = TaEdoCta.SacaInteresAux1FB(r.id_contrato, r.FechaCorte, Fecha)
@@ -1145,8 +1148,10 @@
                                         0, Minis_BASE, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFN_Aux, IntVENC, Provision)
             End If
 
-            CargaTIIE(Fecha, "", "") 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
-            TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE_Promedio, ID_Contrato)
+            If RevisionTasa = True Then
+                CargaTIIE(Fecha, "", "") 'NO APLICA EN TASA FIJA   dagl pero si lo estan aplicando para fn 
+                TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE_Promedio, ID_Contrato)
+            End If
 
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
@@ -1168,14 +1173,14 @@
             End If
 
             TaEdoCta.Insert("BP", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
-                        0, Minis_BASE, ID_Contrato, (TasaActivaBP + TIIE_old), diasX, IntORD, IntVENC, Provision)
+                            0, Minis_BASE, ID_Contrato, (TasaActivaBP + TIIE_old), diasX, IntORD, IntVENC, Provision)
 
             TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
-                            0, Minis_BASE, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFB, 0, Provision)
+                                0, Minis_BASE, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFB, 0, Provision)
 
             If TasaActivaFN > 0 Then
                 TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
-                        0, Minis_BASE, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFN, 0, Provision)
+                            0, Minis_BASE, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFN, 0, Provision)
             End If
         End If
         TaVeciminetos.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)

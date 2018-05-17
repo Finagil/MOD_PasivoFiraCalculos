@@ -86,7 +86,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DescuentosDS.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ModEdoCta.vb" />
     <Compile Include="ModGlobal.vb" />
+    <Compile Include="ModPagosFira.vb" />
     <Compile Include="ModuleMain.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -102,6 +104,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="PagosFiraDS.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PagosFiraDS.xsd</DependentUpon>
     </Compile>
     <Compile Include="PasivoFiraDS.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -138,6 +145,17 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="PagosFiraDS.xsc">
+      <DependentUpon>PagosFiraDS.xsd</DependentUpon>
+    </None>
+    <None Include="PagosFiraDS.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>PagosFiraDS.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="PagosFiraDS.xss">
+      <DependentUpon>PagosFiraDS.xsd</DependentUpon>
     </None>
     <None Include="PasivoFiraDS.xsc">
       <DependentUpon>PasivoFiraDS.xsd</DependentUpon>

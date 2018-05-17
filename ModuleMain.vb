@@ -46,12 +46,17 @@
         'ID = xx
         Hasta = Today.Date
             Tipar = TaAnexos.tipar(ID)
-            If TaAnexos.ExisteContrato(ID) <= 0 Then
-                Console.WriteLine("NO EXISTE CONTRATO " & ID)
-                Exit Sub
-                'Continue For
-            End If
-            If Tipar = "H" Or Tipar = "C" Then
+        If TaAnexos.ExisteContrato(ID) <= 0 Then
+            Console.WriteLine("NO EXISTE CONTRATO " & ID)
+            Exit Sub
+            'Continue For
+        End If
+        If TaAnexos.SacaEstatus(ID) <> "ACTIVO" Then
+            Console.WriteLine("Contrato TERMINADO " & ID)
+            Exit Sub
+            'Continue For
+        End If
+        If Tipar = "H" Or Tipar = "C" Then
                 diasProm = 99
                 Dim Anexo, Ciclo As String
                 Dim mfira As New PasivoFiraDSTableAdapters.mFIRATableAdapter
@@ -541,7 +546,13 @@
     End Function
 
     Sub CalculaServicioCobro(FecIni As Date, MontoBase As Decimal, PCXSG As Decimal, id_contrato As Integer, Subsidio As Boolean)
-        Dim FecFin As Date = TaVeciminetos.SigFechaVenc(id_contrato)
+        Dim FecFin As Date
+        Try
+            FecFin = TaVeciminetos.SigFechaVenc(id_contrato)
+        Catch ex As Exception
+            TaAnexos.TerminaContrato(id_contrato)
+            Exit Sub
+        End Try
         Dim Dias As Integer
         Dim Cobro As Decimal
         Dim ID As Integer = taCXSG.SacaIDContratoGarantia(id_contrato)
@@ -558,7 +569,6 @@
             Dim fechaux As Date = FecIni
             FecIni = FecFin
             FecFin = fechaux
-
         End If
         Dias = DateDiff(DateInterval.Day, FecIni, FecFin)
         Cobro = ((((MontoBase / SubsidioAUX) * (PCXSG / 100)) / 360)) * (Dias)

@@ -596,7 +596,7 @@ where id_contrato=@id_contrato
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Production.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="EsquemaCobro" Modifier="Public" Name="EsquemaCobro" QueryType="Scalar" ScalarCallRetval="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy18" UserSourceName="EsquemaCobro">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Production.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="EsquemaCobro" Modifier="Public" Name="EsquemaCobro" QueryType="Scalar" ScalarCallRetval="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy2" UserSourceName="EsquemaCobro">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        id_esquema_cobro
@@ -608,7 +608,7 @@ WHERE        (id_contrato = @id_contrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="ExisteContrato" Modifier="Public" Name="ExisteContrato" QueryType="Scalar" ScalarCallRetval="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy2" UserSourceName="ExisteContrato">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="ExisteContrato" Modifier="Public" Name="ExisteContrato" QueryType="Scalar" ScalarCallRetval="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy3" UserSourceName="ExisteContrato">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        ISNULL(COUNT(id_contrato), 0) AS Expr1
@@ -620,7 +620,7 @@ WHERE        (id_contrato = @id_contrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="ExisteIdContrato" Modifier="Public" Name="ExisteIdContrato" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy3" UserSourceName="ExisteIdContrato">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="ExisteIdContrato" Modifier="Public" Name="ExisteIdContrato" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy4" UserSourceName="ExisteIdContrato">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        COUNT(id_contrato) AS Expr1
@@ -632,7 +632,7 @@ WHERE        (id_contrato = @id_contrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Production_AUX2.dbo.CONT_CPF_clasificacion_garantias" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="fonaga" Modifier="Public" Name="fonaga" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy4" UserSourceName="fonaga">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Production_AUX2.dbo.CONT_CPF_clasificacion_garantias" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="fonaga" Modifier="Public" Name="fonaga" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy5" UserSourceName="fonaga">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        CONT_CPF_clasificacion_garantias.fonaga
@@ -645,7 +645,7 @@ WHERE        (CONT_CPF_contratos.id_contrato = @ID_Contrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Production_AUX2.dbo.CONT_CPF_clasificacion_garantias" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="gl_mosusa" Modifier="Public" Name="gl_mosusa" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy5" UserSourceName="gl_mosusa">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Production_AUX2.dbo.CONT_CPF_clasificacion_garantias" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="gl_mosusa" Modifier="Public" Name="gl_mosusa" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy6" UserSourceName="gl_mosusa">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT DISTINCT CONT_CPF_clasificacion_garantias.gl_mosusa
@@ -658,7 +658,7 @@ WHERE        (CONT_CPF_contratos.id_contrato = @ID_Contrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="InteresAcumulado" Modifier="Public" Name="InteresAcumulado" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy6" UserSourceName="InteresAcumulado">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="InteresAcumulado" Modifier="Public" Name="InteresAcumulado" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy7" UserSourceName="InteresAcumulado">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        ISNULL(SUM(InteAux1), 0) AS InteresOrdinario
@@ -671,7 +671,7 @@ WHERE        (id_contrato = @IDcontrato) AND (tipo_deu_acre = @TipoTasa)</Comman
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="pcxs" Modifier="Public" Name="pcxs" QueryType="Scalar" ScalarCallRetval="System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy7" UserSourceName="pcxs">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="pcxs" Modifier="Public" Name="pcxs" QueryType="Scalar" ScalarCallRetval="System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy8" UserSourceName="pcxs">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        ISNULL(porcentaje_cxsg, 0) AS Expr1
@@ -683,7 +683,20 @@ WHERE        (id_contrato = @id_contrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="Subsidiocontrato" Modifier="Public" Name="Subsidiocontrato" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy8" UserSourceName="Subsidiocontrato">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Production.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="SacaEstatus" Modifier="Public" Name="SacaEstatus" QueryType="Scalar" ScalarCallRetval="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy20" UserSourceName="SacaEstatus">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        Estatus
+FROM            CONT_CPF_contratos
+WHERE        (id_contrato = @id_contrato)
+GROUP BY Estatus</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="false" AutogeneratedName="id_contrato" ColumnName="id_contrato" DataSourceName="Production.dbo.CONT_CPF_contratos" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@id_contrato" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="id_contrato" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="Subsidiocontrato" Modifier="Public" Name="Subsidiocontrato" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy9" UserSourceName="Subsidiocontrato">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        ISNULL(subsidio, 'False') AS subsidio
@@ -695,7 +708,7 @@ WHERE        (id_contrato = @Idcontrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Pasivo.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="TasaActivaBP" Modifier="Public" Name="TasaActivaBP" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy9" UserSourceName="TasaActivaBP">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Pasivo.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="TasaActivaBP" Modifier="Public" Name="TasaActivaBP" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy10" UserSourceName="TasaActivaBP">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        BP
@@ -707,7 +720,7 @@ WHERE        (id_contrato = @Idcontrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Pasivo.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="TasaActivaFB" Modifier="Public" Name="TasaActivaFB" QueryType="Scalar" ScalarCallRetval="System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy10" UserSourceName="TasaActivaFB">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Pasivo.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="TasaActivaFB" Modifier="Public" Name="TasaActivaFB" QueryType="Scalar" ScalarCallRetval="System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy11" UserSourceName="TasaActivaFB">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        FB
@@ -719,7 +732,7 @@ WHERE        (id_contrato = @Idcontrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Pasivo.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="TasaActivaFN" Modifier="Public" Name="TasaActivaFN" QueryType="Scalar" ScalarCallRetval="System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy11" UserSourceName="TasaActivaFN">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Pasivo.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="TasaActivaFN" Modifier="Public" Name="TasaActivaFN" QueryType="Scalar" ScalarCallRetval="System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy12" UserSourceName="TasaActivaFN">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        FN
@@ -731,7 +744,7 @@ WHERE        (id_contrato = @Idcontrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="TASAFIJA" Modifier="Public" Name="TASAFIJA" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy12" UserSourceName="TASAFIJA">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="TASAFIJA" Modifier="Public" Name="TASAFIJA" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy13" UserSourceName="TASAFIJA">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        ISNULL(tasafijafira, 0) AS Expr1
@@ -743,7 +756,19 @@ WHERE        (id_contrato = @ID_CONTRATO)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Production_AUX.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="TIIEACTIVA" Modifier="Public" Name="TIIEACTIVA" QueryType="Scalar" ScalarCallRetval="System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy13" UserSourceName="TIIEACTIVA">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="TerminaContrato" Modifier="Public" Name="TerminaContrato" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy17" UserSourceName="TerminaContrato">
+                <UpdateCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>UPDATE       CONT_CPF_contratos
+SET                Estatus = 'TERMINADO'
+WHERE        (id_contrato = @id_Contrato)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="false" AutogeneratedName="id_Contrato" ColumnName="id_contrato" DataSourceName="Production.dbo.CONT_CPF_contratos" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@id_Contrato" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="id_contrato" SourceColumnNullMapping="false" SourceVersion="Original" />
+                    </Parameters>
+                  </DbCommand>
+                </UpdateCommand>
+              </DbSource>
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="Production_AUX.dbo.CONT_CPF_contratos" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="TIIEACTIVA" Modifier="Public" Name="TIIEACTIVA" QueryType="Scalar" ScalarCallRetval="System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy14" UserSourceName="TIIEACTIVA">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        TiieActiva
@@ -755,7 +780,7 @@ WHERE        (id_contrato = @ID_Contrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="tipar" Modifier="Public" Name="tipar" QueryType="Scalar" ScalarCallRetval="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy14" UserSourceName="tipar">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="tipar" Modifier="Public" Name="tipar" QueryType="Scalar" ScalarCallRetval="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy15" UserSourceName="tipar">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        ISNULL(Vw_Anexos.Tipar, 0) AS Expr1
@@ -768,7 +793,7 @@ WHERE        (CONT_CPF_contratos.id_contrato = @id_contrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="tipta" Modifier="Public" Name="tipta" QueryType="Scalar" ScalarCallRetval="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy15" UserSourceName="tipta">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="tipta" Modifier="Public" Name="tipta" QueryType="Scalar" ScalarCallRetval="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy16" UserSourceName="tipta">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        ISNULL(Vw_Anexos.Tipta, 0) AS Expr1
@@ -781,7 +806,7 @@ WHERE        (CONT_CPF_contratos.id_contrato = @id_contrato)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="UpdateFechaCorte" Modifier="Public" Name="UpdateFechaCorte" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy16" UserSourceName="UpdateFechaCorte">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="UpdateFechaCorte" Modifier="Public" Name="UpdateFechaCorte" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy18" UserSourceName="UpdateFechaCorte">
                 <UpdateCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>UPDATE       CONT_CPF_contratos
@@ -794,7 +819,7 @@ WHERE        (id_contrato = @ID_contrato)</CommandText>
                   </DbCommand>
                 </UpdateCommand>
               </DbSource>
-              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="UpdateFechaCorteTIIE" Modifier="Public" Name="UpdateFechaCorteTIIE" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy17" UserSourceName="UpdateFechaCorteTIIE">
+              <DbSource ConnectionRef="PasivoConnectionString (MySettings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="UpdateFechaCorteTIIE" Modifier="Public" Name="UpdateFechaCorteTIIE" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy19" UserSourceName="UpdateFechaCorteTIIE">
                 <UpdateCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>UPDATE       CONT_CPF_contratos

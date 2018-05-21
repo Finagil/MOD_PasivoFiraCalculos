@@ -1,22 +1,9 @@
 ﻿Module ModEdoCta
-    Dim TaVeciminetos As New PasivoFiraDSTableAdapters.CONT_CPF_vencimientosTableAdapter
-    Dim TaEdoCta As New PasivoFiraDSTableAdapters.CONT_CPF_edocuentaTableAdapter
-    Dim TaAnexos As New PasivoFiraDSTableAdapters.SaldosAnexosTableAdapter
-    Dim TaMinis As New PasivoFiraDSTableAdapters.CONT_CPF_ministracionesTableAdapter
-    Dim Ministraciones As New DescuentosDSTableAdapters.MinistracionesTableAdapter
-    Dim TaSaldoConti As New PasivoFiraDSTableAdapters.CONT_CPF_saldos_contingenteTableAdapter
-    Dim MFIRA As New PasivoFiraDSTableAdapters.mFIRATableAdapter
-    Dim taCalendar As New PasivoFiraDSTableAdapters.CONT_CPF_CalendariosRevisionTasaTableAdapter
-    Dim taCXSG As New PasivoFiraDSTableAdapters.CONT_CPF_csgTableAdapter
-    Dim taContraGarant As New PasivoFiraDSTableAdapters.CONT_CPF_contratos_garantiasTableAdapter
-    Dim tapagos As New PasivoFiraDSTableAdapters.PagosTableAdapter
+
     Dim ds As New PasivoFiraDS
     Dim ds1 As New DescuentosDS
     Dim subsidio As Boolean
     Dim Consec As Integer
-    Dim taGarantias As New PasivoFiraDSTableAdapters.CONT_CPF_contratos_garantiasTableAdapter
-    Dim taCargosXservico As New PasivoFiraDSTableAdapters.CONT_CPF_csgTableAdapter
-    Dim SaldoCont As New PasivoFiraDSTableAdapters.CONT_CPF_saldos_contingenteTableAdapter
     Dim NoGarantias As Integer
     Dim SaldoINI, SaldoFIN, InteORD, InteORDFN, InteORDFB As Decimal
     Dim FechaUltimoMov As Date

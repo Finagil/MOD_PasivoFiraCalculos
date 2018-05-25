@@ -1,17 +1,24 @@
 ﻿Module ModPagosFira
     Dim DS As New PagosFiraDS
 
-    Sub Procesa_Pagos_Fira()
-        taPagosFira.Fill(DS.CONT_CPF_PagosFira)
+    Function Procesa_Pagos_Fira(ID As Integer)
+        Dim X As Integer = 0
+        If ID = 0 Then
+            taPagosFira.Fill(DS.CONT_CPF_PagosFira)
+        Else
+            taPagosFira.Fill_ID(DS.CONT_CPF_PagosFira, ID)
+        End If
         For Each r As PagosFiraDS.CONT_CPF_PagosFiraRow In DS.CONT_CPF_PagosFira.Rows
-            GeneraPago(r.id_Contrato, r.FechaPagoFira, r.Capital, r.Interes)
+            X = 1
+            GeneraPago(r.id_Contrato, r.FechaPagoFira, r.Capital, r.Interes, r.FechaHistoria)
         Next
-    End Sub
+        Return X
+    End Function
 
-    Sub GeneraPago(ID As Integer, FechaFira As Date, Capital As Decimal, Interes As Decimal)
+    Sub GeneraPago(ID As Integer, FechaFira As Date, Capital As Decimal, Interes As Decimal, FechaHistoria As String)
         Dim rCalen As PagosFiraDS.CalendariosRow
         Dim rVenc As PagosFiraDS.VencimientosRow
-        Dim SaldoCap As Decimal = taEdoCta.SaldoCapital(ID, "BP")
+        Dim SaldoCap As Decimal = TaEdoCta.SaldoCapital(ID, "BP")
         taVencimientos.FillFecha(DS.Vencimientos, ID, FechaFira)
         If DS.Vencimientos.Rows.Count <= 0 Then
             taVencimientos.FillPosteriores(DS.Vencimientos, ID, FechaFira)
@@ -36,6 +43,7 @@
                     End If
                     Shell("\\server-raid\Jobs\MOD_PasivoFiraCalculos.exe " & ID, AppWinStyle.NormalFocus, True)
                     TaAnexos.TerminaContrato(ID)
+                    TaEdoCta.BorraCeros(ID)
                 Else
                     taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", rVenc.intereses, ID)
                     rVenc.capital -= Capital
@@ -43,8 +51,8 @@
                     DS.Vencimientos.GetChanges()
                     taVencimientos.Update(DS.Vencimientos)
                 End If
-
             Next
+            taPagosFira.ProcesaPago(True, ID, FechaHistoria)
         End If
     End Sub
 

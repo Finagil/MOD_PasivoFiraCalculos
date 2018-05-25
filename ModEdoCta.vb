@@ -108,8 +108,9 @@
     End Sub
 
     Sub GeneraCorteInteres(Fecha As Date, ID_Contrato As Integer, EsCorteInte As Boolean, EsVencimientoCAP As Boolean, AcumulaInteres As Boolean, RevisionTasa As Boolean)
+        Dim r As PasivoFiraDS.SaldosAnexosRow
         TaAnexos.Fill(ds.SaldosAnexos, ID_Contrato)
-        For Each r As PasivoFiraDS.SaldosAnexosRow In ds.SaldosAnexos.Rows
+        For Each r In ds.SaldosAnexos.Rows
             Console.WriteLine(ID_Contrato & " " & Fecha.ToShortDateString & r.des_tipo_tasa & " Esquema: " & r.claveCobro.Trim)
 
             If CInt(r.claveCobro.Trim) = EsquemaCobro.SIMPLE And InStr(r.des_tipo_tasa.Trim, "Variable") Then
@@ -143,6 +144,13 @@
                 Console.WriteLine("SIN ESQUEMA DE COBRO....")
             End If
         Next
+        'TERMINA CONTRATOS+++++++++++++++++++++++++++++++++++++++++++
+        TaAnexos.Fill(ds.SaldosAnexos, ID_Contrato)
+        r = ds.SaldosAnexos.Rows(0)
+        If r.SaldoInsoluto = 0 And r.Ministrado > 0 Then
+            TaAnexos.TerminaContrato(r.id_contrato)
+        End If
+        'TERMINA CONTRATOS+++++++++++++++++++++++++++++++++++++++++++
     End Sub
 
     Sub CalculaServicioCobro(hoy As Date, idcont As Integer)

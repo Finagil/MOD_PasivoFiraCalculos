@@ -1615,6 +1615,8 @@ Partial Public Class PasivoFiraDS
         
         Private columnTasaTiie As Global.System.Data.DataColumn
         
+        Private columnMinistrado As Global.System.Data.DataColumn
+        
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Sub New()
@@ -1907,6 +1909,14 @@ Partial Public Class PasivoFiraDS
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public ReadOnly Property MinistradoColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnMinistrado
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false)>  _
         Public ReadOnly Property Count() As Integer
@@ -1973,9 +1983,10 @@ Partial Public Class PasivoFiraDS
                     ByVal Tipar As String,  _
                     ByVal Tipta As String,  _
                     ByVal fonaga As String,  _
-                    ByVal TasaTiie As String) As SaldosAnexosRow
+                    ByVal TasaTiie As String,  _
+                    ByVal Ministrado As Decimal) As SaldosAnexosRow
             Dim rowSaldosAnexosRow As SaldosAnexosRow = CType(Me.NewRow,SaldosAnexosRow)
-            Dim columnValuesArray() As Object = New Object() {Nothing, tipo_deu_acre, Capital, Vigente, Vencido, SaldoInsoluto, FechaCorte, InteresOrdinario, InteresVencido, MotatoriosOrdinarios, MotatoriosPendientes, InteresAcumulado, InteresFinanciado, FechaInicial, FechaFinal, BP, FN, FB, id_edo_ctaMAX, claveCobro, des_tipo_tasa, Nothing, porcentaje_cxsg, TiieActiva, subsidio, tasafijafira, ciclo, anexo, Tipar, Tipta, fonaga, TasaTiie}
+            Dim columnValuesArray() As Object = New Object() {Nothing, tipo_deu_acre, Capital, Vigente, Vencido, SaldoInsoluto, FechaCorte, InteresOrdinario, InteresVencido, MotatoriosOrdinarios, MotatoriosPendientes, InteresAcumulado, InteresFinanciado, FechaInicial, FechaFinal, BP, FN, FB, id_edo_ctaMAX, claveCobro, des_tipo_tasa, Nothing, porcentaje_cxsg, TiieActiva, subsidio, tasafijafira, ciclo, anexo, Tipar, Tipta, fonaga, TasaTiie, Ministrado}
             rowSaldosAnexosRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowSaldosAnexosRow)
             Return rowSaldosAnexosRow
@@ -2036,6 +2047,7 @@ Partial Public Class PasivoFiraDS
             Me.columnTipta = MyBase.Columns("Tipta")
             Me.columnfonaga = MyBase.Columns("fonaga")
             Me.columnTasaTiie = MyBase.Columns("TasaTiie")
+            Me.columnMinistrado = MyBase.Columns("Ministrado")
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -2105,6 +2117,8 @@ Partial Public Class PasivoFiraDS
             MyBase.Columns.Add(Me.columnfonaga)
             Me.columnTasaTiie = New Global.System.Data.DataColumn("TasaTiie", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnTasaTiie)
+            Me.columnMinistrado = New Global.System.Data.DataColumn("Ministrado", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnMinistrado)
             Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnid_contrato}, true))
             Me.columnid_contrato.AutoIncrement = true
             Me.columnid_contrato.AutoIncrementSeed = -1
@@ -2143,6 +2157,7 @@ Partial Public Class PasivoFiraDS
             Me.columnTipta.MaxLength = 1
             Me.columnfonaga.MaxLength = 50
             Me.columnTasaTiie.MaxLength = 10
+            Me.columnMinistrado.ReadOnly = true
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -8616,6 +8631,21 @@ Partial Public Class PasivoFiraDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Property Ministrado() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableSaldosAnexos.MinistradoColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'Ministrado' de la tabla 'SaldosAnexos' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableSaldosAnexos.MinistradoColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Function Istipo_deu_acreNull() As Boolean
             Return Me.IsNull(Me.tableSaldosAnexos.tipo_deu_acreColumn)
         End Function
@@ -8924,6 +8954,18 @@ Partial Public Class PasivoFiraDS
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Sub SetTasaTiieNull()
             Me(Me.tableSaldosAnexos.TasaTiieColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Function IsMinistradoNull() As Boolean
+            Return Me.IsNull(Me.tableSaldosAnexos.MinistradoColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Sub SetMinistradoNull()
+            Me(Me.tableSaldosAnexos.MinistradoColumn) = Global.System.Convert.DBNull
         End Sub
     End Class
     
@@ -14050,7 +14092,7 @@ Namespace PasivoFiraDSTableAdapters
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Private Sub InitCommandCollection()
-            Me._commandCollection = New Global.System.Data.SqlClient.SqlCommand(17) {}
+            Me._commandCollection = New Global.System.Data.SqlClient.SqlCommand(18) {}
             Me._commandCollection(0) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(0).Connection = Me.Connection
             Me._commandCollection(0).CommandText = "SELECT        id_edo_cta, tipo_deu_acre, fecha_ini, fecha_fin, saldo_ini, saldo_f"& _ 
@@ -14060,82 +14102,79 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(1) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(1).Connection = Me.Connection
-            Me._commandCollection(1).CommandText = "DELETE FROM CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @idcontrato) AND (sal"& _ 
-                "do_ini > 0) OR"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         (saldo_ini = 0) AND (saldo_fin = 0)"
+            Me._commandCollection(1).CommandText = "DELETE FROM CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @Contrato) AND (saldo"& _ 
+                "_ini = 0) AND (saldo_fin = 0)"
             Me._commandCollection(1).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(1).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@idcontrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._commandCollection(1).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._commandCollection(2) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(2).Connection = Me.Connection
-            Me._commandCollection(2).CommandText = "DELETE FROM CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @idcontrato) "
+            Me._commandCollection(2).CommandText = "DELETE FROM CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @idcontrato) AND (sal"& _ 
+                "do_ini > 0) OR"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         (saldo_ini = 0) AND (saldo_fin = 0)"
             Me._commandCollection(2).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(2).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@idcontrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._commandCollection(3) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(3).Connection = Me.Connection
-            Me._commandCollection(3).CommandText = "SELECT        COUNT(*) AS Expr1"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_DiasFestivos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE    "& _ 
-                "    (Fecha = @Fecha) AND (Divisa = @Moneda)"
+            Me._commandCollection(3).CommandText = "DELETE FROM CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @idcontrato) "
             Me._commandCollection(3).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(3).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Fecha", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "Fecha", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(3).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Moneda", Global.System.Data.SqlDbType.VarChar, 3, Global.System.Data.ParameterDirection.Input, 0, 0, "Divisa", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(3).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@idcontrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._commandCollection(4) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(4).Connection = Me.Connection
-            Me._commandCollection(4).CommandText = "SELECT        InteAux1, InteAux2, Provision, cap_vencido, cap_vigente, dias, fech"& _ 
+            Me._commandCollection(4).CommandText = "SELECT        COUNT(*) AS Expr1"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_DiasFestivos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE    "& _ 
+                "    (Fecha = @Fecha) AND (Divisa = @Moneda)"
+            Me._commandCollection(4).CommandType = Global.System.Data.CommandType.Text
+            Me._commandCollection(4).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Fecha", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "Fecha", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(4).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Moneda", Global.System.Data.SqlDbType.VarChar, 3, Global.System.Data.ParameterDirection.Input, 0, 0, "Divisa", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(5) = New Global.System.Data.SqlClient.SqlCommand()
+            Me._commandCollection(5).Connection = Me.Connection
+            Me._commandCollection(5).CommandText = "SELECT        InteAux1, InteAux2, Provision, cap_vencido, cap_vigente, dias, fech"& _ 
                 "a_fin, fecha_ini, id_contrato, id_edo_cta, int_acum, int_fin, int_mor_ord, int_m"& _ 
                 "or_pen, int_ord, int_vencido, min_base, saldo_fin, saldo_ini, tasa, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"          "& _ 
                 "               tipo_deu_acre"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        ("& _ 
                 "id_contrato = @id_contrato) AND (tipo_deu_acre = @TipoAcre)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY fecha_fin "& _ 
                 "DESC, fecha_ini DESC"
-            Me._commandCollection(4).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(4).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(4).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TipoAcre", Global.System.Data.SqlDbType.VarChar, 50, Global.System.Data.ParameterDirection.Input, 0, 0, "tipo_deu_acre", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(5) = New Global.System.Data.SqlClient.SqlCommand()
-            Me._commandCollection(5).Connection = Me.Connection
-            Me._commandCollection(5).CommandText = "SELECT        TOP (1) min_base"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        "& _ 
-                "(id_contrato = @Id_contrato)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY id_edo_cta DESC"
             Me._commandCollection(5).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(5).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(5).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(5).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TipoAcre", Global.System.Data.SqlDbType.VarChar, 50, Global.System.Data.ParameterDirection.Input, 0, 0, "tipo_deu_acre", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(6) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(6).Connection = Me.Connection
-            Me._commandCollection(6).CommandText = "SELECT        TOP (1) fecha_fin"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE       "& _ 
-                " (id_contrato = @id_contrato) "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY id_edo_cta DESC"
+            Me._commandCollection(6).CommandText = "SELECT        TOP (1) min_base"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        "& _ 
+                "(id_contrato = @Id_contrato)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY id_edo_cta DESC"
             Me._commandCollection(6).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(6).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(6).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(7) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(7).Connection = Me.Connection
-            Me._commandCollection(7).CommandText = "SELECT        ISNULL(SUM(Provision), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edo"& _ 
-                "cuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'BP') AND"& _ 
-                " (fecha_fin BETWEEN @FechaIni AND @FechaFin)"
+            Me._commandCollection(7).CommandText = "SELECT        TOP (1) fecha_fin"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE       "& _ 
+                " (id_contrato = @id_contrato) "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY id_edo_cta DESC"
             Me._commandCollection(7).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(7).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(7).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaIni", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_fin", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(7).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaFin", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_fin", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(7).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(8) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(8).Connection = Me.Connection
-            Me._commandCollection(8).CommandText = "SELECT        ISNULL(SUM(dias), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edocuent"& _ 
-                "a"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'BP') AND (fec"& _ 
-                "ha_fin BETWEEN @FechaIni AND @FechaFin)"
+            Me._commandCollection(8).CommandText = "SELECT        ISNULL(SUM(Provision), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edo"& _ 
+                "cuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'BP') AND"& _ 
+                " (fecha_fin BETWEEN @FechaIni AND @FechaFin)"
             Me._commandCollection(8).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(8).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(8).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaIni", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_fin", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(8).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaFin", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_fin", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(9) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(9).Connection = Me.Connection
-            Me._commandCollection(9).CommandText = "SELECT        MIN(fecha_ini) AS Fecha1"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE"& _ 
-                "        (tipo_deu_acre = 'BP') AND (id_contrato = @id_contrato)"
+            Me._commandCollection(9).CommandText = "SELECT        ISNULL(SUM(dias), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edocuent"& _ 
+                "a"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'BP') AND (fec"& _ 
+                "ha_fin BETWEEN @FechaIni AND @FechaFin)"
             Me._commandCollection(9).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(9).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(9).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(9).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaIni", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_fin", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(9).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaFin", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_fin", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(10) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(10).Connection = Me.Connection
-            Me._commandCollection(10).CommandText = "SELECT        ISNULL(SUM(InteAux1), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edoc"& _ 
-                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'BP') AND "& _ 
-                "(fecha_ini BETWEEN @FechaIni AND @FechaFin)"
+            Me._commandCollection(10).CommandText = "SELECT        MIN(fecha_ini) AS Fecha1"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE"& _ 
+                "        (tipo_deu_acre = 'BP') AND (id_contrato = @id_contrato)"
             Me._commandCollection(10).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(10).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(10).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaIni", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_ini", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(10).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaFin", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_ini", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(10).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(11) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(11).Connection = Me.Connection
             Me._commandCollection(11).CommandText = "SELECT        ISNULL(SUM(InteAux1), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edoc"& _ 
-                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'FB') AND "& _ 
+                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'BP') AND "& _ 
                 "(fecha_ini BETWEEN @FechaIni AND @FechaFin)"
             Me._commandCollection(11).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(11).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -14144,7 +14183,7 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(12) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(12).Connection = Me.Connection
             Me._commandCollection(12).CommandText = "SELECT        ISNULL(SUM(InteAux1), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edoc"& _ 
-                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'FN') AND "& _ 
+                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'FB') AND "& _ 
                 "(fecha_ini BETWEEN @FechaIni AND @FechaFin)"
             Me._commandCollection(12).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(12).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -14152,8 +14191,8 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(12).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaFin", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_ini", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(13) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(13).Connection = Me.Connection
-            Me._commandCollection(13).CommandText = "SELECT        ISNULL(SUM(InteAux2), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edoc"& _ 
-                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'BP') AND "& _ 
+            Me._commandCollection(13).CommandText = "SELECT        ISNULL(SUM(InteAux1), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edoc"& _ 
+                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'FN') AND "& _ 
                 "(fecha_ini BETWEEN @FechaIni AND @FechaFin)"
             Me._commandCollection(13).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(13).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -14162,7 +14201,7 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(14) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(14).Connection = Me.Connection
             Me._commandCollection(14).CommandText = "SELECT        ISNULL(SUM(InteAux2), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edoc"& _ 
-                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'FB') AND "& _ 
+                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'BP') AND "& _ 
                 "(fecha_ini BETWEEN @FechaIni AND @FechaFin)"
             Me._commandCollection(14).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(14).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -14171,7 +14210,7 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(15) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(15).Connection = Me.Connection
             Me._commandCollection(15).CommandText = "SELECT        ISNULL(SUM(InteAux2), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edoc"& _ 
-                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'FN') AND "& _ 
+                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'FB') AND "& _ 
                 "(fecha_ini BETWEEN @FechaIni AND @FechaFin)"
             Me._commandCollection(15).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(15).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -14179,19 +14218,28 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(15).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaFin", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_ini", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(16) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(16).Connection = Me.Connection
-            Me._commandCollection(16).CommandText = "SELECT        SUM(min_base) - SUM(cap_vigente) AS SaldoCapital"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            C"& _ 
-                "ONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @Id_contrato) AND (tipo_deu_acre "& _ 
-                "= @TipoAcre)"
+            Me._commandCollection(16).CommandText = "SELECT        ISNULL(SUM(InteAux2), 0) AS Ineteres"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_edoc"& _ 
+                "uenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @ID_contrato) AND (tipo_deu_acre = 'FN') AND "& _ 
+                "(fecha_ini BETWEEN @FechaIni AND @FechaFin)"
             Me._commandCollection(16).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(16).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(16).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TipoAcre", Global.System.Data.SqlDbType.VarChar, 50, Global.System.Data.ParameterDirection.Input, 0, 0, "tipo_deu_acre", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(16).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(16).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaIni", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_ini", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(16).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FechaFin", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha_ini", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(17) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(17).Connection = Me.Connection
-            Me._commandCollection(17).CommandText = "SELECT     ISNULL(SUM(ISNULL(min_base, 0)) + SUM(ISNULL(int_ord, 0)) + SUM(ISNULL"& _ 
+            Me._commandCollection(17).CommandText = "SELECT        SUM(min_base) - SUM(cap_vigente) AS SaldoCapital"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            C"& _ 
+                "ONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @Id_contrato) AND (tipo_deu_acre "& _ 
+                "= @TipoAcre)"
+            Me._commandCollection(17).CommandType = Global.System.Data.CommandType.Text
+            Me._commandCollection(17).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(17).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TipoAcre", Global.System.Data.SqlDbType.VarChar, 50, Global.System.Data.ParameterDirection.Input, 0, 0, "tipo_deu_acre", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(18) = New Global.System.Data.SqlClient.SqlCommand()
+            Me._commandCollection(18).Connection = Me.Connection
+            Me._commandCollection(18).CommandText = "SELECT     ISNULL(SUM(ISNULL(min_base, 0)) + SUM(ISNULL(int_ord, 0)) + SUM(ISNULL"& _ 
                 "(int_vencido, 0)), 0) AS Saldo"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM         CONT_CPF_edocuenta"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE     (id_c"& _ 
                 "ontrato = @idcontro) AND (tipo_deu_acre = 'BP')"
-            Me._commandCollection(17).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(17).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@idcontro", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(18).CommandType = Global.System.Data.CommandType.Text
+            Me._commandCollection(18).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@idcontro", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -14223,7 +14271,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, false)>  _
         Public Overloads Overridable Function FillDesc(ByVal dataTable As PasivoFiraDS.CONT_CPF_edocuentaDataTable, ByVal id_contrato As Global.System.Nullable(Of Integer), ByVal TipoAcre As String) As Integer
-            Me.Adapter.SelectCommand = Me.CommandCollection(4)
+            Me.Adapter.SelectCommand = Me.CommandCollection(5)
             If (id_contrato.HasValue = true) Then
                 Me.Adapter.SelectCommand.Parameters(0).Value = CType(id_contrato.Value,Integer)
             Else
@@ -14246,7 +14294,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], false)>  _
         Public Overloads Overridable Function GetDataDESC(ByVal id_contrato As Global.System.Nullable(Of Integer), ByVal TipoAcre As String) As PasivoFiraDS.CONT_CPF_edocuentaDataTable
-            Me.Adapter.SelectCommand = Me.CommandCollection(4)
+            Me.Adapter.SelectCommand = Me.CommandCollection(5)
             If (id_contrato.HasValue = true) Then
                 Me.Adapter.SelectCommand.Parameters(0).Value = CType(id_contrato.Value,Integer)
             Else
@@ -14969,8 +15017,35 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, false)>  _
-        Public Overloads Overridable Function BorraDatos(ByVal idcontrato As Global.System.Nullable(Of Integer)) As Integer
+        Public Overloads Overridable Function BorraCeros(ByVal Contrato As Global.System.Nullable(Of Integer)) As Integer
             Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(1)
+            If (Contrato.HasValue = true) Then
+                command.Parameters(0).Value = CType(Contrato.Value,Integer)
+            Else
+                command.Parameters(0).Value = Global.System.DBNull.Value
+            End If
+            Dim previousConnectionState As Global.System.Data.ConnectionState = command.Connection.State
+            If ((command.Connection.State And Global.System.Data.ConnectionState.Open)  _
+                        <> Global.System.Data.ConnectionState.Open) Then
+                command.Connection.Open
+            End If
+            Dim returnValue As Integer
+            Try 
+                returnValue = command.ExecuteNonQuery
+            Finally
+                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
+                    command.Connection.Close
+                End If
+            End Try
+            Return returnValue
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, false)>  _
+        Public Overloads Overridable Function BorraDatos(ByVal idcontrato As Global.System.Nullable(Of Integer)) As Integer
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(2)
             If (idcontrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(idcontrato.Value,Integer)
             Else
@@ -14997,7 +15072,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, false)>  _
         Public Overloads Overridable Function BorraTodo(ByVal idcontrato As Global.System.Nullable(Of Integer)) As Integer
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(2)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(3)
             If (idcontrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(idcontrato.Value,Integer)
             Else
@@ -15023,7 +15098,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
         Public Overloads Overridable Function EsDiaFestivo(ByVal Fecha As Date, ByVal Moneda As String) As Global.System.Nullable(Of Integer)
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(3)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(4)
             command.Parameters(0).Value = CType(Fecha,Date)
             If (Moneda Is Nothing) Then
                 Throw New Global.System.ArgumentNullException("Moneda")
@@ -15055,7 +15130,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
         Public Overloads Overridable Function Minis_Base(ByVal Id_contrato As Global.System.Nullable(Of Integer)) As Global.System.Nullable(Of Decimal)
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(5)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(6)
             If (Id_contrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(Id_contrato.Value,Integer)
             Else
@@ -15086,7 +15161,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
         Public Overloads Overridable Function Minis_Base_Fec(ByVal id_contrato As Global.System.Nullable(Of Integer)) As Object
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(6)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(7)
             If (id_contrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(id_contrato.Value,Integer)
             Else
@@ -15117,7 +15192,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
         Public Overloads Overridable Function Provision(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Object
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(7)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(8)
             If (ID_contrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(ID_contrato.Value,Integer)
             Else
@@ -15158,7 +15233,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
         Public Overloads Overridable Function ProvisionDias(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Global.System.Nullable(Of Integer)
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(8)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(9)
             If (ID_contrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(ID_contrato.Value,Integer)
             Else
@@ -15199,7 +15274,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
         Public Overloads Overridable Function SacaFecha1(ByVal id_contrato As Global.System.Nullable(Of Integer)) As Global.System.Nullable(Of Date)
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(9)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(10)
             If (id_contrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(id_contrato.Value,Integer)
             Else
@@ -15230,47 +15305,6 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
         Public Overloads Overridable Function SacaInteresAux1(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Object
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(10)
-            If (ID_contrato.HasValue = true) Then
-                command.Parameters(0).Value = CType(ID_contrato.Value,Integer)
-            Else
-                command.Parameters(0).Value = Global.System.DBNull.Value
-            End If
-            If (FechaIni.HasValue = true) Then
-                command.Parameters(1).Value = CType(FechaIni.Value,Date)
-            Else
-                command.Parameters(1).Value = Global.System.DBNull.Value
-            End If
-            If (FechaFin.HasValue = true) Then
-                command.Parameters(2).Value = CType(FechaFin.Value,Date)
-            Else
-                command.Parameters(2).Value = Global.System.DBNull.Value
-            End If
-            Dim previousConnectionState As Global.System.Data.ConnectionState = command.Connection.State
-            If ((command.Connection.State And Global.System.Data.ConnectionState.Open)  _
-                        <> Global.System.Data.ConnectionState.Open) Then
-                command.Connection.Open
-            End If
-            Dim returnValue As Object
-            Try 
-                returnValue = command.ExecuteScalar
-            Finally
-                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
-                    command.Connection.Close
-                End If
-            End Try
-            If ((returnValue Is Nothing)  _
-                        OrElse (returnValue.GetType Is GetType(Global.System.DBNull))) Then
-                Return Nothing
-            Else
-                Return CType(returnValue,Object)
-            End If
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function SacaInteresAux1FB(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Object
             Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(11)
             If (ID_contrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(ID_contrato.Value,Integer)
@@ -15311,8 +15345,49 @@ Namespace PasivoFiraDSTableAdapters
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function SacaInteresAux1FN(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Global.System.Nullable(Of Decimal)
+        Public Overloads Overridable Function SacaInteresAux1FB(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Object
             Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(12)
+            If (ID_contrato.HasValue = true) Then
+                command.Parameters(0).Value = CType(ID_contrato.Value,Integer)
+            Else
+                command.Parameters(0).Value = Global.System.DBNull.Value
+            End If
+            If (FechaIni.HasValue = true) Then
+                command.Parameters(1).Value = CType(FechaIni.Value,Date)
+            Else
+                command.Parameters(1).Value = Global.System.DBNull.Value
+            End If
+            If (FechaFin.HasValue = true) Then
+                command.Parameters(2).Value = CType(FechaFin.Value,Date)
+            Else
+                command.Parameters(2).Value = Global.System.DBNull.Value
+            End If
+            Dim previousConnectionState As Global.System.Data.ConnectionState = command.Connection.State
+            If ((command.Connection.State And Global.System.Data.ConnectionState.Open)  _
+                        <> Global.System.Data.ConnectionState.Open) Then
+                command.Connection.Open
+            End If
+            Dim returnValue As Object
+            Try 
+                returnValue = command.ExecuteScalar
+            Finally
+                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
+                    command.Connection.Close
+                End If
+            End Try
+            If ((returnValue Is Nothing)  _
+                        OrElse (returnValue.GetType Is GetType(Global.System.DBNull))) Then
+                Return Nothing
+            Else
+                Return CType(returnValue,Object)
+            End If
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
+        Public Overloads Overridable Function SacaInteresAux1FN(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Global.System.Nullable(Of Decimal)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(13)
             If (ID_contrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(ID_contrato.Value,Integer)
             Else
@@ -15353,47 +15428,6 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
         Public Overloads Overridable Function SacaInteresAux2(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Object
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(13)
-            If (ID_contrato.HasValue = true) Then
-                command.Parameters(0).Value = CType(ID_contrato.Value,Integer)
-            Else
-                command.Parameters(0).Value = Global.System.DBNull.Value
-            End If
-            If (FechaIni.HasValue = true) Then
-                command.Parameters(1).Value = CType(FechaIni.Value,Date)
-            Else
-                command.Parameters(1).Value = Global.System.DBNull.Value
-            End If
-            If (FechaFin.HasValue = true) Then
-                command.Parameters(2).Value = CType(FechaFin.Value,Date)
-            Else
-                command.Parameters(2).Value = Global.System.DBNull.Value
-            End If
-            Dim previousConnectionState As Global.System.Data.ConnectionState = command.Connection.State
-            If ((command.Connection.State And Global.System.Data.ConnectionState.Open)  _
-                        <> Global.System.Data.ConnectionState.Open) Then
-                command.Connection.Open
-            End If
-            Dim returnValue As Object
-            Try 
-                returnValue = command.ExecuteScalar
-            Finally
-                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
-                    command.Connection.Close
-                End If
-            End Try
-            If ((returnValue Is Nothing)  _
-                        OrElse (returnValue.GetType Is GetType(Global.System.DBNull))) Then
-                Return Nothing
-            Else
-                Return CType(returnValue,Object)
-            End If
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function SacaInteresAux2FB(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Object
             Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(14)
             If (ID_contrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(ID_contrato.Value,Integer)
@@ -15434,8 +15468,49 @@ Namespace PasivoFiraDSTableAdapters
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function SacaInteresAux2FN(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Global.System.Nullable(Of Decimal)
+        Public Overloads Overridable Function SacaInteresAux2FB(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Object
             Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(15)
+            If (ID_contrato.HasValue = true) Then
+                command.Parameters(0).Value = CType(ID_contrato.Value,Integer)
+            Else
+                command.Parameters(0).Value = Global.System.DBNull.Value
+            End If
+            If (FechaIni.HasValue = true) Then
+                command.Parameters(1).Value = CType(FechaIni.Value,Date)
+            Else
+                command.Parameters(1).Value = Global.System.DBNull.Value
+            End If
+            If (FechaFin.HasValue = true) Then
+                command.Parameters(2).Value = CType(FechaFin.Value,Date)
+            Else
+                command.Parameters(2).Value = Global.System.DBNull.Value
+            End If
+            Dim previousConnectionState As Global.System.Data.ConnectionState = command.Connection.State
+            If ((command.Connection.State And Global.System.Data.ConnectionState.Open)  _
+                        <> Global.System.Data.ConnectionState.Open) Then
+                command.Connection.Open
+            End If
+            Dim returnValue As Object
+            Try 
+                returnValue = command.ExecuteScalar
+            Finally
+                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
+                    command.Connection.Close
+                End If
+            End Try
+            If ((returnValue Is Nothing)  _
+                        OrElse (returnValue.GetType Is GetType(Global.System.DBNull))) Then
+                Return Nothing
+            Else
+                Return CType(returnValue,Object)
+            End If
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
+        Public Overloads Overridable Function SacaInteresAux2FN(ByVal ID_contrato As Global.System.Nullable(Of Integer), ByVal FechaIni As Global.System.Nullable(Of Date), ByVal FechaFin As Global.System.Nullable(Of Date)) As Global.System.Nullable(Of Decimal)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(16)
             If (ID_contrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(ID_contrato.Value,Integer)
             Else
@@ -15476,7 +15551,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
         Public Overloads Overridable Function SaldoCapital(ByVal Id_contrato As Global.System.Nullable(Of Integer), ByVal TipoAcre As String) As Object
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(16)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(17)
             If (Id_contrato.HasValue = true) Then
                 command.Parameters(0).Value = CType(Id_contrato.Value,Integer)
             Else
@@ -15512,7 +15587,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
         Public Overloads Overridable Function SaldoContrato(ByVal idcontro As Global.System.Nullable(Of Integer)) As Global.System.Nullable(Of Decimal)
-            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(17)
+            Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(18)
             If (idcontro.HasValue = true) Then
                 command.Parameters(0).Value = CType(idcontro.Value,Integer)
             Else
@@ -16069,6 +16144,7 @@ Namespace PasivoFiraDSTableAdapters
             tableMapping.ColumnMappings.Add("Tipta", "Tipta")
             tableMapping.ColumnMappings.Add("fonaga", "fonaga")
             tableMapping.ColumnMappings.Add("TasaTiie", "TasaTiie")
+            tableMapping.ColumnMappings.Add("Ministrado", "Ministrado")
             Me._adapter.TableMappings.Add(tableMapping)
         End Sub
         
@@ -16107,26 +16183,28 @@ Namespace PasivoFiraDSTableAdapters
                 "             CONT_CPF_contratos.subsidio, CONT_CPF_contratos.tasafijafira, CONT_"& _ 
                 "CPF_contratos.ciclo, CONT_CPF_contratos.anexo, Vw_Anexos.Tipar, Vw_Anexos.Tipta,"& _ 
                 " CONT_CPF_clasificacion_garantias.fonaga, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_co"& _ 
-                "ntratos.TasaTiie"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Vw_Anexos INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                        "& _ 
-                " CONT_CPF_contratos INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_edocuenta ON C"& _ 
-                "ONT_CPF_contratos.id_contrato = CONT_CPF_edocuenta.id_contrato INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"     "& _ 
-                "                    CONT_CPF_esquema_cobro ON CONT_CPF_contratos.id_esquema_cobr"& _ 
-                "o = CONT_CPF_esquema_cobro.id_esquema_cobro INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                        "& _ 
-                " CONT_CPF_tipo_tasas ON CONT_CPF_contratos.id_tipo_tasa = CONT_CPF_tipo_tasas.id"& _ 
-                "_tipo_tasa INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_contratos_garantias ON "& _ 
-                "CONT_CPF_contratos.id_contrato = CONT_CPF_contratos_garantias.id_contrato ON Vw_"& _ 
-                "Anexos.Anexo = CONT_CPF_contratos.anexo LEFT OUTER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                       "& _ 
-                "  CONT_CPF_clasificacion_garantias ON CONT_CPF_contratos.tipo_garantia = CONT_CP"& _ 
-                "F_clasificacion_garantias.id_clasificacion_garantia"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"GROUP BY CONT_CPF_contratos"& _ 
-                ".id_contrato, CONT_CPF_edocuenta.tipo_deu_acre, CONT_CPF_contratos.FechaCorte, C"& _ 
-                "ONT_CPF_contratos.BP, CONT_CPF_contratos.FN, CONT_CPF_contratos.FB, CONT_CPF_esq"& _ 
-                "uema_cobro.clave, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_tipo_tasas.des_tipo_tasa, "& _ 
-                "CONT_CPF_contratos_garantias.id_contrato_garantia, CONT_CPF_contratos.porcentaje"& _ 
-                "_cxsg, CONT_CPF_contratos.TiieActiva, CONT_CPF_contratos.subsidio, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"           "& _ 
-                "              CONT_CPF_contratos.tasafijafira, CONT_CPF_contratos.ciclo, CONT_CP"& _ 
-                "F_contratos.anexo, Vw_Anexos.Tipar, Vw_Anexos.Tipta, CONT_CPF_clasificacion_gara"& _ 
-                "ntias.fonaga, CONT_CPF_contratos.TasaTiie"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"HAVING        (CONT_CPF_edocuenta.tip"& _ 
-                "o_deu_acre = 'BP') AND (CONT_CPF_contratos.id_contrato = @ID_Contrato)"
+                "ntratos.TasaTiie, SUM(CONT_CPF_edocuenta.min_base) AS Ministrado"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM          "& _ 
+                "  Vw_Anexos INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_contratos INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)& _ 
+                "                         CONT_CPF_edocuenta ON CONT_CPF_contratos.id_contrato = "& _ 
+                "CONT_CPF_edocuenta.id_contrato INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_esq"& _ 
+                "uema_cobro ON CONT_CPF_contratos.id_esquema_cobro = CONT_CPF_esquema_cobro.id_es"& _ 
+                "quema_cobro INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_tipo_tasas ON CONT_CPF"& _ 
+                "_contratos.id_tipo_tasa = CONT_CPF_tipo_tasas.id_tipo_tasa INNER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"         "& _ 
+                "                CONT_CPF_contratos_garantias ON CONT_CPF_contratos.id_contrato ="& _ 
+                " CONT_CPF_contratos_garantias.id_contrato ON Vw_Anexos.Anexo = CONT_CPF_contrato"& _ 
+                "s.anexo AND "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         Vw_Anexos.Ciclo = CONT_CPF_contratos.cicl"& _ 
+                "o LEFT OUTER JOIN"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_clasificacion_garantias ON "& _ 
+                "CONT_CPF_contratos.tipo_garantia = CONT_CPF_clasificacion_garantias.id_clasifica"& _ 
+                "cion_garantia"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"GROUP BY CONT_CPF_contratos.id_contrato, CONT_CPF_edocuenta.tipo_"& _ 
+                "deu_acre, CONT_CPF_contratos.FechaCorte, CONT_CPF_contratos.BP, CONT_CPF_contrat"& _ 
+                "os.FN, CONT_CPF_contratos.FB, CONT_CPF_esquema_cobro.clave, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                  "& _ 
+                "       CONT_CPF_tipo_tasas.des_tipo_tasa, CONT_CPF_contratos_garantias.id_contra"& _ 
+                "to_garantia, CONT_CPF_contratos.porcentaje_cxsg, CONT_CPF_contratos.TiieActiva, "& _ 
+                "CONT_CPF_contratos.subsidio, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         CONT_CPF_contratos.tasaf"& _ 
+                "ijafira, CONT_CPF_contratos.ciclo, CONT_CPF_contratos.anexo, Vw_Anexos.Tipar, Vw"& _ 
+                "_Anexos.Tipta, CONT_CPF_clasificacion_garantias.fonaga, CONT_CPF_contratos.TasaT"& _ 
+                "iie"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"HAVING        (CONT_CPF_edocuenta.tipo_deu_acre = 'BP') AND (CONT_CPF_contr"& _ 
+                "atos.id_contrato = @ID_Contrato)"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ID_Contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(1) = New Global.System.Data.SqlClient.SqlCommand()
@@ -16486,13 +16564,9 @@ Namespace PasivoFiraDSTableAdapters
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function InteresAcumulado(ByVal IDcontrato As Global.System.Nullable(Of Integer), ByVal TipoTasa As String) As Object
+        Public Overloads Overridable Function InteresAcumulado(ByVal IDcontrato As Integer, ByVal TipoTasa As String) As Object
             Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(8)
-            If (IDcontrato.HasValue = true) Then
-                command.Parameters(0).Value = CType(IDcontrato.Value,Integer)
-            Else
-                command.Parameters(0).Value = Global.System.DBNull.Value
-            End If
+            command.Parameters(0).Value = CType(IDcontrato,Integer)
             If (TipoTasa Is Nothing) Then
                 command.Parameters(1).Value = Global.System.DBNull.Value
             Else

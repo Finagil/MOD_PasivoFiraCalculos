@@ -41,7 +41,8 @@
                         rCalen = DS.Calendarios.Rows(0)
                         taCaledarios.BorraCalendario(rCalen.ID_Calendario)
                     End If
-                    Shell("\\server-raid\Jobs\MOD_PasivoFiraCalculos.exe " & ID, AppWinStyle.NormalFocus, True)
+                    'Shell("\\server-raid\Jobs\MOD_PasivoFiraCalculos.exe " & ID, AppWinStyle.NormalFocus, True)
+                    ProcesaEstadoCuenta(ID)
                     TaAnexos.TerminaContrato(ID)
                     TaEdoCta.BorraCeros(ID)
                 Else

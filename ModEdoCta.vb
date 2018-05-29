@@ -26,84 +26,91 @@
         Dim Hoy As Date
         Dim Hasta As Date
         Dim Aux As Decimal
+        Try
+            Hasta = Today.Date
+            Tipar = TaAnexos.tipar(ID)
+            If TaAnexos.ExisteContrato(ID) <= 0 Then
+                Console.WriteLine("NO EXISTE CONTRATO " & ID)
+                Exit Sub
 
-        'For xx As Integer = 67 To 75
-        'ID = xx
-        Hasta = Today.Date
-        Tipar = TaAnexos.tipar(ID)
-        If TaAnexos.ExisteContrato(ID) <= 0 Then
-            Console.WriteLine("NO EXISTE CONTRATO " & ID)
-            Exit Sub
-            'Continue For
-        End If
-        If TaAnexos.SacaEstatus(ID) <> "ACTIVO" Then
-            Console.WriteLine("Contrato TERMINADO " & ID)
-            Exit Sub
-            'Continue For
-        End If
-        If Tipar = "H" Or Tipar = "C" Then
-            diasProm = 99
-            Dim Anexo, Ciclo As String
-            Dim mfira As New PasivoFiraDSTableAdapters.mFIRATableAdapter
-            Anexo = TaAnexos.anexo(ID)
-            Ciclo = TaAnexos.ciclo(ID)
-            Hoy = TaEdoCta.SacaFecha1(ID) '1 saca la fecha
-            TaEdoCta.BorraTodo(ID) '2 borra todo
-            CargaTIIE(Hoy, "", "") '3.1 saca tiie
-            TaAnexos.UpdateFechaCorteTIIE(Hoy, TIIE28, ID) '3.2 saca tiie
-            Aux = mfira.ministracionporfecha(Anexo, Hoy.ToString("yyyyMMdd"), Ciclo)
-            TaEdoCta.Insert("BP", Hoy, Hoy, 0, Aux, 0, 0, 0, 0, 0, 0, 0, 0, Aux, ID, TIIE28, 0, 0, 0, 0) ' 4 inserta primera linea
-            TaVeciminetos.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
-            TaSaldoConti.BorraSaldoContigente(ID)
-            taCXSG.BorraCSG(ID)
-            tapagos.BorraPagos(ID)
-            TaMinis.BorraMinistraciones(ID)
-            mfira.FillByOtorgado(ds.mFIRA, Anexo, Ciclo)
-            For Each rx As PasivoFiraDS.mFIRARow In ds.mFIRA.Rows
-                If TaMinis.ExisteMinistracion(ID, CtoD(rx.FechaProgramada)) <= 0 Then
-                    CalculaServicioCobroX(CtoD(rx.FechaProgramada), ID)
+            End If
+            If TaAnexos.SacaEstatus(ID) <> "ACTIVO" Then
+                Console.WriteLine("Contrato TERMINADO " & ID)
+                Exit Sub
+            End If
+            If ID = 411 Then
+                Tipar = "H"
+            End If
+            If Tipar = "H" Or Tipar = "C" Then
+                diasProm = 99
+                Dim Anexo, Ciclo As String
+                Dim mfira As New PasivoFiraDSTableAdapters.mFIRATableAdapter
+                Anexo = TaAnexos.anexo(ID)
+                Ciclo = TaAnexos.ciclo(ID)
+                If ID = 411 Then
+                    Hoy = "10/04/2018"
+                Else
+                    Hoy = TaEdoCta.SacaFecha1(ID) '1 saca la fecha
                 End If
-                If taCalendar.ExisteFecha(ID, CtoD(rx.FechaProgramada)) <= 0 Then
-                    taCalendar.Insert(ID, CtoD(rx.FechaProgramada), 0, 0, 0, 0, 0)
-                End If
-            Next
-            Hoy = Hoy.AddDays(1)
-
-            While Hoy <= Hasta
-                taCalendar.FillByIdContrato(ds.CONT_CPF_CalendariosRevisionTasa, Hoy, ID)
-                For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
-                    GeneraCorteInteres(Hoy, Rc.Id_Contrato, Rc.VencimientoInteres, Rc.VencimientoCapital, Rc.AcumulaInteres, Rc.RevisionTasa)
-                    Console.WriteLine(Rc.Id_Contrato)
-                    taCalendar.ProcesaCalendario(True, Rc.ID_Calendario, Rc.ID_Calendario)
+                TaEdoCta.BorraTodo(ID) '2 borra todo
+                CargaTIIE(Hoy, "", "") '3.1 saca tiie
+                TaAnexos.UpdateFechaCorteTIIE(Hoy, TIIE28, ID) '3.2 saca tiie
+                Aux = mfira.ministracionporfecha(Anexo, Hoy.ToString("yyyyMMdd"), Ciclo)
+                TaEdoCta.Insert("BP", Hoy, Hoy, 0, Aux, 0, 0, 0, 0, 0, 0, 0, 0, Aux, ID, TIIE28, 0, 0, 0, 0) ' 4 inserta primera linea
+                TaVeciminetos.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
+                TaSaldoConti.BorraSaldoContigente(ID)
+                taCXSG.BorraCSG(ID)
+                tapagos.BorraPagos(ID)
+                TaMinis.BorraMinistraciones(ID)
+                mfira.FillByOtorgado(ds.mFIRA, Anexo, Ciclo)
+                For Each rx As PasivoFiraDS.mFIRARow In ds.mFIRA.Rows
+                    If TaMinis.ExisteMinistracion(ID, CtoD(rx.FechaProgramada)) <= 0 Then
+                        CalculaServicioCobroX(CtoD(rx.FechaProgramada), ID)
+                    End If
+                    If taCalendar.ExisteFecha(ID, CtoD(rx.FechaProgramada)) <= 0 Then
+                        taCalendar.Insert(ID, CtoD(rx.FechaProgramada), 0, 0, 0, 0, 0)
+                    End If
                 Next
                 Hoy = Hoy.AddDays(1)
-            End While
-        Else
-            TaEdoCta.BorraDatos(ID)
-            Hoy = TaEdoCta.SacaFecha1(ID)
-            CargaTIIE(Hoy, "", "")
-            TaAnexos.UpdateFechaCorteTIIE(Hoy, TIIE28, ID)
-            TaVeciminetos.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
-            TaSaldoConti.BorraSaldoContigente(ID)
-            taCXSG.BorraCSG(ID)
-            tapagos.BorraPagos(ID)
-            diasProm = DiasEntreVecn(ID)
-            While Hoy <= Hasta
-                If CargaTIIE(Hoy, "", "") Then
-                    Console.WriteLine("Procesando " & Hoy.ToShortDateString)
+
+                While Hoy <= Hasta
                     taCalendar.FillByIdContrato(ds.CONT_CPF_CalendariosRevisionTasa, Hoy, ID)
                     For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
                         GeneraCorteInteres(Hoy, Rc.Id_Contrato, Rc.VencimientoInteres, Rc.VencimientoCapital, Rc.AcumulaInteres, Rc.RevisionTasa)
                         Console.WriteLine(Rc.Id_Contrato)
                         taCalendar.ProcesaCalendario(True, Rc.ID_Calendario, Rc.ID_Calendario)
                     Next
-                Else
-                    Console.WriteLine("Error tasa Tiie : {0}", Hoy)
-                End If
-                Hoy = Hoy.AddDays(1)
-            End While
-        End If
-        'Next
+                    Hoy = Hoy.AddDays(1)
+                End While
+            Else
+                TaEdoCta.BorraDatos(ID)
+                Hoy = TaEdoCta.SacaFecha1(ID)
+                CargaTIIE(Hoy, "", "")
+                TaAnexos.UpdateFechaCorteTIIE(Hoy, TIIE28, ID)
+                TaVeciminetos.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
+                TaSaldoConti.BorraSaldoContigente(ID)
+                taCXSG.BorraCSG(ID)
+                tapagos.BorraPagos(ID)
+                diasProm = DiasEntreVecn(ID)
+                While Hoy <= Hasta
+                    If CargaTIIE(Hoy, "", "") Then
+                        Console.WriteLine("Procesando " & Hoy.ToShortDateString)
+                        taCalendar.FillByIdContrato(ds.CONT_CPF_CalendariosRevisionTasa, Hoy, ID)
+                        For Each Rc As PasivoFiraDS.CONT_CPF_CalendariosRevisionTasaRow In ds.CONT_CPF_CalendariosRevisionTasa.Rows
+                            GeneraCorteInteres(Hoy, Rc.Id_Contrato, Rc.VencimientoInteres, Rc.VencimientoCapital, Rc.AcumulaInteres, Rc.RevisionTasa)
+                            Console.WriteLine(Rc.Id_Contrato)
+                            taCalendar.ProcesaCalendario(True, Rc.ID_Calendario, Rc.ID_Calendario)
+                        Next
+                    Else
+                        Console.WriteLine("Error tasa Tiie : {0}", Hoy)
+                    End If
+                    Hoy = Hoy.AddDays(1)
+                End While
+            End If
+            TaEdoCta.BorraCeros(ID)
+        Catch ex As Exception
+            taCorreos.Insert("PasivoFira@finagil.com.mx", "ecacerest@finagil.com.mx", "Error: " & ID, ex.Message, False, Date.Now, "")
+        End Try
         End
     End Sub
 
@@ -146,9 +153,11 @@
         Next
         'TERMINA CONTRATOS+++++++++++++++++++++++++++++++++++++++++++
         TaAnexos.Fill(ds.SaldosAnexos, ID_Contrato)
-        r = ds.SaldosAnexos.Rows(0)
-        If r.SaldoInsoluto = 0 And r.Ministrado > 0 Then
-            TaAnexos.TerminaContrato(r.id_contrato)
+        If ds.SaldosAnexos.Rows.Count > 0 Then
+            r = ds.SaldosAnexos.Rows(0)
+            If r.SaldoInsoluto = 0 And r.Ministrado > 0 Then
+                TaAnexos.TerminaContrato(r.id_contrato)
+            End If
         End If
         'TERMINA CONTRATOS+++++++++++++++++++++++++++++++++++++++++++
     End Sub
@@ -534,7 +543,11 @@
                 Cont += 1
             End If
         Next
-        DiasEntreVecn = (Acum / Cont)
+        If Cont = 0 Then
+            DiasEntreVecn = 33 ' solo un vencimiento
+        Else
+            DiasEntreVecn = (Acum / Cont)
+        End If
         Return DiasEntreVecn
     End Function
 

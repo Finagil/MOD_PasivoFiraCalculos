@@ -17,6 +17,7 @@
     Public taVencimientos As New PagosFiraDSTableAdapters.VencimientosTableAdapter
     Public taCaledarios As New PagosFiraDSTableAdapters.CalendariosTableAdapter
     Public taPagosFira As New PagosFiraDSTableAdapters.CONT_CPF_PagosFiraTableAdapter
+    Public taCorreos As New PagosFinagilDSTableAdapters.Correos_SistemaFinagilTableAdapter
 
     Public Enum EsquemaCobro As Integer
         SIMFAA = 20

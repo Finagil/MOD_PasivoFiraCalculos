@@ -565,8 +565,8 @@ Partial Public Class PagosFinagilDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
-        Public Function FindByid_contratoConceptoFecha(ByVal id_contrato As Integer, ByVal Concepto As String, ByVal Fecha As String) As PagosFinagilRow
-            Return CType(Me.Rows.Find(New Object() {id_contrato, Concepto, Fecha}),PagosFinagilRow)
+        Public Function FindByid_contratoConceptoLetraFecha(ByVal id_contrato As Integer, ByVal Concepto As String, ByVal Letra As String, ByVal Fecha As String) As PagosFinagilRow
+            Return CType(Me.Rows.Find(New Object() {id_contrato, Concepto, Letra, Fecha}),PagosFinagilRow)
         End Function
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -630,7 +630,7 @@ Partial Public Class PagosFinagilDS
             MyBase.Columns.Add(Me.columnTipar)
             Me.columnFechaX = New Global.System.Data.DataColumn("FechaX", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnFechaX)
-            Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnid_contrato, Me.columnConcepto, Me.columnFecha}, true))
+            Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnid_contrato, Me.columnConcepto, Me.columnLetra, Me.columnFecha}, true))
             Me.columnid_contrato.AllowDBNull = false
             Me.columnidCredito.MaxLength = 7
             Me.columnConcepto.AllowDBNull = false
@@ -639,6 +639,7 @@ Partial Public Class PagosFinagilDS
             Me.columnAnexo.MaxLength = 9
             Me.columnCliente.AllowDBNull = false
             Me.columnCliente.MaxLength = 120
+            Me.columnLetra.AllowDBNull = false
             Me.columnLetra.MaxLength = 3
             Me.columnFecha.AllowDBNull = false
             Me.columnFecha.MaxLength = 8
@@ -1554,11 +1555,7 @@ Partial Public Class PagosFinagilDS
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Property Letra() As String
             Get
-                Try 
-                    Return CType(Me(Me.tablePagosFinagil.LetraColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'Letra' de la tabla 'PagosFinagil' es DBNull.", e)
-                End Try
+                Return CType(Me(Me.tablePagosFinagil.LetraColumn),String)
             End Get
             Set
                 Me(Me.tablePagosFinagil.LetraColumn) = value
@@ -1676,18 +1673,6 @@ Partial Public Class PagosFinagilDS
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Sub SetidCreditoNull()
             Me(Me.tablePagosFinagil.idCreditoColumn) = Global.System.Convert.DBNull
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
-        Public Function IsLetraNull() As Boolean
-            Return Me.IsNull(Me.tablePagosFinagil.LetraColumn)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
-        Public Sub SetLetraNull()
-            Me(Me.tablePagosFinagil.LetraColumn) = Global.System.Convert.DBNull
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -2404,9 +2389,9 @@ Namespace PagosFinagilDSTableAdapters
             Me._commandCollection = New Global.System.Data.SqlClient.SqlCommand(1) {}
             Me._commandCollection(0) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT id_contrato, idCredito, Concepto, Anexo, Cliente, Letra, Fecha, FechaTermi"& _ 
-                "nacion, Importe, SaldoCapital, Interes, Tipar, FechaX FROM Vw_CONT_CPF_PagosFina"& _ 
-                "gil ORDER BY Fecha, idCredito"
+            Me._commandCollection(0).CommandText = "SELECT        id_contrato, idCredito, Concepto, Anexo, Cliente, Letra, Fecha, Fec"& _ 
+                "haTerminacion, Importe, SaldoCapital, Interes, Tipar, FechaX"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Vw"& _ 
+                "_CONT_CPF_PagosFinagil"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY Fecha, idCredito, Letra"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(1) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(1).Connection = Me.Connection
@@ -2455,7 +2440,7 @@ Namespace PagosFinagilDSTableAdapters
                 command.Parameters(0).Value = Global.System.DBNull.Value
             End If
             If (Anexo Is Nothing) Then
-                command.Parameters(1).Value = Global.System.DBNull.Value
+                Throw New Global.System.ArgumentNullException("Anexo")
             Else
                 command.Parameters(1).Value = CType(Anexo,String)
             End If

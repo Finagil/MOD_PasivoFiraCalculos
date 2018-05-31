@@ -8,6 +8,10 @@
                 If IsNumeric(Args(1)) Then
                     If Args(1) > 0 Then
                         If Procesa_Pagos_Fira(Args(1)) = 0 Then
+                            Console.WriteLine("Proceso Pagos")
+                            ProcesaEstadoCuenta(Args(1))
+                        Else
+                            Console.WriteLine("Sin Pagos")
                             ProcesaEstadoCuenta(Args(1))
                         End If
                     Else

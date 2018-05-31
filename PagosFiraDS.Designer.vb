@@ -367,6 +367,8 @@ Partial Public Class PagosFiraDS
         
         Private columnid_contrato As Global.System.Data.DataColumn
         
+        Private columnInteresPagado As Global.System.Data.DataColumn
+        
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Sub New()
@@ -459,6 +461,14 @@ Partial Public Class PagosFiraDS
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public ReadOnly Property InteresPagadoColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnInteresPagado
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false)>  _
         Public ReadOnly Property Count() As Integer
@@ -495,9 +505,9 @@ Partial Public Class PagosFiraDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
-        Public Overloads Function AddVencimientosRow(ByVal fecha As Date, ByVal capital As Decimal, ByVal ultimo_pago As Date, ByVal estatus As String, ByVal intereses As Decimal, ByVal id_contrato As Integer) As VencimientosRow
+        Public Overloads Function AddVencimientosRow(ByVal fecha As Date, ByVal capital As Decimal, ByVal ultimo_pago As Date, ByVal estatus As String, ByVal intereses As Decimal, ByVal id_contrato As Integer, ByVal InteresPagado As Decimal) As VencimientosRow
             Dim rowVencimientosRow As VencimientosRow = CType(Me.NewRow,VencimientosRow)
-            Dim columnValuesArray() As Object = New Object() {Nothing, fecha, capital, ultimo_pago, estatus, intereses, id_contrato}
+            Dim columnValuesArray() As Object = New Object() {Nothing, fecha, capital, ultimo_pago, estatus, intereses, id_contrato, InteresPagado}
             rowVencimientosRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowVencimientosRow)
             Return rowVencimientosRow
@@ -533,6 +543,7 @@ Partial Public Class PagosFiraDS
             Me.columnestatus = MyBase.Columns("estatus")
             Me.columnintereses = MyBase.Columns("intereses")
             Me.columnid_contrato = MyBase.Columns("id_contrato")
+            Me.columnInteresPagado = MyBase.Columns("InteresPagado")
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -552,6 +563,8 @@ Partial Public Class PagosFiraDS
             MyBase.Columns.Add(Me.columnintereses)
             Me.columnid_contrato = New Global.System.Data.DataColumn("id_contrato", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnid_contrato)
+            Me.columnInteresPagado = New Global.System.Data.DataColumn("InteresPagado", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnInteresPagado)
             Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnid_vencimientos}, true))
             Me.columnid_vencimientos.AutoIncrement = true
             Me.columnid_vencimientos.AutoIncrementSeed = -1
@@ -1503,6 +1516,21 @@ Partial Public Class PagosFiraDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Property InteresPagado() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableVencimientos.InteresPagadoColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'InteresPagado' de la tabla 'Vencimientos' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableVencimientos.InteresPagadoColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Function IsfechaNull() As Boolean
             Return Me.IsNull(Me.tableVencimientos.fechaColumn)
         End Function
@@ -1571,6 +1599,18 @@ Partial Public Class PagosFiraDS
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Sub Setid_contratoNull()
             Me(Me.tableVencimientos.id_contratoColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Function IsInteresPagadoNull() As Boolean
+            Return Me.IsNull(Me.tableVencimientos.InteresPagadoColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Sub SetInteresPagadoNull()
+            Me(Me.tableVencimientos.InteresPagadoColumn) = Global.System.Convert.DBNull
         End Sub
     End Class
     
@@ -2209,6 +2249,7 @@ Namespace PagosFiraDSTableAdapters
             tableMapping.ColumnMappings.Add("estatus", "estatus")
             tableMapping.ColumnMappings.Add("intereses", "intereses")
             tableMapping.ColumnMappings.Add("id_contrato", "id_contrato")
+            tableMapping.ColumnMappings.Add("InteresPagado", "InteresPagado")
             Me._adapter.TableMappings.Add(tableMapping)
             Me._adapter.DeleteCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.DeleteCommand.Connection = Me.Connection
@@ -2219,7 +2260,9 @@ Namespace PagosFiraDSTableAdapters
                 "_pago] = @Original_ultimo_pago)) AND ((@IsNull_estatus = 1 AND [estatus] IS NULL"& _ 
                 ") OR ([estatus] = @Original_estatus)) AND ((@IsNull_intereses = 1 AND [intereses"& _ 
                 "] IS NULL) OR ([intereses] = @Original_intereses)) AND ((@IsNull_id_contrato = 1"& _ 
-                " AND [id_contrato] IS NULL) OR ([id_contrato] = @Original_id_contrato)))"
+                " AND [id_contrato] IS NULL) OR ([id_contrato] = @Original_id_contrato)) AND ((@I"& _ 
+                "sNull_InteresPagado = 1 AND [InteresPagado] IS NULL) OR ([InteresPagado] = @Orig"& _ 
+                "inal_InteresPagado)))"
             Me._adapter.DeleteCommand.CommandType = Global.System.Data.CommandType.Text
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_vencimientos", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_vencimientos", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_fecha", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
@@ -2234,13 +2277,16 @@ Namespace PagosFiraDSTableAdapters
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_intereses", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "intereses", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_id_contrato", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_contrato", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_InteresPagado", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "InteresPagado", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_InteresPagado", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "InteresPagado", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.InsertCommand.Connection = Me.Connection
             Me._adapter.InsertCommand.CommandText = "INSERT INTO [CONT_CPF_vencimientos] ([fecha], [capital], [ultimo_pago], [estatus]"& _ 
-                ", [intereses], [id_contrato]) VALUES (@fecha, @capital, @ultimo_pago, @estatus, "& _ 
-                "@intereses, @id_contrato);"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_vencimientos, fecha, capital, ultimo_pago,"& _ 
-                " estatus, intereses, id_contrato FROM CONT_CPF_vencimientos WHERE (id_vencimient"& _ 
-                "os = SCOPE_IDENTITY()) ORDER BY fecha"
+                ", [intereses], [id_contrato], [InteresPagado]) VALUES (@fecha, @capital, @ultimo"& _ 
+                "_pago, @estatus, @intereses, @id_contrato, @InteresPagado);"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_vencimien"& _ 
+                "tos, fecha, capital, ultimo_pago, estatus, intereses, id_contrato, InteresPagado"& _ 
+                " FROM CONT_CPF_vencimientos WHERE (id_vencimientos = SCOPE_IDENTITY()) ORDER BY "& _ 
+                "fecha"
             Me._adapter.InsertCommand.CommandType = Global.System.Data.CommandType.Text
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@fecha", Global.System.Data.SqlDbType.DateTime, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@capital", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "capital", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -2248,20 +2294,23 @@ Namespace PagosFiraDSTableAdapters
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@estatus", Global.System.Data.SqlDbType.VarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "estatus", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@intereses", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "intereses", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@InteresPagado", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "InteresPagado", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.UpdateCommand.Connection = Me.Connection
             Me._adapter.UpdateCommand.CommandText = "UPDATE [CONT_CPF_vencimientos] SET [fecha] = @fecha, [capital] = @capital, [ultim"& _ 
                 "o_pago] = @ultimo_pago, [estatus] = @estatus, [intereses] = @intereses, [id_cont"& _ 
-                "rato] = @id_contrato WHERE (([id_vencimientos] = @Original_id_vencimientos) AND "& _ 
-                "((@IsNull_fecha = 1 AND [fecha] IS NULL) OR ([fecha] = @Original_fecha)) AND ((@"& _ 
-                "IsNull_capital = 1 AND [capital] IS NULL) OR ([capital] = @Original_capital)) AN"& _ 
-                "D ((@IsNull_ultimo_pago = 1 AND [ultimo_pago] IS NULL) OR ([ultimo_pago] = @Orig"& _ 
-                "inal_ultimo_pago)) AND ((@IsNull_estatus = 1 AND [estatus] IS NULL) OR ([estatus"& _ 
-                "] = @Original_estatus)) AND ((@IsNull_intereses = 1 AND [intereses] IS NULL) OR "& _ 
-                "([intereses] = @Original_intereses)) AND ((@IsNull_id_contrato = 1 AND [id_contr"& _ 
-                "ato] IS NULL) OR ([id_contrato] = @Original_id_contrato)));"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_vencimien"& _ 
-                "tos, fecha, capital, ultimo_pago, estatus, intereses, id_contrato FROM CONT_CPF_"& _ 
-                "vencimientos WHERE (id_vencimientos = @id_vencimientos) ORDER BY fecha"
+                "rato] = @id_contrato, [InteresPagado] = @InteresPagado WHERE (([id_vencimientos]"& _ 
+                " = @Original_id_vencimientos) AND ((@IsNull_fecha = 1 AND [fecha] IS NULL) OR (["& _ 
+                "fecha] = @Original_fecha)) AND ((@IsNull_capital = 1 AND [capital] IS NULL) OR ("& _ 
+                "[capital] = @Original_capital)) AND ((@IsNull_ultimo_pago = 1 AND [ultimo_pago] "& _ 
+                "IS NULL) OR ([ultimo_pago] = @Original_ultimo_pago)) AND ((@IsNull_estatus = 1 A"& _ 
+                "ND [estatus] IS NULL) OR ([estatus] = @Original_estatus)) AND ((@IsNull_interese"& _ 
+                "s = 1 AND [intereses] IS NULL) OR ([intereses] = @Original_intereses)) AND ((@Is"& _ 
+                "Null_id_contrato = 1 AND [id_contrato] IS NULL) OR ([id_contrato] = @Original_id"& _ 
+                "_contrato)) AND ((@IsNull_InteresPagado = 1 AND [InteresPagado] IS NULL) OR ([In"& _ 
+                "teresPagado] = @Original_InteresPagado)));"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_vencimientos, fecha, capit"& _ 
+                "al, ultimo_pago, estatus, intereses, id_contrato, InteresPagado FROM CONT_CPF_ve"& _ 
+                "ncimientos WHERE (id_vencimientos = @id_vencimientos) ORDER BY fecha"
             Me._adapter.UpdateCommand.CommandType = Global.System.Data.CommandType.Text
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@fecha", Global.System.Data.SqlDbType.DateTime, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@capital", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "capital", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -2269,6 +2318,7 @@ Namespace PagosFiraDSTableAdapters
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@estatus", Global.System.Data.SqlDbType.VarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "estatus", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@intereses", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "intereses", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@InteresPagado", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "InteresPagado", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_vencimientos", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_vencimientos", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_fecha", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_fecha", Global.System.Data.SqlDbType.DateTime, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
@@ -2282,6 +2332,8 @@ Namespace PagosFiraDSTableAdapters
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_intereses", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "intereses", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_id_contrato", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_contrato", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_InteresPagado", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "InteresPagado", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_InteresPagado", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "InteresPagado", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_vencimientos", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_vencimientos", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
         End Sub
         
@@ -2295,23 +2347,30 @@ Namespace PagosFiraDSTableAdapters
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Private Sub InitCommandCollection()
-            Me._commandCollection = New Global.System.Data.SqlClient.SqlCommand(1) {}
+            Me._commandCollection = New Global.System.Data.SqlClient.SqlCommand(2) {}
             Me._commandCollection(0) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(0).Connection = Me.Connection
             Me._commandCollection(0).CommandText = "SELECT        id_vencimientos, fecha, capital, ultimo_pago, estatus, intereses, i"& _ 
-                "d_contrato"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_vencimientos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @"& _ 
-                "idContrato) AND (fecha > @Fecha)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY fecha"
+                "d_contrato, InteresPagado"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_vencimientos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        ("& _ 
+                "id_contrato = @idContrato) AND (fecha > @Fecha)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY fecha"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@idContrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Fecha", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(1) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(1).Connection = Me.Connection
-            Me._commandCollection(1).CommandText = "SELECT        id_vencimientos, fecha, capital, ultimo_pago, estatus, intereses, i"& _ 
-                "d_contrato"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_vencimientos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato = @"& _ 
-                "idContrato) AND (fecha = @Fecha)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY fecha"
+            Me._commandCollection(1).CommandText = "SELECT        TOP (1) InteresPagado, capital, estatus, fecha, id_contrato, id_ven"& _ 
+                "cimientos, intereses, ultimo_pago"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_vencimientos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE "& _ 
+                "       (id_contrato = @idContrato)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY fecha DESC"
             Me._commandCollection(1).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(1).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@idContrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(1).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Fecha", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(2) = New Global.System.Data.SqlClient.SqlCommand()
+            Me._commandCollection(2).Connection = Me.Connection
+            Me._commandCollection(2).CommandText = "SELECT InteresPagado, capital, estatus, fecha, id_contrato, id_vencimientos, inte"& _ 
+                "reses, ultimo_pago FROM CONT_CPF_vencimientos WHERE (id_contrato = @idContrato) "& _ 
+                "AND (fecha = @Fecha) ORDER BY fecha"
+            Me._commandCollection(2).CommandType = Global.System.Data.CommandType.Text
+            Me._commandCollection(2).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@idContrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(2).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Fecha", Global.System.Data.SqlDbType.DateTime, 8, Global.System.Data.ParameterDirection.Input, 0, 0, "fecha", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -2362,8 +2421,42 @@ Namespace PagosFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, false)>  _
-        Public Overloads Overridable Function FillFecha(ByVal dataTable As PagosFiraDS.VencimientosDataTable, ByVal idContrato As Global.System.Nullable(Of Integer), ByVal Fecha As Global.System.Nullable(Of Date)) As Integer
+        Public Overloads Overridable Function FillByUltimo(ByVal dataTable As PagosFiraDS.VencimientosDataTable, ByVal idContrato As Global.System.Nullable(Of Integer)) As Integer
             Me.Adapter.SelectCommand = Me.CommandCollection(1)
+            If (idContrato.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(0).Value = CType(idContrato.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(0).Value = Global.System.DBNull.Value
+            End If
+            If (Me.ClearBeforeFill = true) Then
+                dataTable.Clear
+            End If
+            Dim returnValue As Integer = Me.Adapter.Fill(dataTable)
+            Return returnValue
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], false)>  _
+        Public Overloads Overridable Function GetDataByUltimo(ByVal idContrato As Global.System.Nullable(Of Integer)) As PagosFiraDS.VencimientosDataTable
+            Me.Adapter.SelectCommand = Me.CommandCollection(1)
+            If (idContrato.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(0).Value = CType(idContrato.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(0).Value = Global.System.DBNull.Value
+            End If
+            Dim dataTable As PagosFiraDS.VencimientosDataTable = New PagosFiraDS.VencimientosDataTable()
+            Me.Adapter.Fill(dataTable)
+            Return dataTable
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, false)>  _
+        Public Overloads Overridable Function FillFecha(ByVal dataTable As PagosFiraDS.VencimientosDataTable, ByVal idContrato As Global.System.Nullable(Of Integer), ByVal Fecha As Global.System.Nullable(Of Date)) As Integer
+            Me.Adapter.SelectCommand = Me.CommandCollection(2)
             If (idContrato.HasValue = true) Then
                 Me.Adapter.SelectCommand.Parameters(0).Value = CType(idContrato.Value,Integer)
             Else
@@ -2386,7 +2479,7 @@ Namespace PagosFiraDSTableAdapters
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], false)>  _
         Public Overloads Overridable Function GetDataFecha(ByVal idContrato As Global.System.Nullable(Of Integer), ByVal Fecha As Global.System.Nullable(Of Date)) As PagosFiraDS.VencimientosDataTable
-            Me.Adapter.SelectCommand = Me.CommandCollection(1)
+            Me.Adapter.SelectCommand = Me.CommandCollection(2)
             If (idContrato.HasValue = true) Then
                 Me.Adapter.SelectCommand.Parameters(0).Value = CType(idContrato.Value,Integer)
             Else
@@ -2434,7 +2527,7 @@ Namespace PagosFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
-        Public Overloads Overridable Function Delete(ByVal Original_id_vencimientos As Integer, ByVal Original_fecha As Global.System.Nullable(Of Date), ByVal Original_capital As Global.System.Nullable(Of Decimal), ByVal Original_ultimo_pago As Global.System.Nullable(Of Date), ByVal Original_estatus As String, ByVal Original_intereses As Global.System.Nullable(Of Decimal), ByVal Original_id_contrato As Global.System.Nullable(Of Integer)) As Integer
+        Public Overloads Overridable Function Delete(ByVal Original_id_vencimientos As Integer, ByVal Original_fecha As Global.System.Nullable(Of Date), ByVal Original_capital As Global.System.Nullable(Of Decimal), ByVal Original_ultimo_pago As Global.System.Nullable(Of Date), ByVal Original_estatus As String, ByVal Original_intereses As Global.System.Nullable(Of Decimal), ByVal Original_id_contrato As Global.System.Nullable(Of Integer), ByVal Original_InteresPagado As Global.System.Nullable(Of Decimal)) As Integer
             Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_id_vencimientos,Integer)
             If (Original_fecha.HasValue = true) Then
                 Me.Adapter.DeleteCommand.Parameters(1).Value = CType(0,Object)
@@ -2478,6 +2571,13 @@ Namespace PagosFiraDSTableAdapters
                 Me.Adapter.DeleteCommand.Parameters(11).Value = CType(1,Object)
                 Me.Adapter.DeleteCommand.Parameters(12).Value = Global.System.DBNull.Value
             End If
+            If (Original_InteresPagado.HasValue = true) Then
+                Me.Adapter.DeleteCommand.Parameters(13).Value = CType(0,Object)
+                Me.Adapter.DeleteCommand.Parameters(14).Value = CType(Original_InteresPagado.Value,Decimal)
+            Else
+                Me.Adapter.DeleteCommand.Parameters(13).Value = CType(1,Object)
+                Me.Adapter.DeleteCommand.Parameters(14).Value = Global.System.DBNull.Value
+            End If
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.DeleteCommand.Connection.State
             If ((Me.Adapter.DeleteCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
                         <> Global.System.Data.ConnectionState.Open) Then
@@ -2497,7 +2597,7 @@ Namespace PagosFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
-        Public Overloads Overridable Function Insert(ByVal fecha As Global.System.Nullable(Of Date), ByVal capital As Global.System.Nullable(Of Decimal), ByVal ultimo_pago As Global.System.Nullable(Of Date), ByVal estatus As String, ByVal intereses As Global.System.Nullable(Of Decimal), ByVal id_contrato As Global.System.Nullable(Of Integer)) As Integer
+        Public Overloads Overridable Function Insert(ByVal fecha As Global.System.Nullable(Of Date), ByVal capital As Global.System.Nullable(Of Decimal), ByVal ultimo_pago As Global.System.Nullable(Of Date), ByVal estatus As String, ByVal intereses As Global.System.Nullable(Of Decimal), ByVal id_contrato As Global.System.Nullable(Of Integer), ByVal InteresPagado As Global.System.Nullable(Of Decimal)) As Integer
             If (fecha.HasValue = true) Then
                 Me.Adapter.InsertCommand.Parameters(0).Value = CType(fecha.Value,Date)
             Else
@@ -2528,6 +2628,11 @@ Namespace PagosFiraDSTableAdapters
             Else
                 Me.Adapter.InsertCommand.Parameters(5).Value = Global.System.DBNull.Value
             End If
+            If (InteresPagado.HasValue = true) Then
+                Me.Adapter.InsertCommand.Parameters(6).Value = CType(InteresPagado.Value,Decimal)
+            Else
+                Me.Adapter.InsertCommand.Parameters(6).Value = Global.System.DBNull.Value
+            End If
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.InsertCommand.Connection.State
             If ((Me.Adapter.InsertCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
                         <> Global.System.Data.ConnectionState.Open) Then
@@ -2547,7 +2652,23 @@ Namespace PagosFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
-        Public Overloads Overridable Function Update(ByVal fecha As Global.System.Nullable(Of Date), ByVal capital As Global.System.Nullable(Of Decimal), ByVal ultimo_pago As Global.System.Nullable(Of Date), ByVal estatus As String, ByVal intereses As Global.System.Nullable(Of Decimal), ByVal id_contrato As Global.System.Nullable(Of Integer), ByVal Original_id_vencimientos As Integer, ByVal Original_fecha As Global.System.Nullable(Of Date), ByVal Original_capital As Global.System.Nullable(Of Decimal), ByVal Original_ultimo_pago As Global.System.Nullable(Of Date), ByVal Original_estatus As String, ByVal Original_intereses As Global.System.Nullable(Of Decimal), ByVal Original_id_contrato As Global.System.Nullable(Of Integer), ByVal id_vencimientos As Integer) As Integer
+        Public Overloads Overridable Function Update( _
+                    ByVal fecha As Global.System.Nullable(Of Date),  _
+                    ByVal capital As Global.System.Nullable(Of Decimal),  _
+                    ByVal ultimo_pago As Global.System.Nullable(Of Date),  _
+                    ByVal estatus As String,  _
+                    ByVal intereses As Global.System.Nullable(Of Decimal),  _
+                    ByVal id_contrato As Global.System.Nullable(Of Integer),  _
+                    ByVal InteresPagado As Global.System.Nullable(Of Decimal),  _
+                    ByVal Original_id_vencimientos As Integer,  _
+                    ByVal Original_fecha As Global.System.Nullable(Of Date),  _
+                    ByVal Original_capital As Global.System.Nullable(Of Decimal),  _
+                    ByVal Original_ultimo_pago As Global.System.Nullable(Of Date),  _
+                    ByVal Original_estatus As String,  _
+                    ByVal Original_intereses As Global.System.Nullable(Of Decimal),  _
+                    ByVal Original_id_contrato As Global.System.Nullable(Of Integer),  _
+                    ByVal Original_InteresPagado As Global.System.Nullable(Of Decimal),  _
+                    ByVal id_vencimientos As Integer) As Integer
             If (fecha.HasValue = true) Then
                 Me.Adapter.UpdateCommand.Parameters(0).Value = CType(fecha.Value,Date)
             Else
@@ -2578,50 +2699,62 @@ Namespace PagosFiraDSTableAdapters
             Else
                 Me.Adapter.UpdateCommand.Parameters(5).Value = Global.System.DBNull.Value
             End If
-            Me.Adapter.UpdateCommand.Parameters(6).Value = CType(Original_id_vencimientos,Integer)
-            If (Original_fecha.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(7).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(8).Value = CType(Original_fecha.Value,Date)
+            If (InteresPagado.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(6).Value = CType(InteresPagado.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(7).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(8).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(6).Value = Global.System.DBNull.Value
+            End If
+            Me.Adapter.UpdateCommand.Parameters(7).Value = CType(Original_id_vencimientos,Integer)
+            If (Original_fecha.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(8).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(9).Value = CType(Original_fecha.Value,Date)
+            Else
+                Me.Adapter.UpdateCommand.Parameters(8).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(9).Value = Global.System.DBNull.Value
             End If
             If (Original_capital.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(9).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(10).Value = CType(Original_capital.Value,Decimal)
+                Me.Adapter.UpdateCommand.Parameters(10).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(11).Value = CType(Original_capital.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(9).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(10).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(10).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(11).Value = Global.System.DBNull.Value
             End If
             If (Original_ultimo_pago.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(11).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(Original_ultimo_pago.Value,Date)
+                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(Original_ultimo_pago.Value,Date)
             Else
-                Me.Adapter.UpdateCommand.Parameters(11).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(12).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(13).Value = Global.System.DBNull.Value
             End If
             If (Original_estatus Is Nothing) Then
-                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(14).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(15).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(Original_estatus,String)
+                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(Original_estatus,String)
             End If
             If (Original_intereses.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(Original_intereses.Value,Decimal)
+                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(17).Value = CType(Original_intereses.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(16).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(17).Value = Global.System.DBNull.Value
             End If
             If (Original_id_contrato.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(17).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(18).Value = CType(Original_id_contrato.Value,Integer)
+                Me.Adapter.UpdateCommand.Parameters(18).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(19).Value = CType(Original_id_contrato.Value,Integer)
             Else
-                Me.Adapter.UpdateCommand.Parameters(17).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(18).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(18).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(19).Value = Global.System.DBNull.Value
             End If
-            Me.Adapter.UpdateCommand.Parameters(19).Value = CType(id_vencimientos,Integer)
+            If (Original_InteresPagado.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(20).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(21).Value = CType(Original_InteresPagado.Value,Decimal)
+            Else
+                Me.Adapter.UpdateCommand.Parameters(20).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(21).Value = Global.System.DBNull.Value
+            End If
+            Me.Adapter.UpdateCommand.Parameters(22).Value = CType(id_vencimientos,Integer)
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.UpdateCommand.Connection.State
             If ((Me.Adapter.UpdateCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
                         <> Global.System.Data.ConnectionState.Open) Then
@@ -2641,8 +2774,8 @@ Namespace PagosFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
-        Public Overloads Overridable Function Update(ByVal fecha As Global.System.Nullable(Of Date), ByVal capital As Global.System.Nullable(Of Decimal), ByVal ultimo_pago As Global.System.Nullable(Of Date), ByVal estatus As String, ByVal intereses As Global.System.Nullable(Of Decimal), ByVal id_contrato As Global.System.Nullable(Of Integer), ByVal Original_id_vencimientos As Integer, ByVal Original_fecha As Global.System.Nullable(Of Date), ByVal Original_capital As Global.System.Nullable(Of Decimal), ByVal Original_ultimo_pago As Global.System.Nullable(Of Date), ByVal Original_estatus As String, ByVal Original_intereses As Global.System.Nullable(Of Decimal), ByVal Original_id_contrato As Global.System.Nullable(Of Integer)) As Integer
-            Return Me.Update(fecha, capital, ultimo_pago, estatus, intereses, id_contrato, Original_id_vencimientos, Original_fecha, Original_capital, Original_ultimo_pago, Original_estatus, Original_intereses, Original_id_contrato, Original_id_vencimientos)
+        Public Overloads Overridable Function Update(ByVal fecha As Global.System.Nullable(Of Date), ByVal capital As Global.System.Nullable(Of Decimal), ByVal ultimo_pago As Global.System.Nullable(Of Date), ByVal estatus As String, ByVal intereses As Global.System.Nullable(Of Decimal), ByVal id_contrato As Global.System.Nullable(Of Integer), ByVal InteresPagado As Global.System.Nullable(Of Decimal), ByVal Original_id_vencimientos As Integer, ByVal Original_fecha As Global.System.Nullable(Of Date), ByVal Original_capital As Global.System.Nullable(Of Decimal), ByVal Original_ultimo_pago As Global.System.Nullable(Of Date), ByVal Original_estatus As String, ByVal Original_intereses As Global.System.Nullable(Of Decimal), ByVal Original_id_contrato As Global.System.Nullable(Of Integer), ByVal Original_InteresPagado As Global.System.Nullable(Of Decimal)) As Integer
+            Return Me.Update(fecha, capital, ultimo_pago, estatus, intereses, id_contrato, InteresPagado, Original_id_vencimientos, Original_fecha, Original_capital, Original_ultimo_pago, Original_estatus, Original_intereses, Original_id_contrato, Original_InteresPagado, Original_id_vencimientos)
         End Function
     End Class
     

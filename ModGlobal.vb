@@ -1,6 +1,6 @@
 ﻿Module ModGlobal
 
-    Public TaVeciminetos As New PasivoFiraDSTableAdapters.CONT_CPF_vencimientosTableAdapter
+    Public TaVevcimientosCPF As New PasivoFiraDSTableAdapters.CONT_CPF_vencimientosTableAdapter
     Public TaEdoCta As New PasivoFiraDSTableAdapters.CONT_CPF_edocuentaTableAdapter
     Public TaAnexos As New PasivoFiraDSTableAdapters.SaldosAnexosTableAdapter
     Public TaMinis As New PasivoFiraDSTableAdapters.CONT_CPF_ministracionesTableAdapter
@@ -68,6 +68,24 @@
         Dim f As Date = New DateTime(Fec.Substring(0, 4), Fec.Substring(4, 2), Fec.Substring(6, 2))
         Return f
     End Function
+
+    Sub CorrigeCapitalVencimiento(ID As Integer)
+        Dim DS2 As New PagosFiraDS
+        Dim rVenc As PagosFiraDS.VencimientosRow
+        Dim SaldoCap As Decimal = TaEdoCta.SaldoCapital(ID, "BP")
+        taVencimientos.FillByUltimo(DS2.Vencimientos, ID)
+        taVencimientos.FillByUltimo(DS2.Vencimientos, ID)
+        For Each rVenc In DS2.Vencimientos.Rows
+            If rVenc.capital <> SaldoCap Then
+                rVenc.capital = SaldoCap
+                DS2.Vencimientos.GetChanges()
+                taVencimientos.Update(DS2.Vencimientos)
+            End If
+        Next
+        If SaldoCap < 0 Then
+            taCorreos.Insert("PasivoFira@finagil.com.mx", "ecacerest@finagil.com.mx", "Error Saldo Negativo: " & ID, "Error Saldo Negativo: " & ID, False, Date.Now, "")
+        End If
+    End Sub
 
 
 End Module

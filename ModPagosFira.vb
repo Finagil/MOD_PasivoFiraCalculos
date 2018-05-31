@@ -19,18 +19,24 @@
         Dim rCalen As PagosFiraDS.CalendariosRow
         Dim rVenc As PagosFiraDS.VencimientosRow
         Dim SaldoCap As Decimal = TaEdoCta.SaldoCapital(ID, "BP")
+        Dim Saldo As Decimal = TaEdoCta.SaldoContrato(ID)
         taVencimientos.FillFecha(DS.Vencimientos, ID, FechaFira)
         If DS.Vencimientos.Rows.Count <= 0 Then
+            CorrigeCapitalVencimiento(ID)
             taVencimientos.FillPosteriores(DS.Vencimientos, ID, FechaFira)
             For Each rVenc In DS.Vencimientos.Rows
                 If taCaledarios.ExisteFecha(ID, FechaFira) > 0 Then
                     taCaledarios.UpdateFecha(True, False, True, ID, FechaFira)
                 Else
-                    taCaledarios.Insert(ID, FechaFira, True, False, True, True, True)
+                    If Capital = 0 And Interes > 0 Then
+                        taCaledarios.Insert(ID, FechaFira, False, False, False, True, True)
+                    Else
+                        taCaledarios.Insert(ID, FechaFira, True, False, True, True, True)
+                    End If
                 End If
                 If Capital >= rVenc.capital Then
-                    taVencimientos.Insert(FechaFira, rVenc.capital, FechaFira, "Vigente", rVenc.intereses, ID)
-                    rVenc.capital = 0
+                    taVencimientos.Insert(FechaFira, rVenc.capital, FechaFira, "Vigente", rVenc.intereses, ID, 0)
+                    rVenc.Delete()
                     DS.Vencimientos.GetChanges()
                     taVencimientos.Update(DS.Vencimientos)
                     taCaledarios.FillPosteriores(DS.Calendarios, ID, FechaFira)
@@ -42,18 +48,28 @@
                         taCaledarios.BorraCalendario(rCalen.ID_Calendario)
                     End If
                     'Shell("\\server-raid\Jobs\MOD_PasivoFiraCalculos.exe " & ID, AppWinStyle.NormalFocus, True)
+                    taPagosFira.ProcesaPago(True, ID, FechaHistoria)
                     ProcesaEstadoCuenta(ID)
                     TaAnexos.TerminaContrato(ID)
                     TaEdoCta.BorraCeros(ID)
                 Else
-                    taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", rVenc.intereses, ID)
-                    rVenc.capital -= Capital
+
+                    If Capital = 0 And Interes > 0 Then
+                        taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", Interes, ID, Interes)
+                    Else
+                        Capital += Interes
+                        Interes = TaEdoCta.SaldoInteres(ID, "BP", FechaFira)
+                        Capital -= Interes
+                        taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", Interes, ID, -1)
+                    End If
+                    rVenc.capital -= (Capital)
                     Capital = 0
                     DS.Vencimientos.GetChanges()
                     taVencimientos.Update(DS.Vencimientos)
+                    taPagosFira.ProcesaPago(True, ID, FechaHistoria)
                 End If
             Next
-            taPagosFira.ProcesaPago(True, ID, FechaHistoria)
+
         End If
     End Sub
 

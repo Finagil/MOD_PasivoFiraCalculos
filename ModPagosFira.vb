@@ -24,7 +24,8 @@
         If DS.Vencimientos.Rows.Count <= 0 Then
             CorrigeCapitalVencimiento(ID)
             taVencimientos.FillPosteriores(DS.Vencimientos, ID, FechaFira)
-            For Each rVenc In DS.Vencimientos.Rows
+            For xx As Integer = 0 To DS.Vencimientos.Rows.Count - 1
+                rVenc = DS.Vencimientos.Rows(xx)
                 If taCaledarios.ExisteFecha(ID, FechaFira) > 0 Then
                     taCaledarios.UpdateFecha(True, False, True, ID, FechaFira)
                 Else
@@ -49,7 +50,7 @@
                     End If
                     'Shell("\\server-raid\Jobs\MOD_PasivoFiraCalculos.exe " & ID, AppWinStyle.NormalFocus, True)
                     taPagosFira.ProcesaPago(True, ID, FechaHistoria)
-                    ProcesaEstadoCuenta(ID)
+                    ProcesaEstadoCuenta(ID, True)
                     TaAnexos.TerminaContrato(ID)
                     TaEdoCta.BorraCeros(ID)
                 Else

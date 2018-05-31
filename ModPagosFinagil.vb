@@ -41,6 +41,7 @@
             taPagfinagil.ProcesaHistoria(True, rFinagil.Anexo, rFinagil.Fecha, rFinagil.Concepto.Trim)
         Next
         If DS.PagosFinagil.Rows.Count > 0 Then
+            DS.CONT_CPF_PagosFira.AddCONT_CPF_PagosFiraRow(rFira)
             DS.CONT_CPF_PagosFira.GetChanges()
             taPagfira.Update(DS.CONT_CPF_PagosFira)
         End If

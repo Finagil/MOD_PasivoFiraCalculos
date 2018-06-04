@@ -17,10 +17,10 @@
                     Else
                         Console.WriteLine("ID incorrecto")
                     End If
-                ElseIf Args(1).Trim = "PAGOS" Then
+                ElseIf Args(1).ToUpper.Trim = "PAGOS" Then
                     ExportaPagosFinagilFira()
                     Procesa_Pagos_Fira(0)
-                ElseIf Args(1).Trim = "TODO" Then
+                ElseIf Args(1).ToUpper.Trim = "TODO" Then
                     Dim Tabla As New PasivoFiraDS.SaldosAnexosDataTable
                     TaAnexos.Fill_ConSaldo(Tabla)
                     For Each x As PasivoFiraDS.SaldosAnexosRow In Tabla.Rows

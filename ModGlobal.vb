@@ -76,7 +76,7 @@
         taVencimientos.FillByUltimo(DS2.Vencimientos, ID)
         taVencimientos.FillByUltimo(DS2.Vencimientos, ID)
         For Each rVenc In DS2.Vencimientos.Rows
-            If rVenc.capital <> SaldoCap Then
+            If rVenc.capital <> SaldoCap And SaldoCap > 0 Then
                 rVenc.capital = SaldoCap
                 DS2.Vencimientos.GetChanges()
                 taVencimientos.Update(DS2.Vencimientos)

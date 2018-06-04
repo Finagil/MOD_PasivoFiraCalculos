@@ -9,23 +9,23 @@
                     If Args(1) > 0 Then
                         If Procesa_Pagos_Fira(Args(1)) = 0 Then
                             Console.WriteLine("Proceso Pagos")
-                            ProcesaEstadoCuenta(Args(1), False)
+                            ProcesaEstadoCuenta(Args(1), False, Date.Now.Date)
                         Else
                             Console.WriteLine("Sin Pagos")
-                            ProcesaEstadoCuenta(Args(1), False)
+                            ProcesaEstadoCuenta(Args(1), False, Today.Date)
                         End If
                     Else
                         Console.WriteLine("ID incorrecto")
                     End If
-                ElseIf Args(1) = "PAGOS" Then
+                ElseIf Args(1).Trim = "PAGOS" Then
                     ExportaPagosFinagilFira()
                     Procesa_Pagos_Fira(0)
-                ElseIf Args(1) = "TODO" Then
+                ElseIf Args(1).Trim = "TODO" Then
                     Dim Tabla As New PasivoFiraDS.SaldosAnexosDataTable
                     TaAnexos.Fill_ConSaldo(Tabla)
                     For Each x As PasivoFiraDS.SaldosAnexosRow In Tabla.Rows
                         If Procesa_Pagos_Fira(x.id_contrato) = 0 Then
-                            ProcesaEstadoCuenta(x.id_contrato, True)
+                            ProcesaEstadoCuenta(x.id_contrato, True, Today.Date)
                         End If
                     Next
                 End If

@@ -21,7 +21,10 @@
         Dim SaldoCap As Decimal = TaEdoCta.SaldoCapital(ID, "BP")
         Dim Saldo As Decimal = TaEdoCta.SaldoContrato(ID)
         taVencimientos.FillFecha(DS.Vencimientos, ID, FechaFira)
-        If DS.Vencimientos.Rows.Count <= 0 Then
+        If DS.Vencimientos.Rows.Count > 0 Then
+            taVencimientos.BorraVencimiento(ID, FechaFira)
+        End If
+        ProcesaEstadoCuenta(ID, True, FechaFira)
             CorrigeCapitalVencimiento(ID)
             taVencimientos.FillPosteriores(DS.Vencimientos, ID, FechaFira)
             For xx As Integer = 0 To DS.Vencimientos.Rows.Count - 1
@@ -50,7 +53,7 @@
                     End If
                     'Shell("\\server-raid\Jobs\MOD_PasivoFiraCalculos.exe " & ID, AppWinStyle.NormalFocus, True)
                     taPagosFira.ProcesaPago(True, ID, FechaHistoria)
-                    ProcesaEstadoCuenta(ID, True)
+                    ProcesaEstadoCuenta(ID, True, Today.Date)
                     TaAnexos.TerminaContrato(ID)
                     TaEdoCta.BorraCeros(ID)
                 Else
@@ -70,8 +73,6 @@
                     taPagosFira.ProcesaPago(True, ID, FechaHistoria)
                 End If
             Next
-
-        End If
     End Sub
 
 End Module

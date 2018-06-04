@@ -23,12 +23,10 @@
     Public FN, FB, BP As Decimal
     Dim rCalen As PagosFiraDS.CalendariosRow
 
-    Sub ProcesaEstadoCuenta(ID As Integer, Continuo As Boolean)
+    Sub ProcesaEstadoCuenta(ID As Integer, Continuo As Boolean, Hasta As Date)
         Dim Hoy As Date
-        Dim Hasta As Date
         Dim Aux As Decimal
         Try
-            Hasta = Today.Date
             Tipar = TaAnexos.tipar(ID)
             If TaAnexos.ExisteContrato(ID) <= 0 Then
                 Console.WriteLine("NO EXISTE CONTRATO " & ID)

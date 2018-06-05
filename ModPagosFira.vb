@@ -64,7 +64,6 @@
                 End If
                 TaEdoCta.BorraCeros(ID)
             Else
-
                 If Capital = 0 And Interes > 0 Then
                     taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", Interes, ID, Interes)
                 Else

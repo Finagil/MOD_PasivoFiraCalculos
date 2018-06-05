@@ -19,6 +19,7 @@
                     End If
                 ElseIf Args(1).ToUpper.Trim = "PAGOS" Then
                     ExportaPagosFinagilFira()
+                ElseIf Args(1).ToUpper.Trim = "PROCESA_PAGOS" Then
                     Procesa_Pagos_Fira(0)
                 ElseIf Args(1).ToUpper.Trim = "TODO" Then
                     Dim Tabla As New PasivoFiraDS.SaldosAnexosDataTable

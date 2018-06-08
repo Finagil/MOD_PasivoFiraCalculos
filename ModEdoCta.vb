@@ -308,7 +308,7 @@
                 FN = row1("FN")
             Next
             If NoGarantias = 0 Then
-                taGarantias.Insert(idcont, ID_garantina, Nominal, MontoBase * (Nominal / 100), Efectiva, True)
+                taGarantias.Insert(idcont, ID_garantina, Nominal, MontoBase * (Nominal / 100), Efectiva, True, MontoBase * (Efectiva / 100))
             End If
 
 
@@ -602,14 +602,7 @@
 
         TaEdoCta.FillDesc(ds.CONT_CPF_edocuenta, ID_Contrato, "BP")
         SaldoCap = TaEdoCta.SaldoCapital(ID_Contrato, "BP")
-        For Each r As PasivoFiraDS.CONT_CPF_edocuentaRow In ds.CONT_CPF_edocuenta.Rows
-            If r.fecha_fin >= Tope Then
-                Interes += r.int_ord
-                CapVig += r.cap_vigente
-            Else
-                Exit For
-            End If
-        Next
+        Interes = TaEdoCta.SaldoInteres(ID_Contrato, "BP", Fecha)
 
         SaldoConti = CapVig + Interes + SaldoCap
         taContraGarant.FillByidContrato(ds.CONT_CPF_contratos_garantias, ID_Contrato)
@@ -618,7 +611,7 @@
 
         TaSaldoConti.Insert(Fecha, Nothing, Nothing, 0, 0, Nothing, SaldoConti, rz.cobertura_nominal, rz.cobertura_efectiva,
                                SaldoConti * (rz.cobertura_nominal / 100), SaldoConti * (rz.cobertura_efectiva / 100), rz.id_contrato_garantia)
-        taContraGarant.UpdateSaldoContingente(SaldoConti * (rz.cobertura_nominal / 100), rz.id_contrato_garantia, rz.id_contrato)
+        taContraGarant.UpdateSaldoContingente(SaldoConti * (rz.cobertura_nominal / 100), SaldoConti * (rz.cobertura_efectiva / 100), rz.id_contrato_garantia, rz.id_contrato)
 
     End Sub
 

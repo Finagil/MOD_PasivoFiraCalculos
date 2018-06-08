@@ -6674,6 +6674,8 @@ Partial Public Class PasivoFiraDS
         
         Private columnfondeo As Global.System.Data.DataColumn
         
+        Private columnSaldo_Efectivo As Global.System.Data.DataColumn
+        
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Sub New()
@@ -6766,6 +6768,14 @@ Partial Public Class PasivoFiraDS
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public ReadOnly Property Saldo_EfectivoColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnSaldo_Efectivo
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false)>  _
         Public ReadOnly Property Count() As Integer
@@ -6802,9 +6812,9 @@ Partial Public Class PasivoFiraDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
-        Public Overloads Function AddCONT_CPF_contratos_garantiasRow(ByVal id_contrato As Integer, ByVal id_garantia As Integer, ByVal cobertura_nominal As Decimal, ByVal saldo_contingente As Decimal, ByVal cobertura_efectiva As Decimal, ByVal fondeo As Boolean) As CONT_CPF_contratos_garantiasRow
+        Public Overloads Function AddCONT_CPF_contratos_garantiasRow(ByVal id_contrato As Integer, ByVal id_garantia As Integer, ByVal cobertura_nominal As Decimal, ByVal saldo_contingente As Decimal, ByVal cobertura_efectiva As Decimal, ByVal fondeo As Boolean, ByVal Saldo_Efectivo As Decimal) As CONT_CPF_contratos_garantiasRow
             Dim rowCONT_CPF_contratos_garantiasRow As CONT_CPF_contratos_garantiasRow = CType(Me.NewRow,CONT_CPF_contratos_garantiasRow)
-            Dim columnValuesArray() As Object = New Object() {Nothing, id_contrato, id_garantia, cobertura_nominal, saldo_contingente, cobertura_efectiva, fondeo}
+            Dim columnValuesArray() As Object = New Object() {Nothing, id_contrato, id_garantia, cobertura_nominal, saldo_contingente, cobertura_efectiva, fondeo, Saldo_Efectivo}
             rowCONT_CPF_contratos_garantiasRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowCONT_CPF_contratos_garantiasRow)
             Return rowCONT_CPF_contratos_garantiasRow
@@ -6840,6 +6850,7 @@ Partial Public Class PasivoFiraDS
             Me.columnsaldo_contingente = MyBase.Columns("saldo_contingente")
             Me.columncobertura_efectiva = MyBase.Columns("cobertura_efectiva")
             Me.columnfondeo = MyBase.Columns("fondeo")
+            Me.columnSaldo_Efectivo = MyBase.Columns("Saldo_Efectivo")
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -6859,6 +6870,8 @@ Partial Public Class PasivoFiraDS
             MyBase.Columns.Add(Me.columncobertura_efectiva)
             Me.columnfondeo = New Global.System.Data.DataColumn("fondeo", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnfondeo)
+            Me.columnSaldo_Efectivo = New Global.System.Data.DataColumn("Saldo_Efectivo", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnSaldo_Efectivo)
             Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnid_contrato_garantia}, true))
             Me.columnid_contrato_garantia.AutoIncrement = true
             Me.columnid_contrato_garantia.AutoIncrementSeed = -1
@@ -12980,6 +12993,22 @@ Partial Public Class PasivoFiraDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Property Saldo_Efectivo() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableCONT_CPF_contratos_garantias.Saldo_EfectivoColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'Saldo_Efectivo' de la tabla 'CONT_CPF_contratos_garantias"& _ 
+                            "' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableCONT_CPF_contratos_garantias.Saldo_EfectivoColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Function Iscobertura_nominalNull() As Boolean
             Return Me.IsNull(Me.tableCONT_CPF_contratos_garantias.cobertura_nominalColumn)
         End Function
@@ -13024,6 +13053,18 @@ Partial Public Class PasivoFiraDS
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Sub SetfondeoNull()
             Me(Me.tableCONT_CPF_contratos_garantias.fondeoColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Function IsSaldo_EfectivoNull() As Boolean
+            Return Me.IsNull(Me.tableCONT_CPF_contratos_garantias.Saldo_EfectivoColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Sub SetSaldo_EfectivoNull()
+            Me(Me.tableCONT_CPF_contratos_garantias.Saldo_EfectivoColumn) = Global.System.Convert.DBNull
         End Sub
     End Class
     
@@ -16822,7 +16863,7 @@ Namespace PasivoFiraDSTableAdapters
                 "iie"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"HAVING        (CONT_CPF_edocuenta.tipo_deu_acre = 'BP') AND (SUM(CONT_CPF_e"& _ 
                 "docuenta.min_base) - ISNULL(SUM(CONT_CPF_edocuenta.cap_vigente), 0) - ISNULL(SUM"& _ 
                 "(CONT_CPF_edocuenta.cap_vencido), 0) > 0) AND "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         (SUM(CO"& _ 
-                "NT_CPF_edocuenta.min_base) > 0)"
+                "NT_CPF_edocuenta.min_base) > 0)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY CONT_CPF_contratos.id_contrato"
             Me._commandCollection(6).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(7) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(7).Connection = Me.Connection
@@ -24764,6 +24805,7 @@ Namespace PasivoFiraDSTableAdapters
             tableMapping.ColumnMappings.Add("saldo_contingente", "saldo_contingente")
             tableMapping.ColumnMappings.Add("cobertura_efectiva", "cobertura_efectiva")
             tableMapping.ColumnMappings.Add("fondeo", "fondeo")
+            tableMapping.ColumnMappings.Add("Saldo_Efectivo", "Saldo_Efectivo")
             Me._adapter.TableMappings.Add(tableMapping)
             Me._adapter.DeleteCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.DeleteCommand.Connection = Me.Connection
@@ -24775,7 +24817,8 @@ Namespace PasivoFiraDSTableAdapters
                 "contingente] = @Original_saldo_contingente)) AND ((@IsNull_cobertura_efectiva = "& _ 
                 "1 AND [cobertura_efectiva] IS NULL) OR ([cobertura_efectiva] = @Original_cobertu"& _ 
                 "ra_efectiva)) AND ((@IsNull_fondeo = 1 AND [fondeo] IS NULL) OR ([fondeo] = @Ori"& _ 
-                "ginal_fondeo)))"
+                "ginal_fondeo)) AND ((@IsNull_Saldo_Efectivo = 1 AND [Saldo_Efectivo] IS NULL) OR"& _ 
+                " ([Saldo_Efectivo] = @Original_Saldo_Efectivo)))"
             Me._adapter.DeleteCommand.CommandType = Global.System.Data.CommandType.Text
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_contrato_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato_garantia", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_contrato", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
@@ -24788,14 +24831,17 @@ Namespace PasivoFiraDSTableAdapters
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_cobertura_efectiva", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 7, 4, "cobertura_efectiva", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_fondeo", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fondeo", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
             Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_fondeo", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fondeo", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_Saldo_Efectivo", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "Saldo_Efectivo", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_Saldo_Efectivo", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "Saldo_Efectivo", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.InsertCommand.Connection = Me.Connection
             Me._adapter.InsertCommand.CommandText = "INSERT INTO [CONT_CPF_contratos_garantias] ([id_contrato], [id_garantia], [cobert"& _ 
-                "ura_nominal], [saldo_contingente], [cobertura_efectiva], [fondeo]) VALUES (@id_c"& _ 
-                "ontrato, @id_garantia, @cobertura_nominal, @saldo_contingente, @cobertura_efecti"& _ 
-                "va, @fondeo);"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_contrato_garantia, id_contrato, id_garantia, cobertura_"& _ 
-                "nominal, saldo_contingente, cobertura_efectiva, fondeo FROM CONT_CPF_contratos_g"& _ 
-                "arantias WHERE (id_contrato_garantia = SCOPE_IDENTITY())"
+                "ura_nominal], [saldo_contingente], [cobertura_efectiva], [fondeo], [Saldo_Efecti"& _ 
+                "vo]) VALUES (@id_contrato, @id_garantia, @cobertura_nominal, @saldo_contingente,"& _ 
+                " @cobertura_efectiva, @fondeo, @Saldo_Efectivo);"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_contrato_garantia, i"& _ 
+                "d_contrato, id_garantia, cobertura_nominal, saldo_contingente, cobertura_efectiv"& _ 
+                "a, fondeo, Saldo_Efectivo FROM CONT_CPF_contratos_garantias WHERE (id_contrato_g"& _ 
+                "arantia = SCOPE_IDENTITY())"
             Me._adapter.InsertCommand.CommandType = Global.System.Data.CommandType.Text
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_garantia", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -24803,22 +24849,25 @@ Namespace PasivoFiraDSTableAdapters
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@saldo_contingente", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "saldo_contingente", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@cobertura_efectiva", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 7, 4, "cobertura_efectiva", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@fondeo", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fondeo", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Saldo_Efectivo", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "Saldo_Efectivo", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.UpdateCommand.Connection = Me.Connection
             Me._adapter.UpdateCommand.CommandText = "UPDATE [CONT_CPF_contratos_garantias] SET [id_contrato] = @id_contrato, [id_garan"& _ 
                 "tia] = @id_garantia, [cobertura_nominal] = @cobertura_nominal, [saldo_contingent"& _ 
                 "e] = @saldo_contingente, [cobertura_efectiva] = @cobertura_efectiva, [fondeo] = "& _ 
-                "@fondeo WHERE (([id_contrato_garantia] = @Original_id_contrato_garantia) AND ([i"& _ 
-                "d_contrato] = @Original_id_contrato) AND ([id_garantia] = @Original_id_garantia)"& _ 
-                " AND ((@IsNull_cobertura_nominal = 1 AND [cobertura_nominal] IS NULL) OR ([cober"& _ 
-                "tura_nominal] = @Original_cobertura_nominal)) AND ((@IsNull_saldo_contingente = "& _ 
-                "1 AND [saldo_contingente] IS NULL) OR ([saldo_contingente] = @Original_saldo_con"& _ 
-                "tingente)) AND ((@IsNull_cobertura_efectiva = 1 AND [cobertura_efectiva] IS NULL"& _ 
-                ") OR ([cobertura_efectiva] = @Original_cobertura_efectiva)) AND ((@IsNull_fondeo"& _ 
-                " = 1 AND [fondeo] IS NULL) OR ([fondeo] = @Original_fondeo)));"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_contra"& _ 
-                "to_garantia, id_contrato, id_garantia, cobertura_nominal, saldo_contingente, cob"& _ 
-                "ertura_efectiva, fondeo FROM CONT_CPF_contratos_garantias WHERE (id_contrato_gar"& _ 
-                "antia = @id_contrato_garantia)"
+                "@fondeo, [Saldo_Efectivo] = @Saldo_Efectivo WHERE (([id_contrato_garantia] = @Or"& _ 
+                "iginal_id_contrato_garantia) AND ([id_contrato] = @Original_id_contrato) AND ([i"& _ 
+                "d_garantia] = @Original_id_garantia) AND ((@IsNull_cobertura_nominal = 1 AND [co"& _ 
+                "bertura_nominal] IS NULL) OR ([cobertura_nominal] = @Original_cobertura_nominal)"& _ 
+                ") AND ((@IsNull_saldo_contingente = 1 AND [saldo_contingente] IS NULL) OR ([sald"& _ 
+                "o_contingente] = @Original_saldo_contingente)) AND ((@IsNull_cobertura_efectiva "& _ 
+                "= 1 AND [cobertura_efectiva] IS NULL) OR ([cobertura_efectiva] = @Original_cober"& _ 
+                "tura_efectiva)) AND ((@IsNull_fondeo = 1 AND [fondeo] IS NULL) OR ([fondeo] = @O"& _ 
+                "riginal_fondeo)) AND ((@IsNull_Saldo_Efectivo = 1 AND [Saldo_Efectivo] IS NULL) "& _ 
+                "OR ([Saldo_Efectivo] = @Original_Saldo_Efectivo)));"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_contrato_garantia"& _ 
+                ", id_contrato, id_garantia, cobertura_nominal, saldo_contingente, cobertura_efec"& _ 
+                "tiva, fondeo, Saldo_Efectivo FROM CONT_CPF_contratos_garantias WHERE (id_contrat"& _ 
+                "o_garantia = @id_contrato_garantia)"
             Me._adapter.UpdateCommand.CommandType = Global.System.Data.CommandType.Text
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_garantia", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
@@ -24826,6 +24875,7 @@ Namespace PasivoFiraDSTableAdapters
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@saldo_contingente", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "saldo_contingente", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@cobertura_efectiva", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 7, 4, "cobertura_efectiva", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@fondeo", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fondeo", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Saldo_Efectivo", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "Saldo_Efectivo", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_contrato_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato_garantia", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_contrato", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_id_garantia", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "id_garantia", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
@@ -24837,6 +24887,8 @@ Namespace PasivoFiraDSTableAdapters
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_cobertura_efectiva", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 7, 4, "cobertura_efectiva", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_fondeo", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fondeo", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_fondeo", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "fondeo", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_Saldo_Efectivo", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "Saldo_Efectivo", Global.System.Data.DataRowVersion.Original, true, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_Saldo_Efectivo", Global.System.Data.SqlDbType.[Decimal], 0, Global.System.Data.ParameterDirection.Input, 18, 2, "Saldo_Efectivo", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato_garantia", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato_garantia", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
         End Sub
         
@@ -24854,8 +24906,8 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(0) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(0).Connection = Me.Connection
             Me._commandCollection(0).CommandText = "SELECT        id_contrato_garantia, id_contrato, id_garantia, cobertura_nominal, "& _ 
-                "saldo_contingente, cobertura_efectiva, fondeo"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            CONT_CPF_contrato"& _ 
-                "s_garantias"
+                "saldo_contingente, cobertura_efectiva, fondeo, Saldo_Efectivo"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            C"& _ 
+                "ONT_CPF_contratos_garantias"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(1) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(1).Connection = Me.Connection
@@ -24873,13 +24925,14 @@ Namespace PasivoFiraDSTableAdapters
             Me._commandCollection(3) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(3).Connection = Me.Connection
             Me._commandCollection(3).CommandText = "UPDATE       CONT_CPF_contratos_garantias"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SET                saldo_contingente ="& _ 
-                " @saldo_contingente"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato_garantia = @id_contrato_garantia)"& _ 
-                " AND (id_contrato = @id_contrato); "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT id_contrato_garantia, id_contrato, i"& _ 
-                "d_garantia, cobertura_nominal, saldo_contingente, cobertura_efectiva, fondeo FRO"& _ 
-                "M CONT_CPF_contratos_garantias WHERE (id_contrato_garantia = @id_contrato_garant"& _ 
-                "ia)"
+                " @saldo_contingente, Saldo_Efectivo = @Saldo_Efectivo"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (id_contrato"& _ 
+                "_garantia = @id_contrato_garantia) AND (id_contrato = @id_contrato);  "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT i"& _ 
+                "d_contrato_garantia, id_contrato, id_garantia, cobertura_nominal, saldo_continge"& _ 
+                "nte, cobertura_efectiva, fondeo FROM CONT_CPF_contratos_garantias WHERE (id_cont"& _ 
+                "rato_garantia = @id_contrato_garantia)"
             Me._commandCollection(3).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(3).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@saldo_contingente", Global.System.Data.SqlDbType.[Decimal], 9, Global.System.Data.ParameterDirection.Input, 18, 2, "saldo_contingente", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(3).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Saldo_Efectivo", Global.System.Data.SqlDbType.[Decimal], 9, Global.System.Data.ParameterDirection.Input, 18, 2, "Saldo_Efectivo", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
             Me._commandCollection(3).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato_garantia", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato_garantia", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
             Me._commandCollection(3).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@id_contrato", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "id_contrato", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
         End Sub
@@ -24966,7 +25019,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
-        Public Overloads Overridable Function Delete(ByVal Original_id_contrato_garantia As Integer, ByVal Original_id_contrato As Integer, ByVal Original_id_garantia As Integer, ByVal Original_cobertura_nominal As Global.System.Nullable(Of Decimal), ByVal Original_saldo_contingente As Global.System.Nullable(Of Decimal), ByVal Original_cobertura_efectiva As Global.System.Nullable(Of Decimal), ByVal Original_fondeo As Global.System.Nullable(Of Boolean)) As Integer
+        Public Overloads Overridable Function Delete(ByVal Original_id_contrato_garantia As Integer, ByVal Original_id_contrato As Integer, ByVal Original_id_garantia As Integer, ByVal Original_cobertura_nominal As Global.System.Nullable(Of Decimal), ByVal Original_saldo_contingente As Global.System.Nullable(Of Decimal), ByVal Original_cobertura_efectiva As Global.System.Nullable(Of Decimal), ByVal Original_fondeo As Global.System.Nullable(Of Boolean), ByVal Original_Saldo_Efectivo As Global.System.Nullable(Of Decimal)) As Integer
             Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_id_contrato_garantia,Integer)
             Me.Adapter.DeleteCommand.Parameters(1).Value = CType(Original_id_contrato,Integer)
             Me.Adapter.DeleteCommand.Parameters(2).Value = CType(Original_id_garantia,Integer)
@@ -24998,6 +25051,13 @@ Namespace PasivoFiraDSTableAdapters
                 Me.Adapter.DeleteCommand.Parameters(9).Value = CType(1,Object)
                 Me.Adapter.DeleteCommand.Parameters(10).Value = Global.System.DBNull.Value
             End If
+            If (Original_Saldo_Efectivo.HasValue = true) Then
+                Me.Adapter.DeleteCommand.Parameters(11).Value = CType(0,Object)
+                Me.Adapter.DeleteCommand.Parameters(12).Value = CType(Original_Saldo_Efectivo.Value,Decimal)
+            Else
+                Me.Adapter.DeleteCommand.Parameters(11).Value = CType(1,Object)
+                Me.Adapter.DeleteCommand.Parameters(12).Value = Global.System.DBNull.Value
+            End If
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.DeleteCommand.Connection.State
             If ((Me.Adapter.DeleteCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
                         <> Global.System.Data.ConnectionState.Open) Then
@@ -25017,7 +25077,7 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
-        Public Overloads Overridable Function Insert(ByVal id_contrato As Integer, ByVal id_garantia As Integer, ByVal cobertura_nominal As Global.System.Nullable(Of Decimal), ByVal saldo_contingente As Global.System.Nullable(Of Decimal), ByVal cobertura_efectiva As Global.System.Nullable(Of Decimal), ByVal fondeo As Global.System.Nullable(Of Boolean)) As Integer
+        Public Overloads Overridable Function Insert(ByVal id_contrato As Integer, ByVal id_garantia As Integer, ByVal cobertura_nominal As Global.System.Nullable(Of Decimal), ByVal saldo_contingente As Global.System.Nullable(Of Decimal), ByVal cobertura_efectiva As Global.System.Nullable(Of Decimal), ByVal fondeo As Global.System.Nullable(Of Boolean), ByVal Saldo_Efectivo As Global.System.Nullable(Of Decimal)) As Integer
             Me.Adapter.InsertCommand.Parameters(0).Value = CType(id_contrato,Integer)
             Me.Adapter.InsertCommand.Parameters(1).Value = CType(id_garantia,Integer)
             If (cobertura_nominal.HasValue = true) Then
@@ -25040,6 +25100,11 @@ Namespace PasivoFiraDSTableAdapters
             Else
                 Me.Adapter.InsertCommand.Parameters(5).Value = Global.System.DBNull.Value
             End If
+            If (Saldo_Efectivo.HasValue = true) Then
+                Me.Adapter.InsertCommand.Parameters(6).Value = CType(Saldo_Efectivo.Value,Decimal)
+            Else
+                Me.Adapter.InsertCommand.Parameters(6).Value = Global.System.DBNull.Value
+            End If
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.InsertCommand.Connection.State
             If ((Me.Adapter.InsertCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
                         <> Global.System.Data.ConnectionState.Open) Then
@@ -25059,7 +25124,23 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
-        Public Overloads Overridable Function Update(ByVal id_contrato As Integer, ByVal id_garantia As Integer, ByVal cobertura_nominal As Global.System.Nullable(Of Decimal), ByVal saldo_contingente As Global.System.Nullable(Of Decimal), ByVal cobertura_efectiva As Global.System.Nullable(Of Decimal), ByVal fondeo As Global.System.Nullable(Of Boolean), ByVal Original_id_contrato_garantia As Integer, ByVal Original_id_contrato As Integer, ByVal Original_id_garantia As Integer, ByVal Original_cobertura_nominal As Global.System.Nullable(Of Decimal), ByVal Original_saldo_contingente As Global.System.Nullable(Of Decimal), ByVal Original_cobertura_efectiva As Global.System.Nullable(Of Decimal), ByVal Original_fondeo As Global.System.Nullable(Of Boolean), ByVal id_contrato_garantia As Integer) As Integer
+        Public Overloads Overridable Function Update( _
+                    ByVal id_contrato As Integer,  _
+                    ByVal id_garantia As Integer,  _
+                    ByVal cobertura_nominal As Global.System.Nullable(Of Decimal),  _
+                    ByVal saldo_contingente As Global.System.Nullable(Of Decimal),  _
+                    ByVal cobertura_efectiva As Global.System.Nullable(Of Decimal),  _
+                    ByVal fondeo As Global.System.Nullable(Of Boolean),  _
+                    ByVal Saldo_Efectivo As Global.System.Nullable(Of Decimal),  _
+                    ByVal Original_id_contrato_garantia As Integer,  _
+                    ByVal Original_id_contrato As Integer,  _
+                    ByVal Original_id_garantia As Integer,  _
+                    ByVal Original_cobertura_nominal As Global.System.Nullable(Of Decimal),  _
+                    ByVal Original_saldo_contingente As Global.System.Nullable(Of Decimal),  _
+                    ByVal Original_cobertura_efectiva As Global.System.Nullable(Of Decimal),  _
+                    ByVal Original_fondeo As Global.System.Nullable(Of Boolean),  _
+                    ByVal Original_Saldo_Efectivo As Global.System.Nullable(Of Decimal),  _
+                    ByVal id_contrato_garantia As Integer) As Integer
             Me.Adapter.UpdateCommand.Parameters(0).Value = CType(id_contrato,Integer)
             Me.Adapter.UpdateCommand.Parameters(1).Value = CType(id_garantia,Integer)
             If (cobertura_nominal.HasValue = true) Then
@@ -25082,38 +25163,50 @@ Namespace PasivoFiraDSTableAdapters
             Else
                 Me.Adapter.UpdateCommand.Parameters(5).Value = Global.System.DBNull.Value
             End If
-            Me.Adapter.UpdateCommand.Parameters(6).Value = CType(Original_id_contrato_garantia,Integer)
-            Me.Adapter.UpdateCommand.Parameters(7).Value = CType(Original_id_contrato,Integer)
-            Me.Adapter.UpdateCommand.Parameters(8).Value = CType(Original_id_garantia,Integer)
-            If (Original_cobertura_nominal.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(9).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(10).Value = CType(Original_cobertura_nominal.Value,Decimal)
+            If (Saldo_Efectivo.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(6).Value = CType(Saldo_Efectivo.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(9).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(10).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(6).Value = Global.System.DBNull.Value
+            End If
+            Me.Adapter.UpdateCommand.Parameters(7).Value = CType(Original_id_contrato_garantia,Integer)
+            Me.Adapter.UpdateCommand.Parameters(8).Value = CType(Original_id_contrato,Integer)
+            Me.Adapter.UpdateCommand.Parameters(9).Value = CType(Original_id_garantia,Integer)
+            If (Original_cobertura_nominal.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(10).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(11).Value = CType(Original_cobertura_nominal.Value,Decimal)
+            Else
+                Me.Adapter.UpdateCommand.Parameters(10).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(11).Value = Global.System.DBNull.Value
             End If
             If (Original_saldo_contingente.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(11).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(Original_saldo_contingente.Value,Decimal)
+                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(Original_saldo_contingente.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(11).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(12).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(13).Value = Global.System.DBNull.Value
             End If
             If (Original_cobertura_efectiva.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(Original_cobertura_efectiva.Value,Decimal)
+                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(Original_cobertura_efectiva.Value,Decimal)
             Else
-                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(14).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(15).Value = Global.System.DBNull.Value
             End If
             If (Original_fondeo.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(Original_fondeo.Value,Boolean)
+                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(17).Value = CType(Original_fondeo.Value,Boolean)
             Else
-                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(16).Value = Global.System.DBNull.Value
+                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(17).Value = Global.System.DBNull.Value
             End If
-            Me.Adapter.UpdateCommand.Parameters(17).Value = CType(id_contrato_garantia,Integer)
+            If (Original_Saldo_Efectivo.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(18).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(19).Value = CType(Original_Saldo_Efectivo.Value,Decimal)
+            Else
+                Me.Adapter.UpdateCommand.Parameters(18).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(19).Value = Global.System.DBNull.Value
+            End If
+            Me.Adapter.UpdateCommand.Parameters(20).Value = CType(id_contrato_garantia,Integer)
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.UpdateCommand.Connection.State
             If ((Me.Adapter.UpdateCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
                         <> Global.System.Data.ConnectionState.Open) Then
@@ -25133,8 +25226,8 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
-        Public Overloads Overridable Function Update(ByVal id_contrato As Integer, ByVal id_garantia As Integer, ByVal cobertura_nominal As Global.System.Nullable(Of Decimal), ByVal saldo_contingente As Global.System.Nullable(Of Decimal), ByVal cobertura_efectiva As Global.System.Nullable(Of Decimal), ByVal fondeo As Global.System.Nullable(Of Boolean), ByVal Original_id_contrato_garantia As Integer, ByVal Original_id_contrato As Integer, ByVal Original_id_garantia As Integer, ByVal Original_cobertura_nominal As Global.System.Nullable(Of Decimal), ByVal Original_saldo_contingente As Global.System.Nullable(Of Decimal), ByVal Original_cobertura_efectiva As Global.System.Nullable(Of Decimal), ByVal Original_fondeo As Global.System.Nullable(Of Boolean)) As Integer
-            Return Me.Update(id_contrato, id_garantia, cobertura_nominal, saldo_contingente, cobertura_efectiva, fondeo, Original_id_contrato_garantia, Original_id_contrato, Original_id_garantia, Original_cobertura_nominal, Original_saldo_contingente, Original_cobertura_efectiva, Original_fondeo, Original_id_contrato_garantia)
+        Public Overloads Overridable Function Update(ByVal id_contrato As Integer, ByVal id_garantia As Integer, ByVal cobertura_nominal As Global.System.Nullable(Of Decimal), ByVal saldo_contingente As Global.System.Nullable(Of Decimal), ByVal cobertura_efectiva As Global.System.Nullable(Of Decimal), ByVal fondeo As Global.System.Nullable(Of Boolean), ByVal Saldo_Efectivo As Global.System.Nullable(Of Decimal), ByVal Original_id_contrato_garantia As Integer, ByVal Original_id_contrato As Integer, ByVal Original_id_garantia As Integer, ByVal Original_cobertura_nominal As Global.System.Nullable(Of Decimal), ByVal Original_saldo_contingente As Global.System.Nullable(Of Decimal), ByVal Original_cobertura_efectiva As Global.System.Nullable(Of Decimal), ByVal Original_fondeo As Global.System.Nullable(Of Boolean), ByVal Original_Saldo_Efectivo As Global.System.Nullable(Of Decimal)) As Integer
+            Return Me.Update(id_contrato, id_garantia, cobertura_nominal, saldo_contingente, cobertura_efectiva, fondeo, Saldo_Efectivo, Original_id_contrato_garantia, Original_id_contrato, Original_id_garantia, Original_cobertura_nominal, Original_saldo_contingente, Original_cobertura_efectiva, Original_fondeo, Original_Saldo_Efectivo, Original_id_contrato_garantia)
         End Function
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -25168,15 +25261,20 @@ Namespace PasivoFiraDSTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, false)>  _
-        Public Overloads Overridable Function UpdateSaldoContingente(ByVal saldo_contingente As Global.System.Nullable(Of Decimal), ByVal id_contrato_garantia As Integer, ByVal id_contrato As Integer) As Integer
+        Public Overloads Overridable Function UpdateSaldoContingente(ByVal saldo_contingente As Global.System.Nullable(Of Decimal), ByVal Saldo_Efectivo As Global.System.Nullable(Of Decimal), ByVal id_contrato_garantia As Integer, ByVal id_contrato As Integer) As Integer
             Dim command As Global.System.Data.SqlClient.SqlCommand = Me.CommandCollection(3)
             If (saldo_contingente.HasValue = true) Then
                 command.Parameters(0).Value = CType(saldo_contingente.Value,Decimal)
             Else
                 command.Parameters(0).Value = Global.System.DBNull.Value
             End If
-            command.Parameters(1).Value = CType(id_contrato_garantia,Integer)
-            command.Parameters(2).Value = CType(id_contrato,Integer)
+            If (Saldo_Efectivo.HasValue = true) Then
+                command.Parameters(1).Value = CType(Saldo_Efectivo.Value,Decimal)
+            Else
+                command.Parameters(1).Value = Global.System.DBNull.Value
+            End If
+            command.Parameters(2).Value = CType(id_contrato_garantia,Integer)
+            command.Parameters(3).Value = CType(id_contrato,Integer)
             Dim previousConnectionState As Global.System.Data.ConnectionState = command.Connection.State
             If ((command.Connection.State And Global.System.Data.ConnectionState.Open)  _
                         <> Global.System.Data.ConnectionState.Open) Then

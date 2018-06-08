@@ -9,11 +9,10 @@
                     If Args(1) > 0 Then
                         If Procesa_Pagos_Fira(Args(1)) = 0 Then
                             Console.WriteLine("Proceso Pagos")
-                            ProcesaEstadoCuenta(Args(1), False, Date.Now.Date)
                         Else
                             Console.WriteLine("Sin Pagos")
-                            ProcesaEstadoCuenta(Args(1), False, Today.Date)
                         End If
+                        ProcesaEstadoCuenta(Args(1), False, Today.Date)
                     Else
                         Console.WriteLine("ID incorrecto")
                     End If
@@ -28,6 +27,16 @@
                         If Procesa_Pagos_Fira(x.id_contrato) = 0 Then
                             ProcesaEstadoCuenta(x.id_contrato, True, Today.Date)
                         End If
+                    Next
+                ElseIf Args(1).ToUpper.Trim = "PROCESA_FECHA" Then
+                    Dim Fecha As Date = Today.Date
+                    If Args.Length = 3 Then
+                        Fecha = CDate(Args(2))
+                    End If
+                    Dim Tabla1 As New PasivoFiraDS.ContratosProcesarFechaDataTable
+                    taProcContra.Fill(Tabla1, Fecha.Date)
+                    For Each y As PasivoFiraDS.ContratosProcesarFechaRow In Tabla1.Rows
+                        ProcesaEstadoCuenta(y.Id_Contrato, True, Fecha.Date)
                     Next
                 End If
             End If

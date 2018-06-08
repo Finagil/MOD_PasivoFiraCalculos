@@ -50,7 +50,11 @@
                 If ID = 411 Then
                     Hoy = "10/04/2018"
                 Else
-                    Hoy = TaEdoCta.SacaFecha1(ID) '1 saca la fecha
+                    Try
+                        Hoy = TaEdoCta.SacaFecha1(ID) '1 saca la fecha
+                    Catch ex As Exception
+                        Hoy = TaEdoCta.SacaFecha11(Anexo, Ciclo) '1 saca la fecha
+                    End Try
                 End If
                 TaEdoCta.BorraTodo(ID) '2 borra todo
                 CargaTIIE(Hoy, "", "") '3.1 saca tiie

@@ -18,6 +18,8 @@
     Public taCaledarios As New PagosFiraDSTableAdapters.CalendariosTableAdapter
     Public taPagosFira As New PagosFiraDSTableAdapters.CONT_CPF_PagosFiraTableAdapter
     Public taCorreos As New PagosFinagilDSTableAdapters.Correos_SistemaFinagilTableAdapter
+    Public taProcContra As New PasivoFiraDSTableAdapters.ContratosProcesarFechaTableAdapter
+
 
     Public Enum EsquemaCobro As Integer
         SIMFAA = 20

@@ -4,6 +4,7 @@
     Dim DS As New PagosFinagilDS
     Dim rFinagil As PagosFinagilDS.PagosFinagilRow
     Dim rFira As PagosFinagilDS.CONT_CPF_PagosFiraRow
+    Dim rFiraADELANTO As PagosFinagilDS.CONT_CPF_PagosFiraRow
 
     Public Sub ExportaPagosFinagilFira()
         Dim idCredito As Decimal = 0
@@ -31,13 +32,19 @@
                     rFira.Capital += rFinagil.Importe 'Se incluye Fega'
                 End If
             Else
-                If InStr(rFinagil.Concepto, "CAPITAL EQUIPO") Or InStr(rFinagil.Concepto, "SALDO INSOLUTO DEL EQUIPO") Then
+                If InStr(rFinagil.Concepto, "ADELANTO") Then
+                    rFiraADELANTO = DS.CONT_CPF_PagosFira.NewCONT_CPF_PagosFiraRow
+                    IniciaFila(rFiraADELANTO)
+                    rFiraADELANTO.Adelanto = True
+                    rFiraADELANTO.Capital += rFinagil.Importe
+                    DS.CONT_CPF_PagosFira.AddCONT_CPF_PagosFiraRow(rFiraADELANTO)
+                ElseIf InStr(rFinagil.Concepto, "CAPITAL EQUIPO") Or InStr(rFinagil.Concepto, "SALDO INSOLUTO DEL EQUIPO") Then
                     rFira.Capital += rFinagil.Importe
                 ElseIf InStr(rFinagil.Concepto, "INTERESES") Then
                     rFira.Interes += rFinagil.Importe
+                    End If
                 End If
-            End If
-            idCredito = rFinagil.idCredito
+                idCredito = rFinagil.idCredito
             taPagfinagil.ProcesaHistoria(True, rFinagil.Anexo, rFinagil.Fecha, rFinagil.Concepto.Trim)
         Next
         If DS.PagosFinagil.Rows.Count > 0 Then
@@ -55,5 +62,6 @@
         rFira.id_Contrato = rFinagil.id_contrato
         rFira.id_credito = rFinagil.idCredito
         rFira.FechaHistoria = rFinagil.Fecha
+        rFira.Adelanto = False
     End Sub
 End Module

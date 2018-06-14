@@ -600,9 +600,24 @@
         End If
         Dim SaldoConti, Interes, CapVig, SaldoCap As Decimal
 
-        TaEdoCta.FillDesc(ds.CONT_CPF_edocuenta, ID_Contrato, "BP")
         SaldoCap = TaEdoCta.SaldoCapital(ID_Contrato, "BP")
-        Interes = TaEdoCta.SaldoInteres(ID_Contrato, "BP", Fecha)
+        If EsquemaCobro = 1 Then
+            Interes = TaEdoCta.SaldoInteres(ID_Contrato, "BP", Fecha)
+            CapVig = 0
+        Else
+            TaEdoCta.FillDesc(ds.CONT_CPF_edocuenta, ID_Contrato, "BP")
+            For Each r As PasivoFiraDS.CONT_CPF_edocuentaRow In ds.CONT_CPF_edocuenta.Rows
+                If r.fecha_fin >= Tope Then
+                    If r.fecha_fin = Fecha Then
+                        Continue For
+                    End If
+                    Interes += r.int_ord
+                    CapVig += r.cap_vigente
+                Else
+                    Exit For
+                End If
+            Next
+        End If
 
         SaldoConti = CapVig + Interes + SaldoCap
         taContraGarant.FillByidContrato(ds.CONT_CPF_contratos_garantias, ID_Contrato)

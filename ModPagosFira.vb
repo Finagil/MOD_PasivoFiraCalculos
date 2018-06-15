@@ -8,6 +8,10 @@
         Else
             taPagosFira.Fill_ID(DS.CONT_CPF_PagosFira, ID)
         End If
+        If DS.CONT_CPF_PagosFira.Rows.Count <= 0 Then
+            Console.WriteLine("No hay pagos para procesar")
+        End If
+
         For Each r As PagosFiraDS.CONT_CPF_PagosFiraRow In DS.CONT_CPF_PagosFira.Rows
             X = 1
             GeneraPago(r.id_Contrato, r.FechaPagoFira, r.Capital, r.Interes, r.FechaHistoria)

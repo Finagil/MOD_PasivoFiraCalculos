@@ -38,7 +38,11 @@
                     For Each y As PasivoFiraDS.ContratosProcesarFechaRow In Tabla1.Rows
                         ProcesaEstadoCuenta(y.Id_Contrato, True, Fecha.Date)
                     Next
+                Else
+                    Console.WriteLine("Opcion Inválida")
                 End If
+            Else
+                Console.WriteLine("Opcion Inválida")
             End If
         Catch ex As Exception
             Console.WriteLine("Error: ID-" & Args(1) & " " & ex.Message & " " & Date.Now)

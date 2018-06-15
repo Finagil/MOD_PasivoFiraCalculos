@@ -20,6 +20,9 @@
                     ExportaPagosFinagilFira()
                 ElseIf Args(1).ToUpper.Trim = "PROCESA_PAGOS" Then
                     Procesa_Pagos_Fira(0)
+                    taCorreos.Insert("PasivoFira@finagil.com.mx", "ecacerest@finagil.com.mx", "PROCESA_PAGOS: Terminado", "PROCESA_PAGOS: Terminado", False, Date.Now, "")
+                    taCorreos.Insert("PasivoFira@finagil.com.mx", "Cristina Juarez (Finagil) <cjuarezr@finagil.com.mx>", "PROCESA_PAGOS: Terminado", "PROCESA_PAGOS: Terminado", False, Date.Now, "")
+                    taCorreos.Insert("PasivoFira@finagil.com.mx", "Aldo A Joshina (Finagil) <ajoshin@finagil.com.mx>", "PROCESA_PAGOS: Terminado", "PROCESA_PAGOS: Terminado", False, Date.Now, "")
                 ElseIf Args(1).ToUpper.Trim = "TODO" Then
                     Dim Tabla As New PasivoFiraDS.SaldosAnexosDataTable
                     TaAnexos.Fill_ConSaldo(Tabla)

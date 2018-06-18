@@ -15,9 +15,13 @@
         End If
         For Each r As PagosFiraDS.CONT_CPF_PagosFiraRow In DS.CONT_CPF_PagosFira.Rows
             X = 1
-            GeneraPago(r.id_Contrato, r.FechaPagoFira, r.Capital, r.Interes, r.FechaHistoria)
-            If ID = 0 Then
-                ProcesaEstadoCuenta(r.id_Contrato, True, Date.Now.Date)
+            If r.Adelanto = True Then
+                taPagosFira.ProcesaPago(True, r.id_Contrato, r.FechaHistoria)
+            Else
+                GeneraPago(r.id_Contrato, r.FechaPagoFira, r.Capital, r.Interes, r.FechaHistoria)
+                If ID = 0 Then
+                    ProcesaEstadoCuenta(r.id_Contrato, True, Date.Now.Date)
+                End If
             End If
         Next
         Return X

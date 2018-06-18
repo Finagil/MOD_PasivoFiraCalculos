@@ -8,7 +8,7 @@
   <Shapes>
     <Shape ID="DesignTable:Vencimientos" ZOrder="3" X="432" Y="56" Height="286" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="178" />
     <Shape ID="DesignTable:Calendarios" ZOrder="2" X="789" Y="63" Height="305" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="178" />
-    <Shape ID="DesignTable:CONT_CPF_PagosFira" ZOrder="1" X="57" Y="71" Height="248" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="159" />
+    <Shape ID="DesignTable:CONT_CPF_PagosFira" ZOrder="1" X="57" Y="71" Height="267" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="178" />
   </Shapes>
   <Connectors />
 </DiagramLayout>

@@ -89,7 +89,13 @@
                 CorrigeCapitalVencimiento(ID)
             Else
                 TaEdoCta.BorraDatos(ID)
-                Hoy = TaEdoCta.SacaFecha1(ID)
+                Try
+                    Hoy = TaEdoCta.SacaFecha1(ID)
+                Catch ex As Exception
+                    Hoy = TaEdoCta.SacaFecha1Ministraciones(ID)
+                    Aux = TaMinis.SacaMontoMinisXfecha(ID, Hoy)
+                    TaEdoCta.Insert("BP", Hoy, Hoy, 0, Aux, 0, 0, 0, 0, 0, 0, 0, 0, Aux, ID, TIIE28, 0, 0, 0, 0) ' 4 inserta primera linea
+                End Try
                 CargaTIIE(Hoy, "", "")
                 TaAnexos.UpdateFechaCorteTIIE(Hoy, TIIE28, ID)
                 TaVevcimientosCPF.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)

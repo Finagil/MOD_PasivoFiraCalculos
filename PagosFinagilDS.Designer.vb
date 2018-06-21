@@ -379,6 +379,8 @@ Partial Public Class PagosFinagilDS
         
         Private columnFechaX As Global.System.Data.DataColumn
         
+        Private columnLetraCiclo As Global.System.Data.DataColumn
+        
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Sub New()
@@ -519,6 +521,14 @@ Partial Public Class PagosFinagilDS
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public ReadOnly Property LetraCicloColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnLetraCiclo
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false)>  _
         Public ReadOnly Property Count() As Integer
@@ -555,9 +565,9 @@ Partial Public Class PagosFinagilDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
-        Public Overloads Function AddPagosFinagilRow(ByVal id_contrato As Integer, ByVal idCredito As String, ByVal Concepto As String, ByVal Anexo As String, ByVal Cliente As String, ByVal Letra As String, ByVal Fecha As String, ByVal FechaTerminacion As String, ByVal Importe As Decimal, ByVal SaldoCapital As Decimal, ByVal Interes As Decimal, ByVal Tipar As String, ByVal FechaX As Date) As PagosFinagilRow
+        Public Overloads Function AddPagosFinagilRow(ByVal id_contrato As Integer, ByVal idCredito As String, ByVal Concepto As String, ByVal Anexo As String, ByVal Cliente As String, ByVal Letra As String, ByVal Fecha As String, ByVal FechaTerminacion As String, ByVal Importe As Decimal, ByVal SaldoCapital As Decimal, ByVal Interes As Decimal, ByVal Tipar As String, ByVal FechaX As Date, ByVal LetraCiclo As String) As PagosFinagilRow
             Dim rowPagosFinagilRow As PagosFinagilRow = CType(Me.NewRow,PagosFinagilRow)
-            Dim columnValuesArray() As Object = New Object() {id_contrato, idCredito, Concepto, Anexo, Cliente, Letra, Fecha, FechaTerminacion, Importe, SaldoCapital, Interes, Tipar, FechaX}
+            Dim columnValuesArray() As Object = New Object() {id_contrato, idCredito, Concepto, Anexo, Cliente, Letra, Fecha, FechaTerminacion, Importe, SaldoCapital, Interes, Tipar, FechaX, LetraCiclo}
             rowPagosFinagilRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowPagosFinagilRow)
             Return rowPagosFinagilRow
@@ -599,6 +609,7 @@ Partial Public Class PagosFinagilDS
             Me.columnInteres = MyBase.Columns("Interes")
             Me.columnTipar = MyBase.Columns("Tipar")
             Me.columnFechaX = MyBase.Columns("FechaX")
+            Me.columnLetraCiclo = MyBase.Columns("LetraCiclo")
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -630,6 +641,8 @@ Partial Public Class PagosFinagilDS
             MyBase.Columns.Add(Me.columnTipar)
             Me.columnFechaX = New Global.System.Data.DataColumn("FechaX", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnFechaX)
+            Me.columnLetraCiclo = New Global.System.Data.DataColumn("LetraCiclo", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnLetraCiclo)
             Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnid_contrato, Me.columnConcepto, Me.columnLetra, Me.columnFecha}, true))
             Me.columnid_contrato.AllowDBNull = false
             Me.columnidCredito.MaxLength = 7
@@ -644,8 +657,11 @@ Partial Public Class PagosFinagilDS
             Me.columnFecha.AllowDBNull = false
             Me.columnFecha.MaxLength = 8
             Me.columnFechaTerminacion.MaxLength = 8
+            Me.columnTipar.AllowDBNull = false
             Me.columnTipar.MaxLength = 1
             Me.columnFechaX.ReadOnly = true
+            Me.columnLetraCiclo.ReadOnly = true
+            Me.columnLetraCiclo.MaxLength = 3
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -1650,11 +1666,7 @@ Partial Public Class PagosFinagilDS
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Property Tipar() As String
             Get
-                Try 
-                    Return CType(Me(Me.tablePagosFinagil.TiparColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'Tipar' de la tabla 'PagosFinagil' es DBNull.", e)
-                End Try
+                Return CType(Me(Me.tablePagosFinagil.TiparColumn),String)
             End Get
             Set
                 Me(Me.tablePagosFinagil.TiparColumn) = value
@@ -1673,6 +1685,21 @@ Partial Public Class PagosFinagilDS
             End Get
             Set
                 Me(Me.tablePagosFinagil.FechaXColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Property LetraCiclo() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tablePagosFinagil.LetraCicloColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'LetraCiclo' de la tabla 'PagosFinagil' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tablePagosFinagil.LetraCicloColumn) = value
             End Set
         End Property
         
@@ -1738,18 +1765,6 @@ Partial Public Class PagosFinagilDS
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
-        Public Function IsTiparNull() As Boolean
-            Return Me.IsNull(Me.tablePagosFinagil.TiparColumn)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
-        Public Sub SetTiparNull()
-            Me(Me.tablePagosFinagil.TiparColumn) = Global.System.Convert.DBNull
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Function IsFechaXNull() As Boolean
             Return Me.IsNull(Me.tablePagosFinagil.FechaXColumn)
         End Function
@@ -1758,6 +1773,18 @@ Partial Public Class PagosFinagilDS
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
         Public Sub SetFechaXNull()
             Me(Me.tablePagosFinagil.FechaXColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Function IsLetraCicloNull() As Boolean
+            Return Me.IsNull(Me.tablePagosFinagil.LetraCicloColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")>  _
+        Public Sub SetLetraCicloNull()
+            Me(Me.tablePagosFinagil.LetraCicloColumn) = Global.System.Convert.DBNull
         End Sub
     End Class
     
@@ -2413,6 +2440,7 @@ Namespace PagosFinagilDSTableAdapters
             tableMapping.ColumnMappings.Add("Interes", "Interes")
             tableMapping.ColumnMappings.Add("Tipar", "Tipar")
             tableMapping.ColumnMappings.Add("FechaX", "FechaX")
+            tableMapping.ColumnMappings.Add("LetraCiclo", "LetraCiclo")
             Me._adapter.TableMappings.Add(tableMapping)
         End Sub
         
@@ -2430,8 +2458,8 @@ Namespace PagosFinagilDSTableAdapters
             Me._commandCollection(0) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(0).Connection = Me.Connection
             Me._commandCollection(0).CommandText = "SELECT        id_contrato, idCredito, Concepto, Anexo, Cliente, Letra, Fecha, Fec"& _ 
-                "haTerminacion, Importe, SaldoCapital, Interes, Tipar, FechaX"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Vw"& _ 
-                "_CONT_CPF_PagosFinagil"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY Fecha, idCredito, Letra"
+                "haTerminacion, Importe, SaldoCapital, Interes, Tipar, FechaX, LetraCiclo"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM  "& _ 
+                "          Vw_CONT_CPF_PagosFinagil"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY Fecha, idCredito, Letra"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(1) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(1).Connection = Me.Connection

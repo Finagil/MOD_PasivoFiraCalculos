@@ -38,7 +38,7 @@
                     rFiraADELANTO.Adelanto = True
                     rFiraADELANTO.Capital += rFinagil.Importe
                     DS.CONT_CPF_PagosFira.AddCONT_CPF_PagosFiraRow(rFiraADELANTO)
-                ElseIf InStr(rFinagil.Concepto, "CAPITAL EQUIPO") Or InStr(rFinagil.Concepto, "SALDO INSOLUTO DEL EQUIPO") Then
+                ElseIf InStr(rFinagil.Concepto, "CAPITAL EQUIPO") Or InStr(rFinagil.Concepto, "SALDO INSOLUTO DEL EQUIPO") Or InStr(rFinagil.Concepto, "FEGA") Then
                     rFira.Capital += rFinagil.Importe
                 ElseIf InStr(rFinagil.Concepto, "INTERESES") Then
                     rFira.Interes += rFinagil.Importe

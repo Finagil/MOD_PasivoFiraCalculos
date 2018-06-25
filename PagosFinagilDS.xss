@@ -7,7 +7,7 @@
 <DiagramLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ex:showrelationlabel="False" ViewPortX="0" ViewPortY="0" xmlns:ex="urn:schemas-microsoft-com:xml-msdatasource-layout-extended" xmlns="urn:schemas-microsoft-com:xml-msdatasource-layout">
   <Shapes>
     <Shape ID="DesignTable:PagosFinagil" ZOrder="1" X="43" Y="28" Height="324" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="254" />
-    <Shape ID="DesignTable:CONT_CPF_PagosFira" ZOrder="3" X="368" Y="45" Height="248" Width="278" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="178" />
+    <Shape ID="DesignTable:CONT_CPF_PagosFira" ZOrder="3" X="368" Y="45" Height="267" Width="267" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="197" />
     <Shape ID="DesignTable:Correos_SistemaFinagil" ZOrder="2" X="665" Y="45" Height="229" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="178" />
   </Shapes>
   <Connectors />

@@ -16,7 +16,7 @@
                 rFira = DS.CONT_CPF_PagosFira.NewCONT_CPF_PagosFiraRow
                 IniciaFila(rFira)
             ElseIf idCredito <> rFinagil.idCredito Then
-                If rFira.Capital <> 0 And rFira.Interes <> 0 Then 'solo si tiene algo que pagar
+                If rFira.Capital > 0 Or rFira.Interes > 0 Then 'solo si tiene algo que pagar
                     DS.CONT_CPF_PagosFira.AddCONT_CPF_PagosFiraRow(rFira)
                     DS.CONT_CPF_PagosFira.GetChanges()
                     taPagfira.Update(DS.CONT_CPF_PagosFira)
@@ -32,7 +32,12 @@
                     rFira.Capital += rFinagil.Importe 'Se incluye Fega'
                 End If
             Else
-                If InStr(rFinagil.Concepto, "ADELANTO") Then
+                If rFinagil.Letra = "999" Then
+                    If InStr(rFinagil.Concepto, "CAPITAL EQUIPO") Or InStr(rFinagil.Concepto, "SALDO INSOLUTO DEL EQUIPO") Or InStr(rFinagil.Concepto, "FEGA") Then
+                        rFira.Capital += rFinagil.Importe
+                        rFira.Finiquito = True
+                    End If
+                ElseIf InStr(rFinagil.Concepto, "ADELANTO") Then
                     rFiraADELANTO = DS.CONT_CPF_PagosFira.NewCONT_CPF_PagosFiraRow
                     IniciaFila(rFiraADELANTO)
                     rFiraADELANTO.Adelanto = True
@@ -63,5 +68,6 @@
         rFira.id_credito = rFinagil.idCredito
         rFira.FechaHistoria = rFinagil.Fecha
         rFira.Adelanto = False
+        rFira.Finiquito = False
     End Sub
 End Module

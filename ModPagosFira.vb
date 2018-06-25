@@ -18,7 +18,7 @@
             If r.Adelanto = True Then
                 taPagosFira.ProcesaPago(True, r.id_Contrato, r.FechaHistoria)
             Else
-                GeneraPago(r.id_Contrato, r.FechaPagoFira, r.Capital, r.Interes, r.FechaHistoria)
+                GeneraPago(r.id_Contrato, r.FechaPagoFira, r.Capital, r.Interes, r.FechaHistoria, r.Finiquito)
                 If ID = 0 Then
                     ProcesaEstadoCuenta(r.id_Contrato, True, Date.Now.Date)
                 End If
@@ -27,7 +27,7 @@
         Return X
     End Function
 
-    Sub GeneraPago(ID As Integer, FechaFira As Date, Capital As Decimal, Interes As Decimal, FechaHistoria As String)
+    Sub GeneraPago(ID As Integer, FechaFira As Date, Capital As Decimal, Interes As Decimal, FechaHistoria As String, Finiquito As Boolean)
         Dim Tipar As String = TaAnexos.tipar(ID)
         Dim rCalen As PagosFiraDS.CalendariosRow
         Dim rVenc As PagosFiraDS.VencimientosRow
@@ -55,7 +55,15 @@
                     taCaledarios.Insert(ID, FechaFira, True, False, True, True, True)
                 End If
             End If
-            If Capital + 0.1 >= rVenc.capital Then
+            If Finiquito = True Then
+                ProcesaEstadoCuenta(ID, True, FechaFira.AddDays(-1))
+                Capital = TaEdoCta.SaldoCapital(ID, "BP")
+                taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", 0, ID, 0)
+                ProcesaEstadoCuenta(ID, True, FechaFira)
+                TaAnexos.TerminaContrato(ID)
+                TaEdoCta.BorraCeros(ID)
+                taPagosFira.ProcesaPago(True, ID, FechaHistoria)
+            ElseIf Capital + 0.1 >= rVenc.capital Then
                 taVencimientos.Insert(FechaFira, rVenc.capital, FechaFira, "Vigente", rVenc.intereses, ID, 0)
                 rVenc.Delete()
                 DS.Vencimientos.GetChanges()
@@ -76,15 +84,24 @@
                 End If
                 TaEdoCta.BorraCeros(ID)
             Else
-                If Capital = 0 And Interes > 0 Then
-                    taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", Interes, ID, Interes)
+                If Tipar = "H" Or Tipar = "C" Then
+                    If Capital = 0 And Interes > 0 Then
+                        taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", Interes, ID, Interes)
+                    Else
+                        Capital += Interes
+                        Interes = TaEdoCta.SaldoInteres(ID, "BP", FechaFira)
+                        Capital -= Interes
+                        taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", Interes, ID, -1)
+                    End If
+                    rVenc.capital -= (Capital)
                 Else
-                    Capital += Interes
-                    Interes = TaEdoCta.SaldoInteres(ID, "BP", FechaFira)
-                    Capital -= Interes
-                    taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", Interes, ID, -1)
+                    If Capital = 0 And Interes > 0 Then
+                        taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", Interes, ID, Interes)
+                    Else
+                        taVencimientos.Insert(FechaFira, Capital, FechaFira, "Vigente", Interes, ID, -1)
+                    End If
+                    rVenc.capital -= (Capital)
                 End If
-                rVenc.capital -= (Capital)
                 Capital = 0
                 DS.Vencimientos.GetChanges()
                 taVencimientos.Update(DS.Vencimientos)

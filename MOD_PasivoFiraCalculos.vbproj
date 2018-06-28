@@ -121,6 +121,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PasivoFiraDS.xsd</DependentUpon>
     </Compile>
+    <Compile Include="PasivoFiraDS.vb">
+      <DependentUpon>PasivoFiraDS.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

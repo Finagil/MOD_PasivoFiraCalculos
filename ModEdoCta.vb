@@ -598,6 +598,7 @@
 
     Sub CalculaSaldoContigente(ID_Contrato As Integer, Fecha As Date)
         Dim EsquemaCobro As Integer = TaAnexos.EsquemaCobro(ID_Contrato)
+        Dim Estatus As String = TaAnexos.SacaEstatus(ID_Contrato)
         Dim Tope As Date
         If EsquemaCobro = 1 Then 'simple con financiamiento
             Tope = Fecha.AddDays(-999)
@@ -606,15 +607,26 @@
         End If
         Dim SaldoConti, Interes, CapVig, SaldoCap As Decimal
 
-        SaldoCap = TaEdoCta.SaldoCapital(ID_Contrato, "BP")
+        If Estatus = "TERMINADO" Then
+            SaldoCap = TaEdoCta.SaldoCapitalFecha(ID_Contrato, "BP", Fecha.AddDays(-1))
+        Else
+            SaldoCap = TaEdoCta.SaldoCapitalFecha(ID_Contrato, "BP", Fecha)
+        End If
+
         If EsquemaCobro = 1 Then
             Interes = TaEdoCta.SaldoInteres(ID_Contrato, "BP", Fecha)
+            Interes += TaEdoCta.InteresOrdFecha(ID_Contrato, "BP", Fecha)
+            CapVig = 0
+        ElseIf EsquemaCobro = 3 Then
+            Interes = TaEdoCta.SaldoInteres(ID_Contrato, "BP", Fecha)
+            Interes += TaEdoCta.InteresOrdFecha(ID_Contrato, "BP", Fecha)
             CapVig = 0
         Else
             TaEdoCta.FillDesc(ds.CONT_CPF_edocuenta, ID_Contrato, "BP")
             For Each r As PasivoFiraDS.CONT_CPF_edocuentaRow In ds.CONT_CPF_edocuenta.Rows
                 If r.fecha_fin >= Tope Then
                     If r.fecha_fin = Fecha Then
+                        CapVig += r.cap_vigente
                         Continue For
                     End If
                     Interes += r.int_ord
@@ -624,15 +636,17 @@
                 End If
             Next
         End If
+        If Interes > 0 Then
+            SaldoConti = CapVig + Interes + SaldoCap
+            taContraGarant.FillByidContrato(ds.CONT_CPF_contratos_garantias, ID_Contrato)
+            Dim rz As PasivoFiraDS.CONT_CPF_contratos_garantiasRow
+            rz = ds.CONT_CPF_contratos_garantias.Rows(0)
 
-        SaldoConti = CapVig + Interes + SaldoCap
-        taContraGarant.FillByidContrato(ds.CONT_CPF_contratos_garantias, ID_Contrato)
-        Dim rz As PasivoFiraDS.CONT_CPF_contratos_garantiasRow
-        rz = ds.CONT_CPF_contratos_garantias.Rows(0)
+            TaSaldoConti.Insert(Fecha, Nothing, Nothing, 0, 0, Nothing, SaldoConti, rz.cobertura_nominal, rz.cobertura_efectiva,
+                                   SaldoConti * (rz.cobertura_nominal / 100), SaldoConti * (rz.cobertura_efectiva / 100), rz.id_contrato_garantia)
+            taContraGarant.UpdateSaldoContingente(SaldoConti * (rz.cobertura_nominal / 100), SaldoConti * (rz.cobertura_efectiva / 100), rz.id_contrato_garantia, rz.id_contrato)
+        End If
 
-        TaSaldoConti.Insert(Fecha, Nothing, Nothing, 0, 0, Nothing, SaldoConti, rz.cobertura_nominal, rz.cobertura_efectiva,
-                               SaldoConti * (rz.cobertura_nominal / 100), SaldoConti * (rz.cobertura_efectiva / 100), rz.id_contrato_garantia)
-        taContraGarant.UpdateSaldoContingente(SaldoConti * (rz.cobertura_nominal / 100), SaldoConti * (rz.cobertura_efectiva / 100), rz.id_contrato_garantia, rz.id_contrato)
 
     End Sub
 

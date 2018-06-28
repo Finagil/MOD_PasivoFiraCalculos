@@ -16,6 +16,8 @@
                     Else
                         Console.WriteLine("ID incorrecto")
                     End If
+                ElseIf Args(1).ToUpper.Trim = "CONTI" Then
+                    CalculaSaldoContigente(Args(2), Args(3))
                 ElseIf Args(1).ToUpper.Trim = "PAGOS" Then
                     ExportaPagosFinagilFira()
                 ElseIf Args(1).ToUpper.Trim = "PROCESA_PAGOS" Then

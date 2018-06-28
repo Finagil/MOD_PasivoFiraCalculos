@@ -603,7 +603,7 @@
         If EsquemaCobro = 1 Then 'simple con financiamiento
             Tope = Fecha.AddDays(-999)
         Else
-            Tope = Fecha.AddDays(-121)
+            Tope = Fecha.AddDays(-120)
         End If
         Dim SaldoConti, Interes, CapVig, SaldoCap As Decimal
 
@@ -622,11 +622,14 @@
             Interes += TaEdoCta.InteresOrdFecha(ID_Contrato, "BP", Fecha)
             CapVig = 0
         Else
+            Interes += TaEdoCta.InteresOrdFecha(ID_Contrato, "BP", Fecha)
             TaEdoCta.FillDesc(ds.CONT_CPF_edocuenta, ID_Contrato, "BP")
             For Each r As PasivoFiraDS.CONT_CPF_edocuentaRow In ds.CONT_CPF_edocuenta.Rows
-                If r.fecha_fin >= Tope Then
+                If r.fecha_fin > Tope Then
                     If r.fecha_fin = Fecha Then
-                        CapVig += r.cap_vigente
+                        If Estatus <> "TERMINADO" Then
+                            CapVig += r.cap_vigente
+                        End If
                         Continue For
                     End If
                     Interes += r.int_ord

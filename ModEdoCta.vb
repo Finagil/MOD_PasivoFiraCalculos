@@ -659,7 +659,7 @@
         Dim AjusteDias As Integer = 0
         Dim TIIE_old, Minis_BASE As Decimal
         Dim TasaActivaBP, TasaActivaFB, TasaActivaFN, IntORD, IntVENC, IntFINAN, SaldoINI, SaldoFIN, InteresAux1, InteresAux2 As Decimal
-        Dim InteresAux1FB, InteresAux2FB, Provision, Aux1, Aux2 As Decimal
+        Dim InteresAux1FB, InteresAux2FB, Provision, Pago, Aux As Decimal
         Dim InteresAux1FN, InteresAux2FN As Decimal
         Dim IntFB As Decimal = 0
         Dim IntFN As Decimal = 0
@@ -777,26 +777,42 @@
         Else
             SaldoFIN = SaldoINI + Minis_BASE ' no acumula en simple
             '++++++APLICA PAGO SOLO INTERES+++++++++++
-            Aux1 = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
-            If Aux1 > 0 Then
-                Aux2 = Aux1 / IntORD
-                IntORD -= Aux1
-                Aux2 = IntFB * Aux2
-                IntFB = 0
-                SaldoFIN = SaldoINI
-                Provision = IntORD
-                IntORD = 0
+            Pago = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+            If Pago > 0 Then
+                If Pago <= IntFB Then
+                    Aux = Pago / IntFB
+                    IntFINAN = IntORD - (IntORD * Aux)
+                    IntORD = IntORD * Aux
+                    IntFB = Pago
+                    SaldoFIN = SaldoINI
+                    Provision = IntFINAN
+                    IntFINAN = 0
+                    Pago = 0
+                Else
+                    Pago -= IntFB
+                    IntFINAN = TaEdoCta.SaldoInteres(r.id_contrato, "BP", Fecha)
+                    If Pago >= IntFINAN Then
+                        IntFINAN *= -1
+                    Else
+                        IntFINAN = Pago * -1
+                    End If
+                    SaldoFIN = SaldoINI
+                    Provision = 0
+                    Pago = IntFINAN * -1
+                End If
             Else
-                Aux1 = 0
-                Aux2 = 0
+                IntFINAN = InteORD
+                IntORD = 0
+                IntFB = 0
+                Pago = 0
             End If
             '++++++APLICA PAGO SOLO INTERES+++++++++++
 
-            TaEdoCta.Insert(TipoTasa, r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
-                        0, Minis_BASE, ID_Contrato, (TasaActivaBP + TIIE_old), diasX, IntORD, IntVENC, Provision)
+            TaEdoCta.Insert(TipoTasa, r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoFIN, 0, 0, IntORD, 0, 0, 0, 0,
+                        Pago, Minis_BASE, ID_Contrato, (TasaActivaBP + TIIE_old), diasX, IntFINAN, IntVENC, Provision)
 
-            TaEdoCta.Insert("FB", r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
-                            0, Minis_BASE, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFB, 0, Provision)
+            TaEdoCta.Insert("FB", r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoFIN, 0, 0, IntFB, 0, 0, 0, 0,
+                            Pago, Minis_BASE, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFB, 0, Provision)
 
         End If
         TaVevcimientosCPF.UpdateStatusALL("Vencido", Fecha.AddDays(AjusteDias), "Vigente", ID_Contrato, 0)
@@ -809,7 +825,7 @@
         Dim FechaAnt As Date
         Dim Minis_BASE As Decimal
         Dim TasaActivaBP, TasaActivaFB, TasaActivaFN, IntORD, IntVENC, IntFINAN, SaldoINI, SaldoFIN, InteresAux1, InteresAux2 As Decimal
-        Dim InteresAux1FB, InteresAux2FB, Provision, Aux1, Aux2 As Decimal
+        Dim InteresAux1FB, InteresAux2FB, Provision, Pago, Aux As Decimal
         Dim InteresAux1FN, InteresAux2FN As Decimal
         Dim IntFB As Decimal = 0
         Dim IntFN As Decimal = 0
@@ -930,25 +946,42 @@
         Else
             SaldoFIN = SaldoINI '+ IntORD NO CAPITALIZA
             '++++++APLICA PAGO SOLO INTERES+++++++++++
-            Aux1 = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
-            If Aux1 > 0 Then
-                Aux2 = Aux1 / IntORD
-                IntORD -= Aux1
-                Aux2 = IntFB * Aux2
-                IntFB = 0
-                SaldoFIN = SaldoINI
-                Provision = IntORD
-                IntORD = 0
+            Pago = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+            If Pago > 0 Then
+                If Pago <= IntFB Then
+                    Aux = Pago / IntFB
+                    IntFINAN = IntORD - (IntORD * Aux)
+                    IntORD = IntORD * Aux
+                    IntFB = Pago
+                    SaldoFIN = SaldoINI
+                    Provision = IntFINAN
+                    IntFINAN = 0
+                    Pago = 0
+                Else
+                    Pago -= IntFB
+                    IntFINAN = TaEdoCta.SaldoInteres(r.id_contrato, "BP", Fecha)
+                    If Pago >= IntFINAN Then
+                        IntFINAN *= -1
+                    Else
+                        IntFINAN = Pago * -1
+                    End If
+                    SaldoFIN = SaldoINI
+                    Provision = 0
+                    Pago = IntFINAN * -1
+                End If
             Else
-                Aux1 = 0
-                Aux2 = 0
+                IntFINAN = InteORD
+                IntORD = 0
+                IntFB = 0
+                Pago = 0
             End If
             '++++++APLICA PAGO SOLO INTERES+++++++++++
-            TaEdoCta.Insert("BP", r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, ID_Contrato, (TasaActivaBP), diasX, IntORD, IntVENC, Provision)
 
-            TaEdoCta.Insert("FB", r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, ID_Contrato, (TasaActivaFB), diasX, IntFB, 0, Provision)
+            TaEdoCta.Insert("BP", r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoINI, 0, 0, IntORD, 0, 0, 0, 0,
+                        pago, 0, ID_Contrato, (TasaActivaBP), diasX, IntFINAN, IntVENC, Provision)
+
+            TaEdoCta.Insert("FB", r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoINI, 0, 0, IntFB, 0, 0, 0, 0,
+                            Pago, 0, ID_Contrato, (TasaActivaFB), diasX, IntFINAN, 0, Provision)
 
             If TasaActivaFN > 0 Then
                 TaEdoCta.Insert("FN", r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoINI, 0, 0, 0, 0, 0, 0, 0,
@@ -980,7 +1013,7 @@
         Dim diasX As Integer
         Dim Minis_BASE As Decimal
         Dim TasaActivaBP, TasaActivaFB, TasaActivaFN, IntORD, IntVENC, IntFINAN, SaldoINI, SaldoFIN, InteresAux1, InteresAux2 As Decimal
-        Dim InteresAux1FB, InteresAux2FB, Provision, Aux1, Aux2 As Decimal
+        Dim InteresAux1FB, InteresAux2FB, Provision, Pago, Aux As Decimal
         Dim InteresAux1FN, InteresAux2FN As Decimal
         Dim IntFB As Decimal = 0
         Dim IntFN As Decimal = 0
@@ -1102,26 +1135,42 @@
                 SaldoFIN = SaldoINI + IntORD + Minis_BASE
             End If
             '++++++APLICA PAGO SOLO INTERES+++++++++++
-            Aux1 = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
-            If Aux1 > 0 Then
-                Aux2 = Aux1 / IntORD
-                IntORD -= Aux1
-                Aux2 = IntFB * Aux2
-                IntFB = 0
-                SaldoFIN = SaldoINI
-                Provision = IntORD
-                IntORD = 0
+            Pago = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+            If Pago > 0 Then
+                If Pago <= IntFB Then
+                    Aux = Pago / IntFB
+                    IntFINAN = IntORD - (IntORD * Aux)
+                    IntORD = IntORD * Aux
+                    IntFB = Pago
+                    SaldoFIN = SaldoINI
+                    Provision = IntFINAN
+                    IntFINAN = 0
+                    Pago = 0
+                Else
+                    Pago -= IntFB
+                    IntFINAN = TaEdoCta.SaldoInteres(r.id_contrato, "BP", Fecha)
+                    If Pago >= IntFINAN Then
+                        IntFINAN *= -1
+                    Else
+                        IntFINAN = Pago * -1
+                    End If
+                    SaldoFIN = SaldoINI
+                    Provision = 0
+                    Pago = IntFINAN * -1
+                End If
             Else
-                Aux1 = 0
-                Aux2 = 0
+                IntFINAN = InteORD
+                IntORD = 0
+                IntFB = 0
+                Pago = 0
             End If
             '++++++APLICA PAGO SOLO INTERES+++++++++++
 
-            TaEdoCta.Insert("BP", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
-                        0, Minis_BASE, ID_Contrato, (TasaActivaBP), diasX, IntORD, IntVENC, Provision)
+            TaEdoCta.Insert("BP", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, IntORD, 0, 0, 0, 0,
+                        Pago, Minis_BASE, ID_Contrato, (TasaActivaBP), diasX, IntFINAN, IntVENC, Provision)
 
-            TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
-                            0, Minis_BASE, ID_Contrato, (TasaActivaFB), diasX, IntFB, 0, Provision)
+            TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, IntFB, 0, 0, 0, 0,
+                            Pago, Minis_BASE, ID_Contrato, (TasaActivaFB), diasX, IntFINAN, 0, Provision)
 
             If TasaActivaFN > 0 Then
                 TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
@@ -1154,7 +1203,7 @@
         Dim diasX As Integer
         Dim TIIE_old, Minis_BASE As Decimal
         Dim TasaActivaBP, TasaActivaFB, TasaActivaFN, IntORD, IntVENC, IntFINAN, SaldoINI, SaldoFIN, InteresAux1, InteresAux2 As Decimal
-        Dim InteresAux1FB, InteresAux2FB, Provision, Aux1, Aux2 As Decimal
+        Dim InteresAux1FB, InteresAux2FB, Provision, Pago, Aux As Decimal
         Dim InteresAux1FN, InteresAux2FN As Decimal
         Dim IntFB As Decimal = 0
         Dim IntFN As Decimal = 0
@@ -1289,26 +1338,42 @@
                 SaldoFIN = SaldoINI + IntORD + Minis_BASE
             End If
             '++++++APLICA PAGO SOLO INTERES+++++++++++
-            Aux1 = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
-            If Aux1 > 0 Then
-                Aux2 = Aux1 / IntORD
-                IntORD -= Aux1
-                Aux2 = IntFB * Aux2
-                IntFB = 0
-                SaldoFIN = SaldoINI
-                Provision = IntORD
-                IntORD = 0
+            Pago = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+            If Pago > 0 Then
+                If Pago <= IntFB Then
+                    Aux = Pago / IntFB
+                    IntFINAN = IntORD - (IntORD * Aux)
+                    IntORD = IntORD * Aux
+                    IntFB = Pago
+                    SaldoFIN = SaldoINI
+                    Provision = IntFINAN
+                    IntFINAN = 0
+                    Pago = 0
+                Else
+                    Pago -= IntFB
+                    IntFINAN = TaEdoCta.SaldoInteres(r.id_contrato, "BP", Fecha)
+                    If Pago >= IntFINAN Then
+                        IntFINAN *= -1
+                    Else
+                        IntFINAN = Pago * -1
+                    End If
+                    SaldoFIN = SaldoINI
+                    Provision = 0
+                    Pago = IntFINAN * -1
+                End If
             Else
-                Aux1 = 0
-                Aux2 = 0
+                IntFINAN = InteORD
+                IntORD = 0
+                IntFB = 0
+                Pago = 0
             End If
             '++++++APLICA PAGO SOLO INTERES+++++++++++
 
-            TaEdoCta.Insert("BP", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, Aux1, 0, 0, 0, 0,
-                            0, Minis_BASE, ID_Contrato, (TasaActivaBP + TIIE_old), diasX, IntORD, IntVENC, Provision)
+            TaEdoCta.Insert("BP", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, IntORD, 0, 0, 0, 0,
+                            Pago, Minis_BASE, ID_Contrato, (TasaActivaBP + TIIE_old), diasX, IntFINAN, IntVENC, Provision)
 
-            TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, Aux2, 0, 0, 0, 0,
-                                0, Minis_BASE, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFB, 0, Provision)
+            TaEdoCta.Insert("FB", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, IntFB, 0, 0, 0, 0,
+                                Pago, Minis_BASE, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFINAN, 0, Provision)
 
             If TasaActivaFN > 0 Then
                     TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,

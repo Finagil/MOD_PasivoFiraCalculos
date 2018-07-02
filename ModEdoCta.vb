@@ -61,7 +61,7 @@
                 TaAnexos.UpdateFechaCorteTIIE(Hoy, TIIE28, ID) '3.2 saca tiie
                 Aux = mfira.ministracionporfecha(Anexo, Hoy.ToString("yyyyMMdd"), Ciclo)
                 TaEdoCta.Insert("BP", Hoy, Hoy, 0, Aux, 0, 0, 0, 0, 0, 0, 0, 0, Aux, ID, TIIE28, 0, 0, 0, 0) ' 4 inserta primera linea
-                TaVevcimientosCPF.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
+                TaVencimientosCPF.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
                 TaSaldoConti.BorraSaldoContigente(ID)
                 taCXSG.BorraCSG(ID)
                 tapagos.BorraPagos(ID)
@@ -98,7 +98,7 @@
                 End Try
                 CargaTIIE(Hoy, "", "")
                 TaAnexos.UpdateFechaCorteTIIE(Hoy, TIIE28, ID)
-                TaVevcimientosCPF.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
+                TaVencimientosCPF.UpdateStatusVencimiento("Vigente", "Vencido", ID, ID)
                 TaSaldoConti.BorraSaldoContigente(ID)
                 taCXSG.BorraCSG(ID)
                 tapagos.BorraPagos(ID)
@@ -546,7 +546,7 @@
     End Sub
 
     Function DiasEntreVecn(ID) As Integer
-        TaVevcimientosCPF.FillByID(ds.CONT_CPF_vencimientos, ID)
+        TaVencimientosCPF.FillByID(ds.CONT_CPF_vencimientos, ID)
         Dim Acum, Cont As Decimal
         Dim Fec As Date
         For Each r As PasivoFiraDS.CONT_CPF_vencimientosRow In ds.CONT_CPF_vencimientos.Rows
@@ -568,7 +568,7 @@
     Sub CalculaServicioCobro(FecIni As Date, MontoBase As Decimal, PCXSG As Decimal, id_contrato As Integer, Subsidio As Boolean)
         Dim FecFin As Date
         Try
-            FecFin = TaVevcimientosCPF.SigFechaVenc(id_contrato)
+            FecFin = TaVencimientosCPF.SigFechaVenc(id_contrato)
         Catch ex As Exception
             TaAnexos.TerminaContrato(id_contrato)
             Exit Sub
@@ -689,7 +689,7 @@
         SaldoINI = r.Capital  'no se acumula en simple
         Minis_BASE = TaMinis.SacaMontoMinisXfecha(ID_Contrato, Fecha.AddDays(AjusteDias))
 
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL vIGENTE
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL vIGENTE
             If Provision > 0 And InteresAux1 = 0 Then
                 diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha.AddDays(AjusteDias))
             End If
@@ -707,7 +707,9 @@
         End If
 
         SaldoFIN = SaldoINI
-        IntFB = Math.Round((SaldoINI) * ((TasaActivaFB + TIIE_old) / 100 / 360) * (diasX), 2)
+        'IntFB = Math.Round((SaldoINI) * ((TasaActivaFB + TIIE_old) / 100 / 360) * (diasX), 2)
+        IntFB = (TasaActivaFB + TIIE_old) / (TasaActivaBP + TIIE_old)
+        IntFB = IntORD * IntFB
         If TasaActivaFN > 0 Then
             IntFN = Math.Round((SaldoINI) * ((TasaActivaFB + TIIE_old) / 100 / 360) * (diasX), 2)
         End If
@@ -719,16 +721,16 @@
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
                 Try
-                    CapitalVIG = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
                     If CapitalVIG < 0 Then
-                        TaVevcimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
+                        TaVencimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
                     End If
-                    CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 Catch ex As Exception
                     Try
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
                     Catch ex1 As Exception
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
                     End Try
                 End Try
                 IntORD_Aux = (TaAnexos.InteresAcumulado(r.id_contrato, "BP") * -1)
@@ -766,8 +768,8 @@
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha.AddDays(AjusteDias), 0, 0, 0, IntFB + InteresAux1FB, 0, CapitalVIG, 0, r.id_contrato)
-                If TaVevcimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
-                    TaVevcimientosCPF.UpdateEstatus("Vencido", Fecha.AddDays(AjusteDias), ID_Contrato)
+                If TaVencimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
+                    TaVencimientosCPF.UpdateEstatus("Vencido", Fecha.AddDays(AjusteDias), ID_Contrato)
                     CalculaServicioCobro(Fecha.AddDays(AjusteDias), SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
             Else
@@ -777,7 +779,7 @@
         Else
             SaldoFIN = SaldoINI + Minis_BASE ' no acumula en simple
             '++++++APLICA PAGO SOLO INTERES+++++++++++
-            Pago = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+            Pago = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
             If Pago > 0 Then
                 If Pago <= IntFB Then
                     Aux = Pago / IntFB
@@ -815,7 +817,7 @@
                             Pago, Minis_BASE, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFB, 0, Provision)
 
         End If
-        TaVevcimientosCPF.UpdateStatusALL("Vencido", Fecha.AddDays(AjusteDias), "Vigente", ID_Contrato, 0)
+        TaVencimientosCPF.UpdateStatusALL("Vencido", Fecha.AddDays(AjusteDias), "Vigente", ID_Contrato, 0)
         CalculaSaldoContigente(ID_Contrato, Fecha.AddDays(AjusteDias))
     End Sub
 
@@ -856,7 +858,7 @@
         subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital '+ r.Vencido + r.InteresVencido
 
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
             If Provision > 0 And InteresAux1 = 0 Then
                 diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha)
             End If
@@ -874,7 +876,7 @@
         Else
             IntORD = 0
         End If
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
             IntVENC = Math.Round((r.Vencido + r.InteresVencido) * ((TasaActivaBP) / 100 / 360) * (diasX), 2)
         Else
             IntVENC = 0
@@ -896,19 +898,19 @@
             Dim IntFN_Aux As Decimal = 0
             If EsVencimetoCap Then
                 Try
-                    CapitalVIG = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
                     If CapitalVIG < 0 Then
-                        TaVevcimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
+                        TaVencimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
                     End If
-                    CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 Catch ex As Exception
                     Try
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
                     Catch ex1 As Exception
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
                     End Try
                 End Try
-                'CapitalVIG = TaVevcimientosCPF.CapitalVigente(ID_Contrato)
+                'CapitalVIG = TaVencimientosCPF.CapitalVigente(ID_Contrato)
                 SaldoFIN -= CapitalVIG '+ IntFINAN
                 IntORD_Aux -= TaAnexos.InteresAcumulado(r.id_contrato, "BP")
                 IntFB_Aux -= TaAnexos.InteresAcumulado(r.id_contrato, "FB")
@@ -935,8 +937,8 @@
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha.AddDays(AjusteDias), 0, 0, 0, IntFB + InteresAux1FB, 0, CapitalVIG, 0, r.id_contrato)
-                If TaVevcimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
-                    TaVevcimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
+                If TaVencimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
+                    TaVencimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
                     CalculaServicioCobro(Fecha.AddDays(AjusteDias), SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
             Else
@@ -946,7 +948,7 @@
         Else
             SaldoFIN = SaldoINI '+ IntORD NO CAPITALIZA
             '++++++APLICA PAGO SOLO INTERES+++++++++++
-            Pago = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+            Pago = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
             If Pago > 0 Then
                 If Pago <= IntFB Then
                     Aux = Pago / IntFB
@@ -978,7 +980,7 @@
             '++++++APLICA PAGO SOLO INTERES+++++++++++
 
             TaEdoCta.Insert("BP", r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoINI, 0, 0, IntORD, 0, 0, 0, 0,
-                        pago, 0, ID_Contrato, (TasaActivaBP), diasX, IntFINAN, IntVENC, Provision)
+                        Pago, 0, ID_Contrato, (TasaActivaBP), diasX, IntFINAN, IntVENC, Provision)
 
             TaEdoCta.Insert("FB", r.FechaFinal, Fecha.AddDays(AjusteDias), SaldoINI, SaldoINI, 0, 0, IntFB, 0, 0, 0, 0,
                             Pago, 0, ID_Contrato, (TasaActivaFB), diasX, IntFINAN, 0, Provision)
@@ -988,7 +990,7 @@
                             0, 0, ID_Contrato, (TasaActivaFN), diasX, IntFN, 0, Provision)
             End If
         End If
-        TaVevcimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        TaVencimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
         CalculaSaldoContigente(ID_Contrato, Fecha.AddDays(AjusteDias))
     End Sub
 
@@ -1036,7 +1038,7 @@
         subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital + r.InteresOrdinario + r.Vencido + r.InteresVencido
 
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
             If Provision > 0 And InteresAux1 = 0 Then
                 diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha)
             End If
@@ -1054,7 +1056,7 @@
         Else
             IntORD = 0
         End If
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
             IntVENC = Math.Round((r.Vencido + r.InteresVencido) * ((TasaActivaBP) / 100 / 360) * (diasX), 2)
         Else
             IntVENC = 0
@@ -1075,19 +1077,19 @@
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
                 Try
-                    CapitalVIG = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
                     If CapitalVIG < 0 Then
-                        TaVevcimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
+                        TaVencimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
                     End If
-                    CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 Catch ex As Exception
                     Try
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
                     Catch ex1 As Exception
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
                     End Try
                 End Try
-                'CapitalVIG = TaVevcimientosCPF.CapitalVigente(ID_Contrato)
+                'CapitalVIG = TaVencimientosCPF.CapitalVigente(ID_Contrato)
                 SaldoFIN = r.Capital - CapitalVIG
                 IntORD_Aux = (TaAnexos.InteresAcumulado(r.id_contrato, "BP") * -1)
                 IntFB_Aux = (TaAnexos.InteresAcumulado(r.id_contrato, "FB") * -1)
@@ -1119,8 +1121,8 @@
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntORD_Aux, 0, CapitalVIG, 0, r.id_contrato)
-                If TaVevcimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
-                    TaVevcimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
+                If TaVencimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
+                    TaVencimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
                     CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
             Else
@@ -1135,7 +1137,7 @@
                 SaldoFIN = SaldoINI + IntORD + Minis_BASE
             End If
             '++++++APLICA PAGO SOLO INTERES+++++++++++
-            Pago = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+            Pago = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
             If Pago > 0 Then
                 If Pago <= IntFB Then
                     Aux = Pago / IntFB
@@ -1179,7 +1181,7 @@
             '  CargaTIIE(Fecha)
             '   TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE28, ID_Contrato)
         End If
-        TaVevcimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        TaVencimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
         CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 
@@ -1232,7 +1234,7 @@
         'SaldoINI = r.Capital + r.InteresOrdinario + r.Vencido + r.InteresVencido
         SaldoINI = r.Capital + r.InteresOrdinario
 
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
             'If Provision > 0 And InteresAux1 = 0 Then
             '    'diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha)
             'End If
@@ -1254,7 +1256,7 @@
         Else
             IntORD = 0
         End If
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
             IntVENC = Math.Round((r.Vencido + r.InteresVencido) * ((TasaActivaBP + TIIE_old) / 100 / 360) * (diasX), 2)
         Else
             IntVENC = 0
@@ -1262,8 +1264,9 @@
 
         IntFINAN = IntORD + IntVENC - InteresAux1 + InteresAux2
         SaldoFIN = SaldoINI + IntFINAN
-        IntFB = Math.Round((SaldoINI) * ((TasaActivaFB + TIIE_old) / 100 / 360) * (diasX), 2)
-
+        'IntFB = Math.Round((SaldoINI) * ((TasaActivaFB + TIIE_old) / 100 / 360) * (diasX), 2)
+        IntFB = (TasaActivaFB + TIIE_old) / (TasaActivaBP + TIIE_old)
+        IntFB = IntORD * IntFB
         If TasaActivaFN > 0 Then
             IntFN = (SaldoINI) * ((TasaActivaFN + TIIE_old) / 100 / 360) * (diasX)
         End If
@@ -1275,16 +1278,16 @@
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
                 'Try
-                CapitalVIG = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+                CapitalVIG = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
                 If CapitalVIG < 0 Then
-                    TaVevcimientosCPF.PorcesarInteresPagado(IntFB, r.id_contrato, Fecha)
+                    TaVencimientosCPF.PorcesarInteresPagado(IntFB, r.id_contrato, Fecha)
                 End If
-                CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 'Catch ex As Exception
                 'Try
-                '    CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
+                '    CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
                 'Catch ex1 As Exception
-                '    CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
+                '    CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
                 'End Try
                 'End Try
                 IntORD_Aux = (TaAnexos.InteresAcumulado(r.id_contrato, "BP") * -1)
@@ -1322,8 +1325,8 @@
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntORD_Aux, 0, CapitalVIG, 0, r.id_contrato)
-                If TaVevcimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
-                    TaVevcimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
+                If TaVencimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
+                    TaVencimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
                     CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
             Else
@@ -1338,7 +1341,7 @@
                 SaldoFIN = SaldoINI + IntORD + Minis_BASE
             End If
             '++++++APLICA PAGO SOLO INTERES+++++++++++
-            Pago = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+            Pago = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
             If Pago > 0 Then
                 If Pago <= IntFB Then
                     Aux = Pago / IntFB
@@ -1376,11 +1379,11 @@
                                 Pago, Minis_BASE, ID_Contrato, (TasaActivaFB + TIIE_old), diasX, IntFINAN, 0, Provision)
 
             If TasaActivaFN > 0 Then
-                    TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
+                TaEdoCta.Insert("FN", r.FechaFinal, Fecha, SaldoINI, SaldoFIN, 0, 0, 0, 0, 0, 0, 0,
                             0, Minis_BASE, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFN, 0, Provision)
-                End If
             End If
-            TaVevcimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        End If
+        TaVencimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
         CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 
@@ -1421,7 +1424,7 @@
         subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital '+ r.Vencido + r.InteresVencido
 
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
             'If ID_Contrato = 20 And Fecha = CDate("28/03/2018") Then diasX -= 1
             If Provision > 0 And InteresAux1 = 0 Then
                 diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha)
@@ -1440,7 +1443,7 @@
         Else
             IntORD = 0
         End If
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
             IntVENC = Math.Round((r.Vencido + r.InteresVencido) * ((TasaActivaBP) / 100 / 360) * (diasX), 2)
         Else
             IntVENC = 0
@@ -1462,19 +1465,19 @@
             Dim IntFN_Aux As Decimal = 0
             If EsVencimetoCap Then
                 Try
-                    CapitalVIG = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
                     If CapitalVIG < 0 Then
-                        TaVevcimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
+                        TaVencimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
                     End If
-                    CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 Catch ex As Exception
                     Try
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
                     Catch ex1 As Exception
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
                     End Try
                 End Try
-                'CapitalVIG = TaVevcimientosCPF.CapitalVigente(ID_Contrato)
+                'CapitalVIG = TaVencimientosCPF.CapitalVigente(ID_Contrato)
                 SaldoFIN -= CapitalVIG '+ IntFINAN
                 IntORD_Aux -= TaAnexos.InteresAcumulado(r.id_contrato, "BP")
                 IntFB_Aux -= TaAnexos.InteresAcumulado(r.id_contrato, "FB")
@@ -1501,8 +1504,8 @@
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha.AddDays(AjusteDias), 0, 0, 0, IntFB + InteresAux1FB, 0, CapitalVIG, 0, r.id_contrato)
-                If TaVevcimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
-                    TaVevcimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
+                If TaVencimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
+                    TaVencimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
                     CalculaServicioCobro(Fecha.AddDays(AjusteDias), SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
             Else
@@ -1522,7 +1525,7 @@
                             0, 0, ID_Contrato, (TasaActivaFN), diasX, IntFN, 0, Provision)
             End If
         End If
-        TaVevcimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        TaVencimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
         CalculaSaldoContigente(ID_Contrato, Fecha.AddDays(AjusteDias))
     End Sub
 
@@ -1553,7 +1556,7 @@
         subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital + r.InteresOrdinario + r.Vencido + r.InteresVencido
 
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
             If Provision > 0 And InteresAux1 = 0 Then
                 diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha)
             End If
@@ -1571,7 +1574,7 @@
         Else
             IntORD = 0
         End If
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
             IntVENC = Math.Round((r.Vencido + r.InteresVencido) * ((TasaActivaBP) / 100 / 360) * (diasX), 2)
         Else
             IntVENC = 0
@@ -1592,16 +1595,16 @@
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
                 Try
-                    CapitalVIG = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
                     If CapitalVIG < 0 Then
-                        TaVevcimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
+                        TaVencimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
                     End If
-                    CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 Catch ex As Exception
                     Try
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
                     Catch ex1 As Exception
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
                     End Try
                 End Try
                 IntORD_Aux = (TaAnexos.InteresAcumulado(r.id_contrato, "BP") * -1)
@@ -1611,7 +1614,7 @@
                 SaldoFIN += IntORD_Aux
                 SaldoFIN += Minis_BASE
             Else
-                CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 SaldoFIN = SaldoINI + IntORD - CapitalVIG + Minis_BASE
             End If
             'SaldoINI += TaAnexos.InteresAcumulado(r.id_contrato, "BP")
@@ -1647,8 +1650,8 @@
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntORD_Aux, 0, CapitalVIG, 0, r.id_contrato)
-                If TaVevcimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
-                    TaVevcimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
+                If TaVencimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
+                    TaVencimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
                     CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
             Else
@@ -1674,7 +1677,7 @@
                         0, Minis_BASE, ID_Contrato, (TasaActivaFN), diasX, IntFN, 0, Provision)
             End If
         End If
-        TaVevcimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        TaVencimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
         CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 
@@ -1717,7 +1720,7 @@
         subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital + r.InteresOrdinario + r.Vencido + r.InteresVencido
 
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
             If Provision > 0 And InteresAux1 = 0 Then
                 diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha)
             End If
@@ -1735,7 +1738,7 @@
         Else
             IntORD = 0
         End If
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
             IntVENC = Math.Round((r.Vencido + r.InteresVencido) * ((TasaActivaBP + TIIE_old) / 100 / 360) * (diasX), 2)
         Else
             IntVENC = 0
@@ -1743,8 +1746,9 @@
 
         IntFINAN = IntORD + IntVENC - InteresAux1 + InteresAux2
         SaldoFIN = SaldoINI + IntFINAN
-        IntFB = Math.Round((SaldoINI) * ((TasaActivaFB + TIIE_old) / 100 / 360) * (diasX), 2)
-
+        'IntFB = Math.Round((SaldoINI) * ((TasaActivaFB + TIIE_old) / 100 / 360) * (diasX), 2)
+        IntFB = (TasaActivaFB + TIIE_old) / (TasaActivaBP + TIIE_old)
+        IntFB = IntORD * IntFB
         If TasaActivaFN > 0 Then
             IntFN = (SaldoINI) * ((TasaActivaFN + TIIE_old) / 100 / 360) * (diasX)
         End If
@@ -1756,16 +1760,16 @@
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
                 Try
-                    CapitalVIG = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
                     If CapitalVIG < 0 Then
-                        TaVevcimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
+                        TaVencimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
                     End If
-                    CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 Catch ex As Exception
                     Try
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
                     Catch ex1 As Exception
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
                     End Try
                 End Try
                 IntORD_Aux = (TaAnexos.InteresAcumulado(r.id_contrato, "BP") * -1)
@@ -1775,7 +1779,7 @@
                 SaldoFIN += IntORD_Aux
                 SaldoFIN += Minis_BASE
             Else
-                CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 SaldoFIN = SaldoINI + IntORD - CapitalVIG + Minis_BASE
             End If
             'SaldoINI += TaAnexos.InteresAcumulado(r.id_contrato, "BP")
@@ -1801,8 +1805,8 @@
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntORD_Aux, 0, CapitalVIG, 0, r.id_contrato)
-                If TaVevcimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
-                    TaVevcimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
+                If TaVencimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
+                    TaVencimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
                     CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
             Else
@@ -1830,7 +1834,7 @@
             '  CargaTIIE(Fecha)
             '   TaAnexos.UpdateFechaCorteTIIE(Fecha, TIIE28, ID_Contrato)
         End If
-        TaVevcimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        TaVencimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
         CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 
@@ -1874,7 +1878,7 @@
         subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital + r.InteresOrdinario + r.Vencido + r.InteresVencido
 
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
             If Provision > 0 And InteresAux1 = 0 Then
                 diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha)
             End If
@@ -1892,7 +1896,7 @@
         Else
             IntORD = 0
         End If
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
             IntVENC = Math.Round((r.Vencido + r.InteresVencido) * ((TasaActivaBP + TIIE_old) / 100 / 360) * (diasX), 2)
         Else
             IntVENC = 0
@@ -1900,8 +1904,9 @@
 
         IntFINAN = IntORD + IntVENC - InteresAux1 + InteresAux2
         SaldoFIN = SaldoINI + IntFINAN
-        IntFB = Math.Round((SaldoINI) * ((TasaActivaFB + TIIE_old) / 100 / 360) * (diasX), 2)
-
+        'IntFB = Math.Round((SaldoINI) * ((TasaActivaFB + TIIE_old) / 100 / 360) * (diasX), 2)
+        IntFB = (TasaActivaFB + TIIE_old) / (TasaActivaBP + TIIE_old)
+        IntFB = IntORD * IntFB
         If TasaActivaFN > 0 Then
             IntFN = (SaldoINI) * ((TasaActivaFN + TIIE_old) / 100 / 360) * (diasX)
         End If
@@ -1913,16 +1918,16 @@
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
                 Try
-                    CapitalVIG = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
                     If CapitalVIG < 0 Then
-                        TaVevcimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
+                        TaVencimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
                     End If
-                    CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 Catch ex As Exception
                     Try
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
                     Catch ex1 As Exception
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
                     End Try
                 End Try
                 IntORD_Aux = (TaAnexos.InteresAcumulado(r.id_contrato, "BP") * -1)
@@ -1932,7 +1937,7 @@
                 SaldoFIN += IntORD_Aux
                 SaldoFIN += Minis_BASE
             Else
-                CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 SaldoFIN = SaldoINI + IntORD - CapitalVIG + Minis_BASE
             End If
             'SaldoINI += TaAnexos.InteresAcumulado(r.id_contrato, "BP")
@@ -1959,8 +1964,8 @@
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntORD_Aux, 0, CapitalVIG, 0, r.id_contrato)
-                If TaVevcimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
-                    TaVevcimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
+                If TaVencimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
+                    TaVencimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
                     CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
             Else
@@ -1986,7 +1991,7 @@
                         0, Minis_BASE, ID_Contrato, (TasaActivaFN + TIIE_old), diasX, IntFN, 0, Provision)
             End If
         End If
-        TaVevcimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        TaVencimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
         CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 
@@ -2017,7 +2022,7 @@
         subsidio = TaAnexos.Subsidiocontrato(r.id_contrato) 'dagl 24/01/2018 se agrega subsidio de la tabla contratos 
         SaldoINI = r.Capital '+ r.InteresOrdinario + r.Vencido + r.InteresVencido
 
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vigente") > 0 Then ' CAPITAL VIGENTE
             If Provision > 0 And InteresAux1 = 0 Then
                 diasX += TaEdoCta.ProvisionDias(r.id_contrato, r.FechaFinal, Fecha)
             End If
@@ -2036,7 +2041,7 @@
         Else
             IntORD = 0
         End If
-        If TaVevcimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
+        If TaVencimientosCPF.TotalCapitalStatus(r.id_contrato, "Vencido") > 0 Then ' CAPITAL VENCIDO
             IntVENC = Math.Round((r.Vencido + r.InteresVencido) * ((TasaActivaBP) / 100 / 360) * (diasX), 2)
         Else
             IntVENC = 0
@@ -2056,16 +2061,16 @@
             Dim IntFN_Aux As Decimal = IntFN
             If EsVencimetoCap Then
                 Try
-                    CapitalVIG = TaVevcimientosCPF.InteresPagado(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.InteresPagado(r.id_contrato, Fecha)
                     If CapitalVIG < 0 Then
-                        TaVevcimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
+                        TaVencimientosCPF.PorcesarInteresPagado(Math.Abs(IntFB), r.id_contrato, Fecha)
                     End If
-                    CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                    CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 Catch ex As Exception
                     Try
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-1))
                     Catch ex1 As Exception
-                        CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
+                        CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha.AddDays(-2))
                     End Try
                 End Try
                 IntORD_Aux = (TaAnexos.InteresAcumulado(r.id_contrato, "BP") * -1)
@@ -2075,7 +2080,7 @@
                 'SaldoFIN += IntORD_Aux
                 'SaldoFIN += Minis_BASE
             Else
-                CapitalVIG = TaVevcimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
+                CapitalVIG = TaVencimientosCPF.CapitalVencimiento(r.id_contrato, Fecha)
                 'SaldoFIN = SaldoINI + IntORD - CapitalVIG + Minis_BASE
             End If
             SaldoFIN = SaldoINI - CapitalVIG + Minis_BASE
@@ -2097,8 +2102,8 @@
             If EsVencimetoCap Then 'Pago automatico por Vencimiento de Capital
                 Dim Pag As New PasivoFiraDSTableAdapters.PagosTableAdapter
                 Pag.Insert("AUTOMATICO", "PAGADO", Fecha, 0, 0, 0, IntORD_Aux, 0, CapitalVIG, 0, r.id_contrato)
-                If TaVevcimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
-                    TaVevcimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
+                If TaVencimientosCPF.VencimientosXdevengar(ID_Contrato) > 0 Then 'pago de cobro de servicio por garantia
+                    TaVencimientosCPF.UpdateEstatus("Vencido", Fecha, ID_Contrato)
                     CalculaServicioCobro(Fecha, SaldoFIN, r.porcentaje_cxsg, ID_Contrato, subsidio)
                 End If
             Else
@@ -2124,7 +2129,7 @@
                         0, Minis_BASE, ID_Contrato, (TasaActivaFN), diasX, IntFN, 0, Provision)
             End If
         End If
-        TaVevcimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
+        TaVencimientosCPF.UpdateStatusALL("Vencido", Fecha, "Vigente", ID_Contrato, 0)
         CalculaSaldoContigente(ID_Contrato, Fecha)
     End Sub
 

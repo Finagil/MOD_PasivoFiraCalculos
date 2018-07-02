@@ -1,6 +1,6 @@
 ﻿Module ModGlobal
 
-    Public TaVevcimientosCPF As New PasivoFiraDSTableAdapters.CONT_CPF_vencimientosTableAdapter
+    Public TaVencimientosCPF As New PasivoFiraDSTableAdapters.CONT_CPF_vencimientosTableAdapter
     Public TaEdoCta As New PasivoFiraDSTableAdapters.CONT_CPF_edocuentaTableAdapter
     Public TaAnexos As New PasivoFiraDSTableAdapters.SaldosAnexosTableAdapter
     Public TaMinis As New PasivoFiraDSTableAdapters.CONT_CPF_ministracionesTableAdapter
@@ -75,7 +75,6 @@
         Dim DS2 As New PagosFiraDS
         Dim rVenc As PagosFiraDS.VencimientosRow
         Dim SaldoCap As Decimal = TaEdoCta.SaldoCapital(ID, "BP")
-        taVencimientos.FillByUltimo(DS2.Vencimientos, ID)
         taVencimientos.FillByUltimo(DS2.Vencimientos, ID)
         For Each rVenc In DS2.Vencimientos.Rows
             If rVenc.capital <> SaldoCap And SaldoCap > 0 Then

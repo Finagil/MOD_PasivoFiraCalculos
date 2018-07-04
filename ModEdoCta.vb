@@ -51,9 +51,13 @@
                     Hoy = "10/04/2018"
                 Else
                     Try
-                        Hoy = TaEdoCta.SacaFecha1(ID) '1 saca la fecha
+                        Hoy = TaEdoCta.SacaFecha1(ID) '1 saca la fecha del ESTADO DE CUENTA
                     Catch ex As Exception
-                        Hoy = TaEdoCta.SacaFecha11(Anexo, Ciclo) '1 saca la fecha
+                        Try
+                            Hoy = TaEdoCta.SacaFecha11(Anexo, Ciclo) '1 saca la fecha MfIRA
+                        Catch ex1 As Exception
+                            Hoy = TaEdoCta.SacaFecha1Ministraciones(ID) '1 saca la fecha CONT_CPF_MINISTRACIONES
+                        End Try
                     End Try
                 End If
                 TaEdoCta.BorraTodo(ID) '2 borra todo

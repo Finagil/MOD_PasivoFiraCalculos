@@ -37,7 +37,7 @@
                         rFira.Capital += rFinagil.Importe
                         rFira.Finiquito = True
                     End If
-                ElseIf InStr(rFinagil.Concepto, "ADELANTO") Then
+                ElseIf InStr(rFinagil.Concepto, "ADELANTO") Or rFinagil.Anexo = "039820002" Then ' caso Banting
                     rFiraADELANTO = DS.CONT_CPF_PagosFira.NewCONT_CPF_PagosFiraRow
                     IniciaFila(rFiraADELANTO)
                     rFiraADELANTO.Adelanto = True

@@ -8,7 +8,7 @@
   <Shapes>
     <Shape ID="DesignTable:CONT_CPF_edocuenta" ZOrder="1" X="61" Y="31" Height="590" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="254" />
     <Shape ID="DesignTable:TIIE" ZOrder="13" X="394" Y="41" Height="248" Width="184" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="64" />
-    <Shape ID="DesignTable:SaldosAnexos" ZOrder="3" X="601" Y="43" Height="381" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="121" OldDataTableHeight="0" SplitterPosition="254" />
+    <Shape ID="DesignTable:SaldosAnexos" ZOrder="3" X="601" Y="43" Height="438" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="121" OldDataTableHeight="0" SplitterPosition="254" />
     <Shape ID="DesignTable:CONT_CPF_vencimientos" ZOrder="7" X="63" Y="622" Height="438" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="178" />
     <Shape ID="DesignTable:CONT_CPF_CalendariosRevisionTasa" ZOrder="11" X="918" Y="29" Height="324" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="178" />
     <Shape ID="DesignTable:CONT_CPF_saldos_contingente" ZOrder="9" X="727" Y="823" Height="362" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="254" />

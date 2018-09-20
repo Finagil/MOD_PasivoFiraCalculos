@@ -33,6 +33,12 @@
                             ProcesaEstadoCuenta(x.id_contrato, True, Today.Date)
                         End If
                     Next
+                    TaAnexos.FillBySaldoNulo(Tabla)
+                    For Each x As PasivoFiraDS.SaldosAnexosRow In Tabla.Rows
+                        If Procesa_Pagos_Fira(x.id_contrato) = 0 Then
+                            ProcesaEstadoCuenta(x.id_contrato, True, Today.Date)
+                        End If
+                    Next
                 ElseIf Args(1).ToUpper.Trim = "PROCESA_FECHA" Then
                     Dim Fecha As Date = Today.Date
                     If Args.Length = 3 Then
@@ -42,6 +48,14 @@
                     taProcContra.Fill(Tabla1, Fecha.Date)
                     For Each y As PasivoFiraDS.ContratosProcesarFechaRow In Tabla1.Rows
                         ProcesaEstadoCuenta(y.Id_Contrato, True, Fecha.Date)
+                    Next
+
+                    Dim Tabla As New PasivoFiraDS.SaldosAnexosDataTable
+                    TaAnexos.FillBySaldoNulo(Tabla)
+                    For Each x As PasivoFiraDS.SaldosAnexosRow In Tabla.Rows
+                        If Procesa_Pagos_Fira(x.id_contrato) = 0 Then
+                            ProcesaEstadoCuenta(x.id_contrato, True, Today.Date)
+                        End If
                     Next
                 Else
                     Console.WriteLine("Opcion Inválida")

@@ -37,33 +37,38 @@
     Public TIIE_Promedio As Decimal = 0
     Public TIIE_Aplica As Decimal = 0
     Public Function CargaTIIE(ByVal Fecha As Date, ByVal Tipta As String, ByVal claveCobro As String) As Boolean
-        CargaTIIE = True
-        Dim ta As New PasivoFiraDSTableAdapters.TIIETableAdapter
-        ta.Connection.ConnectionString = "Data Source=server-raid2;Persist Security Info=True;Password=User_PRO2015;User ID=User_PRO"
-        TIIE28 = ta.SacaTIIE28(Fecha.ToString("yyyyMMdd"))
-        TIIE91 = ta.SacaTIIE91(Fecha.ToString("yyyyMMdd"))
-        TIIE182 = ta.SacaTIIE182(Fecha.ToString("yyyyMMdd"))
-        TIIE365 = ta.SacaTIIE365(Fecha.ToString("yyyyMMdd"))
-        TIIE_Promedio = ta.SacaTIIEpromedio(Fecha.AddMonths(-1).ToString("yyyyMMdd"))
-        'If TIIE28 = 0 Or TIIE91 = 0 Or TIIE182 = 0 Or TIIE365 = 0 Then
-        If TIIE28 = 0 Then
-            Console.WriteLine("No hay TIIE Capturada para la Fecha {0}", Fecha.ToShortDateString)
-            CargaTIIE = False
-        End If
-        If claveCobro = "" Then
-            claveCobro = 0
+        Try
+            CargaTIIE = True
+            Dim ta As New PasivoFiraDSTableAdapters.TIIETableAdapter
+            ta.Connection.ConnectionString = "Data Source=server-raid2;Persist Security Info=True;Password=User_PRO2015;User ID=User_PRO;Initial Catalog=Production;"
+            TIIE28 = ta.SacaTIIE28(Fecha.ToString("yyyyMMdd"))
+            TIIE91 = ta.SacaTIIE91(Fecha.ToString("yyyyMMdd"))
+            TIIE182 = ta.SacaTIIE182(Fecha.ToString("yyyyMMdd"))
+            TIIE365 = ta.SacaTIIE365(Fecha.ToString("yyyyMMdd"))
+            TIIE_Promedio = ta.SacaTIIEpromedio(Fecha.AddMonths(-1).ToString("yyyyMMdd"))
+            'If TIIE28 = 0 Or TIIE91 = 0 Or TIIE182 = 0 Or TIIE365 = 0 Then
+            If TIIE28 = 0 Then
+                Console.WriteLine("No hay TIIE Capturada para la Fecha {0}", Fecha.ToShortDateString)
+                CargaTIIE = False
+            End If
+            If claveCobro = "" Then
+                claveCobro = 0
 
-        End If
-        If CInt(claveCobro.Trim) = EsquemaCobro.SIMPLE_FIN And Tipta.Trim <> "7" Then
-            TIIE_Aplica = TIIE28
-        End If
+            End If
+            If CInt(claveCobro.Trim) = EsquemaCobro.SIMPLE_FIN And Tipta.Trim <> "7" Then
+                TIIE_Aplica = TIIE28
+            End If
 
-        If CInt(claveCobro.Trim) = EsquemaCobro.SIMPLE And Tipta.Trim = "7" Then 'SIMPLE Y FIJA TRAER LA TIIE28 DAGL
-            TIIE_Aplica = TIIE28
-        End If
-        ta.Dispose()
+            If CInt(claveCobro.Trim) = EsquemaCobro.SIMPLE And Tipta.Trim = "7" Then 'SIMPLE Y FIJA TRAER LA TIIE28 DAGL
+                TIIE_Aplica = TIIE28
+            End If
+            ta.Dispose()
 
-        ta.Dispose()
+            ta.Dispose()
+        Catch ex As Exception
+            Console.WriteLine("Error: ID-" & " " & ex.Message & " " & Date.Now)
+            taCorreos.Insert("PasivoFira@finagil.com.mx", "ecacerest@finagil.com.mx", "Error: ", ex.Message, False, Date.Now, "")
+        End Try
     End Function
 
     Function CtoD(Fec As String) As Date

@@ -3,6 +3,8 @@
 
     Function Procesa_Pagos_Fira(ID As Integer)
         Dim X As Integer = 0
+        taPagosFira.UpdateIdContrato()
+
         If ID = 0 Then
             taPagosFira.Fill(DS.CONT_CPF_PagosFira)
         Else
@@ -109,5 +111,4 @@
             End If
         Next
     End Sub
-
 End Module

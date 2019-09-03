@@ -462,6 +462,8 @@
             monto = importe + iva
             TaMinis.InsertQueryMinistraciones(MontoBase, fec, Consec, PCXSG_Aux, iva, importe, idcont, "Otorgado", fec)
             Ministraciones.Descontar(anexo1, ciclo, FechaPago.ToString("yyyyMMdd"))
+            id_contratoGarantia = taCargosXservico.SacaIDContratoGarantia(idcont)
+            taCargosXservico.Insert(fec, FechaFinal, dias, Date.Now, MontoBase, cobro, cobro * TasaIVA, cobro * (1 + TasaIVA), PCXSG, id_contratoGarantia, subsidiox)
 
             'For Each row1 As DataRow In TaMinis.GetDataByIDCONTRATO(idcont, idcont)
             '    fonaga = TaAnexos.fonaga(idcont)

@@ -19,6 +19,7 @@
     Public taPagosFira As New PagosFiraDSTableAdapters.CONT_CPF_PagosFiraTableAdapter
     Public taCorreos As New PagosFinagilDSTableAdapters.Correos_SistemaFinagilTableAdapter
     Public taProcContra As New PasivoFiraDSTableAdapters.ContratosProcesarFechaTableAdapter
+    Public DS As New PagosFinagilDS
 
 
     Public Enum EsquemaCobro As Integer
@@ -67,7 +68,7 @@
             ta.Dispose()
         Catch ex As Exception
             Console.WriteLine("Error: ID-" & " " & ex.Message & " " & Date.Now)
-            taCorreos.Insert("PasivoFira@finagil.com.mx", "ecacerest@finagil.com.mx", "Error: ", ex.Message, False, Date.Now, "")
+            CorreosFases("Error: ", ex.Message, "SISTEMAS_FIRA")
         End Try
     End Function
 
@@ -89,9 +90,17 @@
             End If
         Next
         If SaldoCap < 0 Then
-            taCorreos.Insert("PasivoFira@finagil.com.mx", "ecacerest@finagil.com.mx", "Error Saldo Negativo: " & ID, "Error Saldo Negativo: " & ID, False, Date.Now, "")
+            CorreosFases("Error Saldo Negativo: " & ID, "Error Saldo Negativo: " & ID, "SISTEMAS_FIRA")
         End If
     End Sub
 
+    Public Sub CorreosFases(Titulo As String, Mensaje As String, Fase As String)
+        Dim taFases As New PagosFinagilDSTableAdapters.GEN_CorreosFasesTableAdapter
+        taFases.Fill(DS.GEN_CorreosFases, Fase)
+        For Each r As PagosFinagilDS.GEN_CorreosFasesRow In DS.GEN_CorreosFases.Rows
+            taCorreos.Insert("PasivoFira@finagil.com.mx", r.Correo, Titulo, Mensaje, False, Date.Now, "")
+        Next
+        taFases.Dispose()
+    End Sub
 
 End Module

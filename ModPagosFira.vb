@@ -48,8 +48,7 @@
         taVencimientos.FillPosteriores(DS.Vencimientos, ID, FechaFira)
         For xx As Integer = 0 To 0
             If DS.Vencimientos.Rows.Count <= 0 Then
-                taCorreos.Insert("PasivoFira@finagil.com.mx", "ecacerest@finagil.com.mx", "Error: Contrato sin Vencimientos", ID, False, Date.Now, "")
-                taCorreos.Insert("PasivoFira@finagil.com.mx", "denise.gonzalez@finagil.com.mx", "Error: Contrato sin Vencimientos", ID, False, Date.Now, "")
+                CorreosFases("Error: Contrato sin Vencimientos", ID, "SISTEMAS_FIRA")
                 Exit For
             Else
                 rVenc = DS.Vencimientos.Rows(xx)

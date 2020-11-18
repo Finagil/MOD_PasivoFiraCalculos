@@ -125,7 +125,7 @@
             TaEdoCta.BorraCeros(ID)
         Catch ex As Exception
             Console.WriteLine("Error: ID-" & ID & " " & ex.Message & " " & Date.Now)
-            taCorreos.Insert("PasivoFira@finagil.com.mx", "ecacerest@finagil.com.mx", "Error: " & ID, ex.Message, False, Date.Now, "")
+            CorreosFases("Error: " & ID, ex.Message, "SISTEMAS_FIRA")
         End Try
         If Continuo <> True Then
             End

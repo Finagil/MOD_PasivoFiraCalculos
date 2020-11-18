@@ -22,9 +22,8 @@
                     ExportaPagosFinagilFira()
                 ElseIf Args(1).ToUpper.Trim = "PROCESA_PAGOS" Then
                     Procesa_Pagos_Fira(0)
-                    taCorreos.Insert("PasivoFira@finagil.com.mx", "ecacerest@finagil.com.mx", "PROCESA_PAGOS: Terminado", "PROCESA_PAGOS: Terminado", False, Date.Now, "")
-                    taCorreos.Insert("PasivoFira@finagil.com.mx", "María Bautista  (Finagil) <maria.bautista@finagil.com.mx>", "PROCESA_PAGOS: Terminado", "PROCESA_PAGOS: Terminado", False, Date.Now, "")
-                    taCorreos.Insert("PasivoFira@finagil.com.mx", "Aldo A Joshina (Finagil) <ajoshin@finagil.com.mx>", "PROCESA_PAGOS: Terminado", "PROCESA_PAGOS: Terminado", False, Date.Now, "")
+                    CorreosFases("PROCESA_PAGOS: Terminado", "PROCESA_PAGOS: Terminado", "SISTEMAS_FIRA")
+                    CorreosFases("PROCESA_PAGOS: Terminado", "PROCESA_PAGOS: Terminado", "FIRA")
                 ElseIf Args(1).ToUpper.Trim = "TODO" Then
                     Dim Tabla As New PasivoFiraDS.SaldosAnexosDataTable
                     TaAnexos.Fill_ConSaldo(Tabla)
@@ -65,7 +64,7 @@
             End If
         Catch ex As Exception
             Console.WriteLine("Error: ID-" & Args(1) & " " & ex.Message & " " & Date.Now)
-            taCorreos.Insert("PasivoFira@finagil.com.mx", "ecacerest@finagil.com.mx", "Error: " & Args(1), ex.Message, False, Date.Now, "")
+            CorreosFases("Error: " & Args(1), ex.Message, "SISTEMAS_FIRA")
         End Try
 
     End Sub

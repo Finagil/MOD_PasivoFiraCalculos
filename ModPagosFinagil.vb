@@ -1,7 +1,6 @@
 ﻿Module ModPagosFinagil
     Dim taPagfinagil As New PagosFinagilDSTableAdapters.PagosFinagilTableAdapter
     Dim taPagfira As New PagosFinagilDSTableAdapters.CONT_CPF_PagosFiraTableAdapter
-    Dim DS As New PagosFinagilDS
     Dim rFinagil As PagosFinagilDS.PagosFinagilRow
     Dim rFira As PagosFinagilDS.CONT_CPF_PagosFiraRow
     Dim rFiraADELANTO As PagosFinagilDS.CONT_CPF_PagosFiraRow
